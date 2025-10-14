@@ -9,7 +9,7 @@ const SocialProof: React.FC = () => (
             Tech Stacks. Social Links.
         </h3>
         <p className="text-xl text-gray-700 max-w-2xl">
-            All your development content <span className="text-blue-600">integrated</span>into your personal page. No more hiding your work behind simple text links.
+            All your development content <span className="text-blue-600">integrated</span> into your personal page. No more hiding your work behind simple text links.
         </p>
     </section>
 );
