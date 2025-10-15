@@ -47,32 +47,31 @@ interface TestimonialCardProps {
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, handle, quote, avatar }) => (
-    <div className="relative group transition-all duration-300">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none p-[1px]">
-            <div className="w-full h-full rounded-[15px] bg-[#0a0a0a]"></div>
-        </div>
-        <div className="relative h-full">
-            <div className="bg-[#1c1c1c] rounded-2xl p-6 shadow-xl border border-[#2a2a2a] flex flex-col space-y-4 h-full">
-                <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-full overflow-hidden">
-                        <img
-                            src={avatar}
-                            alt={`${name}'s avatar`}
-                            width={48}
-                            height={48}
-                            className="object-cover w-full h-full"
-                        />
-                    </div>
-                    <div>
-                        <p className="text-white font-semibold text-base">{name}</p>
-                        <p className="text-gray-400 text-sm">{handle}</p>
-                    </div>
+    <div 
+        className="relative group transition-transform duration-300 ease-in-out hover:scale-105 focus:scale-105 rounded-2xl overflow-hidden" 
+        tabIndex={0}
+    >
+        <div className="relative bg-[#1c1c1c] rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-[#2a2a2a] flex flex-col space-y-4 h-full">
+            <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <img
+                        src={avatar}
+                        alt={`${name}'s avatar`}
+                        width={48}
+                        height={48}
+                        className="object-cover w-full h-full"
+                    />
                 </div>
-                <p className="text-gray-300 text-base leading-relaxed">
-                    {quote}
-                </p>
+                <div>
+                    <p className="text-white font-semibold text-base">{name}</p>
+                    <p className="text-gray-400 text-sm">{handle}</p>
+                </div>
             </div>
+            <p className="text-gray-300 text-base leading-relaxed">
+                {quote}
+            </p>
         </div>
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
     </div>
 );
 
