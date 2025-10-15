@@ -15,27 +15,29 @@ const Navbar: React.FC = () => {
     }, []);
 
     return (
-        <header className={`sticky w-4/5 flex justify-center mx-auto rounded-full mt-5 top-0 z-50 bg-white shadow-[0_0_10px_rgba(0,0,0,0.15)] transition-transform duration-300 ${isScrolled ? '-translate-y-2' : ''}`}>
-            <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div className="text-2xl font-bold text-gray-900">
-                    <Link href="/">DevBio</Link>
+        <>
+            <header className={`sticky ${isMenuOpen ? 'w-full' : 'w-4/5 rounded-full mt-5'} flex justify-center mx-auto top-0 z-50 bg-white shadow-[0_0_10px_rgba(0,0,0,0.15)] transition-transform duration-300 ${isScrolled ? '-translate-y-2' : ''}`}>
+                <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+                    <div className="text-2xl font-bold text-gray-900">
+                        <Link href="/">DevBio</Link>
+                    </div>
+                    <nav className="hidden md:flex items-center space-x-6">
+                        <Link href="#features" className="text-gray-600 hover:text-blue-600 transition">Features</Link>
+                        <Link href="#testimonials" className="text-gray-600 hover:text-blue-600 transition">Testimonials</Link>
+                        <a href="/signup" className="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition">
+                            Sign Up
+                        </a>
+                    </nav>
+                    <div className="md:hidden">
+                        <button onClick={() => setIsMenuOpen(true)} className="text-gray-600 hover:text-blue-600 focus:outline-none">
+                            <HiMenu className="w-6 h-6" />
+                        </button>
+                    </div>
                 </div>
-                <nav className="hidden md:flex items-center space-x-6">
-                    <Link href="#features" className="text-gray-600 hover:text-blue-600 transition">Features</Link>
-                    <Link href="#testimonials" className="text-gray-600 hover:text-blue-600 transition">Testimonials</Link>
-                    <a href="/signup" className="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition">
-                        Sign Up
-                    </a>
-                </nav>
-                <div className="md:hidden">
-                    <button onClick={() => setIsMenuOpen(true)} className="text-gray-600 hover:text-blue-600 focus:outline-none">
-                        <HiMenu className="w-6 h-6" />
-                    </button>
-                </div>
-            </div>
+            </header>
             {isMenuOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={() => setIsMenuOpen(false)}>
-                    <div className="fixed top-0 right-0 w-full h-full bg-white shadow-lg" onClick={(e) => e.stopPropagation()}>
+                <div className="fixed w-full inset-0 bg-black bg-opacity-50 z-50" onClick={() => setIsMenuOpen(false)}>
+                    <div className="fixed top-0 right-0 w-full h-screen bg-white shadow-lg" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-end p-4">
                             <button onClick={() => setIsMenuOpen(false)} className="text-gray-600 hover:text-blue-600 focus:outline-none">
                                 <HiX className="w-6 h-6" />
@@ -51,7 +53,7 @@ const Navbar: React.FC = () => {
                     </div>
                 </div>
             )}
-        </header>
+        </>
     );
 };
 
