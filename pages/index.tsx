@@ -7,6 +7,7 @@ import Footer from '../components/landingpage/Footer';
 import Hero from '../components/landingpage/Hero';
 import SocialProof from '../components/landingpage/SocialProof';
 import Testimonials from '../components/landingpage/Testimonials';
+import FAQ from '../components/landingpage/FAQ';
 import Navbar from '../components/landingpage/Navbar';
 
 const geistSans = { className: "font-sans" };
@@ -24,6 +25,8 @@ const Home: React.FC = () => {
             <SocialProof />
             <Testimonials />
             <CrackedDevs />
+            <FAQ />
+
             <CallToAction />
             <Footer />
         </div>
