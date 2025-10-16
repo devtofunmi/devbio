@@ -91,7 +91,7 @@ const CrackedDevs: React.FC = () => {
         <section className="py-20 bg-[#0a0a0a] text-white">
             <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl font-extrabold text-center mb-12">
-                    Loved by <span className="text-blue-500">Cracked Devs</span>
+                    Loved by <span className="text-blue-400">Cracked Devs</span>
                 </h2>
                 <div ref={sliderRef} className="keen-slider">
                     {CRACKED_DEVS.map((dev, index) => (

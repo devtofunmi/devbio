@@ -31,7 +31,7 @@ const LinkSlider: React.FC = () => {
         <div ref={sliderRef} className="keen-slider" style={{ height: 40 }}>
             {usernames.map((name, index) => (
                 <div className="keen-slider__slide" key={index}>
-                    <span className="text-blue-600 text-start">{name}</span>
+                    <span className="text-blue-400 text-start">{name}</span>
                 </div>
             ))}
         </div>
@@ -41,16 +41,16 @@ const LinkSlider: React.FC = () => {
 const Hero: React.FC = () => (
     <section className="flex flex-col items-center justify-center pt-20 pb-12 px-6 text-center bg-white border-b border-gray-100">
        
-        <h1 className="text-5xl font-extrabold mb-4 text-gray-900">
+        <h1 className="text-5xl leading-14 font-extrabold mb-4 text-gray-900">
             Showcase Your<br /> Code, Stats, and Stack.
         </h1>
        
         <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12">Your professional developer profile, all in one link. Connect, share, and grow your presence with a beautiful, customizable page.</p>
 
-        <a href="/signup" className="inline-block w-full md:w-fit rounded-2xl bg-blue-600 text-white px-10 py-4 font-bold text-xl shadow-lg hover:bg-blue-700 transition transform hover:scale-105">
+        <a href="/signup" className="inline-block w-full md:w-fit rounded-2xl bg-blue-400 text-white px-10 py-4 font-bold text-xl shadow-lg hover:bg-blue-500 transition transform hover:scale-105">
             Create Your DevBio
         </a>
-        <Link href="/login" className="mt-3 text-sm text-gray-500 hover:text-blue-600 transition">Log In</Link>
+        <Link href="/login" className="mt-3 text-sm text-gray-500 hover:text-blue-500 transition">Log In</Link>
 
         <div className="mt-16 text-2xl font-semibold text-gray-900">Your unique link.</div>
         <div className="text-gray-500 mb-6">And btw, the good ones are still free.</div>

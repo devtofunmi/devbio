@@ -5,7 +5,7 @@ const Features: React.FC = () => {
   const cardClasses = "bg-white p-6 rounded-xl border border-gray-200 transform transition-all duration-300 active:-rotate-2 hover:rotate-2 relative group overflow-hidden";
 
   return (
-    <div className="min-h-screen  p-4 md:p-8">
+    <div  className="min-h-screen  p-4 md:p-8">
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-12 max-w-7xl mx-auto">
 
         {/* 1. Project List */}
