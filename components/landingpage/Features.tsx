@@ -69,7 +69,7 @@ const Features: React.FC = () => {
             </div>
             <p className="text-gray-600 mb-4">Link your own domain for a professional brand.</p>
             <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-              <p className="text-center font-mono text-blue-600">yourname.dev</p>
+              <p className="text-center font-mono text-blue-400">yourname.dev</p>
             </div>
             <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"></div>
         </div>
