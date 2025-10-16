@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     question: 'Can I use my own domain name?',
-    answer: 'This feature is coming soon! We are working on allowing users to connect their own domain names to their Dev.Bio profiles.',
+    answer: 'This feature is coming soon! We are working on allowing users to connect their own domain names to their DevBio profiles.',
   },
 ];
 
