@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 const faqs = [
   {
-    question: 'What is Dev.Bio?',
-    answer: 'Dev.Bio is a platform for developers to create a professional online presence and showcase their skills and projects.',
+    question: 'What is DevBio?',
+    answer: 'DevBio is a platform for developers to create a professional online presence and showcase their skills and projects.',
   },
   {
     question: 'Is DevBio free?',
@@ -31,11 +31,11 @@ const FAQ = () => {
     <section className="bg-[#0a0a0a] py-20">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-white mb-12">Frequently Asked Questions</h2>
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto grid gap-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="border-b border-gray-200 py-4">
+            <div key={index} className="bg-[#1c1c1c] border border-[#2a2a2a] rounded-lg transition-transform duration-300 hover:rotate-2 active:rotate-2">
               <button
-                className="w-full flex justify-between items-center text-left text-lg font-medium text-white focus:outline-none"
+                className="w-full flex justify-between items-center text-left text-lg font-medium text-white p-6 focus:outline-none"
                 onClick={() => toggleFAQ(index)}
               >
                 <span>{faq.question}</span>
@@ -52,7 +52,7 @@ const FAQ = () => {
                 </svg>
               </button>
               {activeIndex === index && (
-                <div className="mt-4 text-white">
+                <div className="px-6 pb-6 text-gray-300">
                   <p>{faq.answer}</p>
                 </div>
               )}
