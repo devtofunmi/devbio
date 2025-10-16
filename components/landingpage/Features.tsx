@@ -8,12 +8,15 @@ interface FeatureItemProps {
 }
 
 const FeatureItem: React.FC<FeatureItemProps> = ({ Icon, title, description }) => (
-    <div className="flex flex-col items-start p-6 bg-white rounded-xl shadow-md border border-gray-100 transition-shadow hover:shadow-lg">
-        <div className="text-4xl mb-4 p-3 rounded-lg bg-blue-50 text-blue-600">
+    <div className="relative flex flex-col items-center pt-16 pb-8 px-6 bg-white rounded-xl border border-gray-200 transition-all duration-300 hover:border-blue-400 hover:scale-[1.02]">
+        {/* Floating Icon Container */}
+        <div className="absolute -top-8 text-4xl p-4 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-300/50">
             <Icon size={32} />
         </div>
-        <h3 className="text-xl font-bold mb-2 text-gray-900">{title}</h3>
-        <p className="text-gray-600">{description}</p>
+        
+        {/* Text Content */}
+        <h3 className="text-xl font-bold mb-3 text-gray-900 text-center">{title}</h3>
+        <p className="text-gray-600 text-center">{description}</p>
     </div>
 );
 
@@ -23,7 +26,7 @@ const Features: React.FC = () => (
             <h2 className="text-4xl sm:text-5xl font-extrabold text-center text-gray-900 mb-16">
                 Features <span className="text-blue-600">Developers Love</span>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                 <FeatureItem
                     Icon={FaCode} 
                     title="Project List"
