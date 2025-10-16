@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
 
     return (
         <>
-            <header className={`sticky ${isMenuOpen ? 'w-full' : 'w-4/5 rounded-full mt-5'} flex justify-center mx-auto top-0 z-50 bg-white shadow-[0_0_10px_rgba(0,0,0,0.15)] transition-transform duration-300 ${isScrolled ? '-translate-y-2' : ''}`}>
+            <header className={`sticky ${isMenuOpen ? 'w-full' : 'w-[90%] rounded-full mt-5'} flex justify-center mx-auto top-0 z-50 bg-white shadow-[0_0_10px_rgba(0,0,0,0.15)] transition-transform duration-300 ${isScrolled ? '-translate-y-2' : ''}`}>
                 <div className="container mx-auto px-6 py-4 flex justify-between items-center">
                     <div className="text-2xl font-bold text-gray-900">
                         <Link href="/">DevBio</Link>
