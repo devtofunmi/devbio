@@ -28,14 +28,14 @@ const FAQ = () => {
   };
 
   return (
-    <section className="bg-gray-50 py-20">
+    <section className="bg-[#0a0a0a] py-20">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-black mb-12">Frequently Asked Questions</h2>
+        <h2 className="text-3xl font-bold text-center text-white mb-12">Frequently Asked Questions</h2>
         <div className="max-w-3xl mx-auto">
           {faqs.map((faq, index) => (
             <div key={index} className="border-b border-gray-200 py-4">
               <button
-                className="w-full flex justify-between items-center text-left text-lg font-medium text-gray-800 focus:outline-none"
+                className="w-full flex justify-between items-center text-left text-lg font-medium text-white focus:outline-none"
                 onClick={() => toggleFAQ(index)}
               >
                 <span>{faq.question}</span>
@@ -52,7 +52,7 @@ const FAQ = () => {
                 </svg>
               </button>
               {activeIndex === index && (
-                <div className="mt-4 text-gray-600">
+                <div className="mt-4 text-white">
                   <p>{faq.answer}</p>
                 </div>
               )}
