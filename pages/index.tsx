@@ -1,5 +1,5 @@
 import React from 'react';
-import SimulatedProfile from '../components/SimulatedProfile';
+// import SimulatedProfile from '../components/SimulatedProfile';
 import CallToAction from '../components/landingpage/CallToAction';
 import CrackedDevs from '../components/landingpage/CrackedDevs';
 import Features from '../components/landingpage/Features';
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             <Navbar />
             <Hero />
             <section className="bg-white px-6">
-                <SimulatedProfile />
+                {/* <SimulatedProfile /> */}
             </section>
             <SocialProof />
             <Features />
