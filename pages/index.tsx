@@ -21,8 +21,8 @@ const Home: React.FC = () => {
             <section className="bg-white px-6">
                 <SimulatedProfile />
             </section>
-            <Features />
             <SocialProof />
+            <Features />
             <Testimonials />
             <CrackedDevs />
             <FAQ />
