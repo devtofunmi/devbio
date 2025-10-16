@@ -31,7 +31,7 @@ const LinkSlider: React.FC = () => {
         <div ref={sliderRef} className="keen-slider" style={{ height: 40 }}>
             {usernames.map((name, index) => (
                 <div className="keen-slider__slide" key={index}>
-                    <span className="text-blue-600">{name}</span>
+                    <span className="text-blue-600 text-start">{name}</span>
                 </div>
             ))}
         </div>
@@ -58,7 +58,9 @@ const Hero: React.FC = () => (
         <div className="text-gray-500 mb-6">And btw, the good ones are still free.</div>
         <div className="flex justify-center w-[300px] items-center text-3xl font-mono mt-4">
             <span className="text-gray-400">devbio.co/</span>
+            <div className="flex justify-start text-start">
             <LinkSlider />
+            </div>
         </div>
     </section>
 );
