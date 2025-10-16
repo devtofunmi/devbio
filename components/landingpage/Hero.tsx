@@ -41,15 +41,13 @@ const LinkSlider: React.FC = () => {
 const Hero: React.FC = () => (
     <section className="flex flex-col items-center justify-center pt-20 pb-12 px-6 text-center bg-white border-b border-gray-100">
        
-        <h1 className="text-5xl sm:text-6xl font-extrabold mb-4 text-gray-900">
-            The Dev Portfolio You Deserve.
+        <h1 className="text-5xl font-extrabold mb-4 text-gray-900">
+            Showcase Your<br /> Code, Stats, and Stack.
         </h1>
-        <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-            Showcase Your Code, Stats, and Stack.
-        </h2>
+       
         <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12">Your professional developer profile, all in one link. Connect, share, and grow your presence with a beautiful, customizable page.</p>
 
-        <a href="/signup" className="inline-block rounded-full bg-blue-600 text-white px-10 py-4 font-bold text-xl shadow-lg hover:bg-blue-700 transition transform hover:scale-105">
+        <a href="/signup" className="inline-block w-full md:w-fit rounded-2xl bg-blue-600 text-white px-10 py-4 font-bold text-xl shadow-lg hover:bg-blue-700 transition transform hover:scale-105">
             Create Your DevBio
         </a>
         <Link href="/login" className="mt-3 text-sm text-gray-500 hover:text-blue-600 transition">Log In</Link>
