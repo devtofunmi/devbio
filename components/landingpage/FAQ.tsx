@@ -7,11 +7,11 @@ const faqs = [
     answer: 'Dev.Bio is a platform for developers to create a professional online presence and showcase their skills and projects.',
   },
   {
-    question: 'Is Dev.Bio free?',
-    answer: 'Yes, Dev.Bio offers a free tier with all the essential features to create a stunning developer portfolio.',
+    question: 'Is DevBio free?',
+    answer: 'Yes, DevBio offers a free tier with all the essential features to create a stunning developer portfolio.',
   },
   {
-    question: 'What technologies can I showcase on my Dev.Bio?',
+    question: 'What stacks can I showcase on my DevBio?',
     answer: 'You can showcase any technology you work with. Our platform is flexible and allows you to add a wide range of skills and projects.',
   },
   {
