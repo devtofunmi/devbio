@@ -3,7 +3,7 @@ import { FaGithub, FaCode, FaRegNewspaper, FaStar, FaTwitter, FaInstagram, FaYou
 import { IoLayersSharp } from "react-icons/io5";
 
 const MOCK_IMAGES = {
-    avatar1: "https://avatars.githubusercontent.com/u/1?v=4", // Using GitHub's default avatar as a more reliable source
+    avatar1: "https://xsgames.co/randomusers/assets/avatars/male/1.jpg", // Using GitHub's default avatar as a more reliable source
 };
 
 interface ContentCardProps {

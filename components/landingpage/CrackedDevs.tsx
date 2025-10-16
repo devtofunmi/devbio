@@ -7,42 +7,42 @@ const CRACKED_DEVS = [
     {
         name: "John Doe",
         handle: "@johndoe",
-        avatar: "https://avatars.githubusercontent.com/u/20?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/male/20.jpg"
     },
     {
         name: "Jane Smith",
         handle: "@janesmith",
-        avatar: "https://avatars.githubusercontent.com/u/21?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/female/21.jpg"
     },
     {
         name: "Peter Jones",
         handle: "@peterjones",
-        avatar: "https://avatars.githubusercontent.com/u/22?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/male/22.jpg"
     },
     {
         name: "Mary Jane",
         handle: "@maryjane",
-        avatar: "https://avatars.githubusercontent.com/u/23?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/female/23.jpg"
     },
     {
         name: "Chris Lee",
         handle: "@chrislee",
-        avatar: "https://avatars.githubusercontent.com/u/29?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/male/29.jpg"
     },
     {
         name: "Patricia Williams",
         handle: "@patriciawilliams",
-        avatar: "https://avatars.githubusercontent.com/u/25?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/female/25.jpg"
     },
     {
         name: "Alex Costa",
         handle: "@alexcosta",
-        avatar: "https://avatars.githubusercontent.com/u/26?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/male/26.jpg"
     },
     {
         name: "Emily White",
         handle: "@emilywhite",
-        avatar: "https://avatars.githubusercontent.com/u/27?v=4"
+        avatar: "https://xsgames.co/randomusers/assets/avatars/female/27.jpg"
     }
 ]
 
