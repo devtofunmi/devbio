@@ -2,7 +2,7 @@ import React from 'react';
 import { useKeenSlider } from 'keen-slider/react';
 import Link from 'next/link';
 
-const usernames = ['alexj', 'codebreak_er', 'mugeeb', 'john', 'xt42io', 'devmaster', 'ttx2', 'vuemaster', 'angdev'];
+const usernames = ['alexj', 'jy06dev', 'mugeeb', 'john', 'xt42io', 'devmaster', 'ttx2', 'vuemaster', 'angdev'];
 
 const animation = { duration: 10000, easing: (t: number) => t }
 
