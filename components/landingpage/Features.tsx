@@ -33,7 +33,7 @@ const Features: React.FC = () => {
             <div className="w-1/4 bg-blue-400 h-1/2 rounded-t-md"></div>
             <div className="w-1/4 bg-blue-400 h-3/4 rounded-t-md"></div>
           </div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"></div>
         </div>
 
         {/* 3. Tech Stack Visuals */}
