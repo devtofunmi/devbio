@@ -24,8 +24,8 @@ const Home: React.FC = () => {
             <SocialProof />
             <Features />
             <Testimonials />
-            <CrackedDevs />
             <FAQ />
+            <CrackedDevs />
 
             <CallToAction />
             <Footer />
