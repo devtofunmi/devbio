@@ -4,37 +4,37 @@ const TESTIMONIALS = [
     {
         name: "Sarah Chen",
         handle: "@devchamp",
-        avatar: "https://avatars.githubusercontent.com/u/2?v=4",
+        avatar: "https://xsgames.co/randomusers/assets/avatars/female/2.jpg",
         quote: "DevBio revolutionized how I present my work. The automatic integration with GitHub and clean presentation of my tech stack makes my profile stand out. It's exactly what developers need.",
     },
     {
         name: "Marcus Rodriguez",
         handle: "@codeartist",
-        avatar: "https://avatars.githubusercontent.com/u/3?v=4",
+        avatar: "https://xsgames.co/randomusers/assets/avatars/male/3.jpg",
         quote: "As a full-stack developer, I love how DevBio showcases both my frontend and backend projects. The analytics integration is brilliant, and the custom domain feature is the cherry on top.",
     },
     {
         name: "Emma Thompson",
         handle: "@emmacodes",
-        avatar: "https://avatars.githubusercontent.com/u/4?v=4",
+        avatar: "https://xsgames.co/randomusers/assets/avatars/female/4.jpg",
         quote: "DevBio is my go-to for sharing my developer journey. The blog integration and code snippet features help me showcase my expertise effectively. Plus, the UI is absolutely gorgeous!",
     },
     {
         name: "Raj Patel",
         handle: "@opensourcehero",
-        avatar: "https://avatars.githubusercontent.com/u/5?v=4",
+        avatar: "https://xsgames.co/randomusers/assets/avatars/male/5.jpg",
         quote: "Finally, a platform that understands developers! The GitHub stats integration and tech stack visualization are fantastic. DevBio has become an essential part of my professional identity.",
     },
     {
         name: "Lisa Wang",
         handle: "@webwizard",
-        avatar: "https://avatars.githubusercontent.com/u/6?v=4",
+        avatar: "https://xsgames.co/randomusers/assets/avatars/female/6.jpg",
         quote: "The way DevBio presents my projects and contributions is incredible. It's like having a living, breathing portfolio that updates itself. Absolutely love it!",
     },
     {
         name: "James Mitchell",
         handle: "@techlead",
-        avatar: "https://avatars.githubusercontent.com/u/7?v=4",
+        avatar: "https://xsgames.co/randomusers/assets/avatars/male/7.jpg",
         quote: "DevBio brings together everything I need in a dev profile. From GitHub stats to blog posts, it's all beautifully integrated. This is what a modern developer portfolio should be.",
     },
 ];
@@ -48,7 +48,7 @@ interface TestimonialCardProps {
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, handle, quote, avatar }) => (
     <div 
-        className="relative group transition-transform duration-300 ease-in-out hover:scale-105 focus:scale-105 rounded-2xl overflow-hidden" 
+        className="relative group transition-transform duration-300 ease-in-out  hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden" 
         tabIndex={0}
     >
         <div className="relative bg-[#1c1c1c] rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-[#2a2a2a] flex flex-col space-y-4 h-full">
