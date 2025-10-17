@@ -11,7 +11,7 @@ const Signup: React.FC = () => {
 
   return (
     <div className={`${geistSans.className} ${geistMono.className}  flex min-h-screen items-center justify-center bg-white p-4`}>
-      <div className="flex flex-col lg:flex-row w-[90%] md:w-full max-w-6xl rounded-xl">
+      <div className="flex flex-col lg:flex-row w-full max-w-6xl rounded-xl">
         {/* Left Side: Signup Form */}
         <div className="flex-1 p-10 md:p-16">
           <h1 className="md:text-4xl text-2xl font-bold text-gray-900 mb-2">
