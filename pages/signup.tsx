@@ -64,7 +64,7 @@ const Signup: React.FC = () => {
 
             <button
               type="button"
-              className="flex items-center justify-center w-full bg-gray-800 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors"
+              className="flex cursor-pointer items-center justify-center w-full bg-gray-800 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors"
               onClick={() => console.log('GitHub Sign-up clicked')}
             >
               <SiGithub className="mr-2" size={20} />
