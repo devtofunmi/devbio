@@ -25,9 +25,9 @@ const Navbar: React.FC = () => {
                         <Link href="#features" className="text-gray-600 hover:text-blue-400 transition">Features</Link>
                         <Link href="#testimonials" className="text-gray-600 hover:text-blue-400 transition">Testimonials</Link>
                         <Link href="#faq" className="text-gray-600 hover:text-blue-400 transition">faq</Link>
-                        <a href="/signup" className="bg-blue-400 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-500 transition">
+                        <Link href="/signup" className="bg-blue-400 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-500 transition">
                             Sign Up
-                        </a>
+                        </Link>
                     </nav>
                     <div className="md:hidden">
                         <button onClick={() => setIsMenuOpen(true)} className="text-gray-600 hover:text-blue-600 focus:outline-none">
@@ -48,9 +48,9 @@ const Navbar: React.FC = () => {
                             <Link href="#features" className="font-bold py-2 border-b border-gray-200 text-xl text-gray-800 hover:text-blue-400 transition" onClick={() => setIsMenuOpen(false)}>Features</Link>
                             <Link href="#testimonials" className="font-bold py-2 border-b border-gray-200 text-xl text-gray-800 hover:text-blue-400 transition" onClick={() => setIsMenuOpen(false)}>Testimonials</Link>
                             <Link href="#faq" className="font-bold py-2 border-b border-gray-200 text-xl text-gray-800 hover:text-blue-400 transition" onClick={() => setIsMenuOpen(false)}>Faq</Link>
-                            <a href="/signup" className="font-bold py-2 border-b border-gray-200 text-xl text-gray-800 hover:text-blue-400 transition" onClick={() => setIsMenuOpen(false)}>
+                            <Link href="/signup" className="font-bold py-2 border-b border-gray-200 text-xl text-gray-800 hover:text-blue-400 transition" onClick={() => setIsMenuOpen(false)}>
                                 Sign Up
-                            </a>
+                            </Link>
                         </nav>
                     </div>
                 </div>

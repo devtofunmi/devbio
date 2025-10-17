@@ -1,5 +1,6 @@
 import React from 'react';
 import { useKeenSlider } from 'keen-slider/react';
+import Image from 'next/image';
 
 const animation = { duration: 20000, easing: (t: number) => t }
 
@@ -54,7 +55,7 @@ interface CrackedDevCardProps {
 
 const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar }) => (
     <div className="relative w-40 h-40 rounded-md overflow-hidden">
-        <img
+        <Image
             src={avatar}
             alt={`${name}'s avatar`}
             width={160}
