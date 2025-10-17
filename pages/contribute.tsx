@@ -43,7 +43,7 @@ const Contribute: React.FC = () => {
               <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
                 <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
                   <div className="flex items-start mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Report a Bug</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Report a Bug</h2>
                   </div>
                   <p className="text-gray-600 mb-4">
                     Found something that isn&apos;t working as expected? Create a detailed issue on GitHub so we can fix it.
@@ -59,7 +59,7 @@ const Contribute: React.FC = () => {
               <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
                 <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
                   <div className="flex items-start mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Code Contributions</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Code Contributions</h2>
                   </div>
                   <p className="text-gray-600 mb-4">
                     Ready to write some code? Fork the repo, create a new branch, and submit a pull request. We appreciate all contributions, big or small.
@@ -75,7 +75,7 @@ const Contribute: React.FC = () => {
               <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
                 <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
                   <div className="flex items-start mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Code of Conduct</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Code of Conduct</h2>
                   </div>
                   <p className="text-gray-600">
                     We are committed to a welcoming and inclusive community. Please read and follow our Code of Conduct to ensure a positive environment for everyone.
@@ -91,7 +91,7 @@ const Contribute: React.FC = () => {
               <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
                 <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
                   <div className="flex items-start mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Suggest a Feature</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Suggest a Feature</h2>
                   </div>
                   <p className="text-gray-600 mb-4">
                     Have a great idea for a new feature? We&apos;d love to hear it. Open an issue to start a discussion with the community.
@@ -107,7 +107,7 @@ const Contribute: React.FC = () => {
               <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
                 <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
                   <div className="flex items-start mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Improve Documentation</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Improve Documentation</h2>
                   </div>
                   <p className="text-gray-600 mb-4">
                     Good documentation is key. If you see a typo, a missing explanation, or an area for improvement, please let us know or submit a PR.
@@ -123,7 +123,7 @@ const Contribute: React.FC = () => {
               <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
                 <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
                   <div className="flex items-start mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Join the Community</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Join the Community</h2>
                   </div>
                   <p className="text-gray-600">
                     Join our community on GitHub Discussions to ask questions, share ideas, and connect with other contributors.
