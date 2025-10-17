@@ -13,7 +13,7 @@ const Contribute: React.FC = () => {
           <div className="lg:w-1/3 lg:fixed lg:top-16 lg:h-screen lg:overflow-y-auto">
             <div className="flex flex-col items-start space-y-4">
               <div className="bg-blue-400 h-20 w-20 sm:h-32 sm:w-32 md:h-40 md:w-40 lg:h-50 lg:w-50 rounded-full"></div>
-              <h1 className="text-4xl font-extrabold text-gray-900 flex items-center gap-3">
+              <h1 className="md:text-4xl text-3xl font-extrabold text-gray-900 flex items-center gap-3">
                 Build with us <GoRocket />
               </h1>
               <p className="text-2xl text-gray-600 max-w-sm">
