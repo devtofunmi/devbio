@@ -94,7 +94,7 @@ const About: React.FC = () => {
     <div className={`${geistSans.className} ${geistMono.className} font-sans min-h-screen bg-gray-50 p-8 sm:p-12 md:p-16`}>
       <div className="max-w-7xl mx-auto">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           {/* Left Column: Product Info & Actions */}
           <div className="md:col-span-1 lg:sticky top-16 h-min">
@@ -121,7 +121,7 @@ const About: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column */}
+          {/* Middle Column */}
           <div className="md:col-span-1">
             <div className="w-full">
                
@@ -136,6 +136,17 @@ const About: React.FC = () => {
                         iconColor="text-blue-400"
                     />
 
+                </div>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="md:col-span-1">
+            <div className="w-full">
+               
+                
+                {/* Main grid structure for the social links and Bento cards */}
+                <div className="grid grid-cols-1 gap-4">
                     <FeatureCard
                         title="Claim your DevBio"
                         subtitle="devbio.me"
