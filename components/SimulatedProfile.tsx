@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { FaGithub, FaCode, FaRegNewspaper, FaStar, FaTwitter, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa6";
 import { IoLayersSharp } from "react-icons/io5";
 
@@ -65,7 +66,7 @@ const SimulatedProfile: React.FC = () => (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-2xl border border-gray-200 mt-12 mb-24">
         <div className="flex flex-col items-center">
             <div className="w-20 h-20 rounded-full bg-gray-200 mb-3 overflow-hidden">
-                <img 
+                <Image 
                     src={MOCK_IMAGES.avatar1} 
                     alt="Dev Avatar" 
                     width={80} 
