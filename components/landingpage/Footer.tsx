@@ -7,7 +7,6 @@ const Footer: React.FC = () => (
 
         <div className="flex justify-center gap-6 text-base text-gray-500">
             <Link href="/about" className="hover:text-gray-900">About us</Link>
-            <Link href="/team" className="hover:text-gray-900">Join the team</Link>
             <Link href="/contribute" className="hover:text-gray-900">Contribute</Link>
         </div>
         <p className="mt-6">© {new Date().getFullYear()} devbio. All rights reserved.</p>
