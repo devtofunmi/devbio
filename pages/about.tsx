@@ -4,21 +4,31 @@ import { FaTwitter, FaInstagram, FaTiktok } from 'react-icons/fa';
 interface SocialCardProps {
     icon: React.ReactNode;
     text: string;
+    subtitle: string;
     href: string;
     iconColor: string; 
+    buttonText: string;
 }
 
-const SocialCard: React.FC<SocialCardProps> = ({ icon, text, href, iconColor }) => (
-    <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-        <a 
-            href={href}
-            className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 flex items-center h-full"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <span className={`text-2xl mr-4 ${iconColor}`}>{icon}</span>
-            <span className="font-medium text-gray-800">{text}</span>
-        </a>
+const SocialCard: React.FC<SocialCardProps> = ({ icon, text, subtitle, href, iconColor, buttonText }) => (
+    <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden h-[160px]">
+        <div className="relative bg-white rounded-2xl p-4 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 flex flex-col justify-between h-full">
+            <div className="flex items-start">
+                <span className={`text-3xl mr-4 ${iconColor}`}>{icon}</span>
+                <div>
+                    <p className="font-bold text-gray-800">{text}</p>
+                    <p className="text-sm text-gray-500">{subtitle}</p>
+                </div>
+            </div>
+            <a 
+                href={href}
+                className="bg-blue-400 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-blue-500 transition duration-150"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                {buttonText}
+            </a>
+        </div>
         <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
     </div>
 );
@@ -131,9 +141,11 @@ const About: React.FC = () => {
                     
                     <SocialCard 
                         icon={<FaTwitter />}
-                        text="Follow us on Twitter"
+                        text="DevBio"
+                        subtitle="@devbio"
                         href="https://twitter.com/devbio"
                         iconColor="text-blue-400"
+                        buttonText="Follow"
                     />
 
                 </div>
