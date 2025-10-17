@@ -176,7 +176,9 @@ const About: React.FC = () => {
                           iconColor="text-blue-400"
                           buttonText="Follow"
                       />
+                      <div className="mt-4 md:mt-10">
                       <WeCreatedDevBioCard />
+                      </div>
                   </div>
               </div>
             </div>
