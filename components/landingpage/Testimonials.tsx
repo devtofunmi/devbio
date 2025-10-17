@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const TESTIMONIALS = [
     {
@@ -54,7 +55,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, handle, quote, 
         <div className="relative bg-[#1c1c1c] rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-[#2a2a2a] flex flex-col space-y-4 h-full">
             <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <img
+                    <Image
                         src={avatar}
                         alt={`${name}'s avatar`}
                         width={48}
