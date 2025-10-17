@@ -95,6 +95,22 @@ const WhyDevBioCard: React.FC = () => (
     </div>
 );
 
+const WeCreatedDevBioCard: React.FC = () => (
+    <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
+        <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">We created DevBio...</h2>
+            <div className="space-y-4 text-gray-600">
+                <p>
+                    ...because we believe developers deserve a better way to showcase their complete professional identity. While this page tells our story, your DevBio page will tell yours.
+                </p>
+                <p>
+                    What else would you like to see here? Maybe a timeline of our journey, more about the team, or a deep dive into our tech stack? Your feedback helps us grow!
+                </p>
+            </div>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
+    </div>
+);
 
 const geistSans = { className: "font-sans" };
 const geistMono = { className: "font-mono" };
@@ -160,6 +176,7 @@ const About: React.FC = () => {
                           iconColor="text-blue-400"
                           buttonText="Follow"
                       />
+                      <WeCreatedDevBioCard />
                   </div>
               </div>
             </div>
