@@ -48,6 +48,12 @@ const LoginPage: React.FC = () => {
                   {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                 </button>
               </div>
+              <button
+                            type="submit"
+                            className="w-full cursor-pointer flex justify-center py-3 mt-4 px-4 border border-transparent rounded-lg shadow-sm font-semibold text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          >
+                            Login
+                          </button>
             </div>
 
             
