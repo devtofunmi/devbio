@@ -10,8 +10,8 @@ const Signup: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
-    <div className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-white p-4`}>
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl rounded-xl">
+    <div className={`${geistSans.className} ${geistMono.className}  flex min-h-screen items-center justify-center bg-white p-4`}>
+      <div className="flex flex-col lg:flex-row w-[90%] md:w-full max-w-6xl rounded-xl">
         {/* Left Side: Signup Form */}
         <div className="flex-1 p-10 md:p-16">
           <h1 className="md:text-4xl text-2xl font-bold text-gray-900 mb-2">
@@ -30,18 +30,18 @@ const Signup: React.FC = () => {
               <input
                 type="text"
                 placeholder="Username"
-                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-500"
+                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500"
               />
               <input
                 type="email"
                 placeholder="Email address"
-                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-500"
+                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500"
               />
               <div className="relative flex-1">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-16 text-black placeholder-gray-500"
+                  className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 pr-16 text-black placeholder-gray-500"
                 />
                 <button
                   type="button"
@@ -55,7 +55,7 @@ const Signup: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full flex justify-center py-3 mt-4 px-4 border border-transparent rounded-lg shadow-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full flex justify-center py-3 mt-4 px-4 border border-transparent rounded-lg shadow-sm font-semibold text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Create Account
             </button>
