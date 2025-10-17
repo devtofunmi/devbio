@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FaTwitter, FaInstagram, FaTiktok } from 'react-icons/fa';
+import { FaTwitter, FaInstagram, FaTiktok, FaGithub } from 'react-icons/fa';
 
 interface SocialCardProps {
     icon: React.ReactNode;
@@ -22,7 +22,7 @@ const SocialCard: React.FC<SocialCardProps> = ({ icon, text, subtitle, href, ico
             </div>
             <a 
                 href={href}
-                className="bg-blue-400 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-blue-500 transition duration-150"
+                className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -138,7 +138,17 @@ const About: React.FC = () => {
                 
                 {/* Main grid structure for the social links and Bento cards */}
                 <div className="grid grid-cols-1 gap-4">
-                    
+                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Help us grow </h3>
+                    </div>
+                    <SocialCard 
+                        icon={<FaGithub />}
+                        text="Star our repo"
+                        subtitle="on GitHub"
+                        href="https://github.com/mugees"
+                        iconColor="text-black"
+                        buttonText="Star"
+                    />
+                <div className="mt-4 md:mt-10">
                     <SocialCard 
                         icon={<FaTwitter />}
                         text="DevBio"
@@ -147,8 +157,9 @@ const About: React.FC = () => {
                         iconColor="text-blue-400"
                         buttonText="Follow"
                     />
-
                 </div>
+                    
+                   
             </div>
           </div>
 
