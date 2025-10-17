@@ -140,7 +140,7 @@ const About: React.FC = () => {
                   {/* Main grid structure for the social links and Bento cards */}
                   <div className="grid grid-cols-1 gap-4">
                   <h3 className="text-lg text-center font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                      <FaArrowDown /> Help us grow <FaArrowDown />
+                      Help us grow <FaArrowDown />
                   </h3>
                       </div>
                       <SocialCard 
