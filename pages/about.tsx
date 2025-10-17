@@ -103,11 +103,9 @@ const About: React.FC = () => {
   return (
     <div className={`${geistSans.className} ${geistMono.className} font-sans min-h-screen bg-gray-50 p-8 sm:p-12 md:p-16`}>
       <div className="max-w-7xl mx-auto">
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          {/* Left Column: Product Info & Actions */}
-          <div className="md:col-span-1 h-min">
+        <div className="lg:flex lg:gap-8">
+          {/* Left Column: Product Info & Actions - Fixed on large screens */}
+          <div className="lg:w-1/3 lg:fixed lg:top-16 lg:h-screen lg:overflow-y-auto">
             <div className="flex flex-col items-start space-y-4">
 
               {/* mock logo */}
@@ -131,55 +129,55 @@ const About: React.FC = () => {
             </div>
           </div>
 
-          {/* Middle Column */}
-          <div className="md:col-span-1">
-            <div className="w-full">
-               
-                
-                {/* Main grid structure for the social links and Bento cards */}
-                <div className="grid grid-cols-1 gap-4">
-                 <h3 className="text-lg font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                    <FaArrowDown /> Help us grow <FaArrowDown />
-                 </h3>
-                    </div>
-                    <SocialCard 
-                        icon={<FaGithub />}
-                        text="Star our repo"
-                        subtitle="on GitHub"
-                        href="https://github.com/mugees"
-                        iconColor="text-black"
-                        buttonText="Star"
-                    />
-                <div className="mt-4 md:mt-10">
-                    <SocialCard 
-                        icon={<FaTwitter />}
-                        text="DevBio"
-                        subtitle="@devbio"
-                        href="https://twitter.com/devbio"
-                        iconColor="text-blue-400"
-                        buttonText="Follow"
-                    />
-                </div>
-                    
-                   
-            </div>
-          </div>
+          {/* Spacer to prevent content from being hidden behind the fixed left column */}
+          <div className="hidden lg:block lg:w-1/3"></div>
 
-          {/* Right Column */}
-          <div className="md:col-span-1">
-            <div className="w-full">
-               
-                
-                {/* Main grid structure for the social links and Bento cards */}
-                <div className="grid grid-cols-1 gap-4">
-                    <FeatureCard
-                        title="Claim your DevBio"
-                        subtitle="devbio.me"
-                        imagePath="/file.svg" 
-                        isClaimCard={true}
-                    />
-                    <WhyDevBioCard />
-                </div>
+          {/* Right side content (Middle and Right columns) */}
+          <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 lg:mt-0">
+            {/* Middle Column */}
+            <div className="md:col-span-1">
+              <div className="w-full">
+                  {/* Main grid structure for the social links and Bento cards */}
+                  <div className="grid grid-cols-1 gap-4">
+                  <h3 className="text-lg text-center font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                      <FaArrowDown /> Help us grow <FaArrowDown />
+                  </h3>
+                      </div>
+                      <SocialCard 
+                          icon={<FaGithub />}
+                          text="Star our repo"
+                          subtitle="on GitHub"
+                          href="https://github.com/mugees"
+                          iconColor="text-black"
+                          buttonText="Star"
+                      />
+                  <div className="mt-4 md:mt-10">
+                      <SocialCard 
+                          icon={<FaTwitter />}
+                          text="DevBio"
+                          subtitle="@devbio"
+                          href="https://twitter.com/devbio"
+                          iconColor="text-blue-400"
+                          buttonText="Follow"
+                      />
+                  </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="md:col-span-1">
+              <div className="w-full">
+                  {/* Main grid structure for the social links and Bento cards */}
+                  <div className="grid grid-cols-1 gap-4">
+                      <FeatureCard
+                          title="Claim your DevBio"
+                          subtitle="devbio.me"
+                          imagePath="/file.svg" 
+                          isClaimCard={true}
+                      />
+                      <WhyDevBioCard />
+                  </div>
+              </div>
             </div>
           </div>
         </div>
