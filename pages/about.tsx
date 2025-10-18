@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { FaTwitter, FaInstagram, FaTiktok, FaGithub, FaArrowDown } from 'react-icons/fa';
 
 const geistSans = { className: "font-sans" };
@@ -21,11 +22,13 @@ const About: React.FC = () => {
                 DevBio is the all-in-one link for developers to showcase their work, stack, and grow their personal brand. Create a beautiful, customizable page that reflects your skills and personality.
               </p>
               <div className="flex items-center space-x-4 pt-4 mb-16">
+                <Link href="/signup">
                 <button
                   className="px-6 py-3 cursor-pointer text-white font-semibold bg-blue-400 rounded-xl shadow-lg hover:bg-blue-500 transition duration-150 flex items-center"
                 >
                   Create Your DevBio
                 </button>
+                </Link>
                
               </div>
             </div>
