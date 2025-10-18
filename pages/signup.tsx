@@ -146,7 +146,7 @@ const Floating = ({
            {Array.from({ length: 140 }).map((_, i) => (
              <div
                key={i}
-               className={`w-2.5 h-2.5 rounded-full ${
+               className={`w-2.5 h-2.5 rounded-sm ${
                  i % 6 === 0
                    ? "bg-green-600"
                    : i % 4 === 0
