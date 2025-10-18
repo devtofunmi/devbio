@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "framer-motion": "^12.23.24",
     "keen-slider": "^6.8.6",
     "next": "15.5.4",
     "react": "19.1.0",
