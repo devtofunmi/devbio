@@ -23,10 +23,9 @@ const Home: React.FC = () => {
             </section>
             <SocialProof />
             <Features />
+            <CrackedDevs />
             <Testimonials />
             <FAQ />
-            <CrackedDevs />
-
             <CallToAction />
             <Footer />
         </div>
