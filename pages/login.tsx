@@ -14,7 +14,7 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
-    <div className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-white p-4`}>
+    <div className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-white md:p-4`}>
       <div className="flex flex-col lg:flex-row w-full max-w-6xl rounded-xl">
         {/* Left Side: Login Form */}
         <div className="flex-1 p-10 md:p-16">
@@ -71,7 +71,7 @@ const LoginPage: React.FC = () => {
             
             {/* Or Sign Up Link */}
             <p className="mt-4 text-sm text-gray-500">
-              or <Link href="/signup" className="text-gray-700 cursor-pointer hover:text-black">sign up</Link>
+              or <Link href="/signup" className="text-gray-700 underline cursor-pointer hover:text-black">sign up</Link>
             </p>
           </form>
         </div>

@@ -10,23 +10,17 @@ const Signup: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   return (
-    <div className={`${geistSans.className} ${geistMono.className}  flex min-h-screen items-center justify-center bg-white p-4`}>
+    <div className={`${geistSans.className} ${geistMono.className}  flex min-h-screen items-center justify-center bg-white md:p-4`}>
       <div className="flex flex-col lg:flex-row w-full max-w-6xl rounded-xl">
         {/* Left Side: Signup Form */}
         <div className="flex-1 p-10 md:p-16">
           <h1 className="md:text-4xl text-2xl font-bold text-gray-900 mb-2">
             Create your DevBio
           </h1>
-          <p className="text-xl text-gray-700 mb-10">
-            Already have an account?{' '}
-            <Link href="/login" className="font-medium text-md text-gray-800 hover:text-black">
-              Log in
-            </Link>
-          </p>
-
+         
           <form className="max-w-sm">
             {/* Input Fields */}
-            <div className="flex flex-col space-y-5 mb-4">
+            <div className="flex flex-col space-y-5 mt-4 mb-4">
               <input
                 type="text"
                 placeholder="Username"
@@ -70,6 +64,13 @@ const Signup: React.FC = () => {
               <SiGithub className="mr-2" size={20} />
               Sign up with Github
             </button>
+             <p className="text-sm text-gray-700 mt-4">
+            Already have an account?{' '}
+            <Link href="/login" className="font-medium text-sm  text-gray-800 hover:text-black">
+              Log in
+            </Link>
+          </p>
+
           </form>
         </div>
 
