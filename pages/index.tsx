@@ -1,5 +1,5 @@
 import React from 'react';
-// import SimulatedProfile from '../components/SimulatedProfile';
+// 
 import CallToAction from '../components/landingpage/CallToAction';
 import CrackedDevs from '../components/landingpage/CrackedDevs';
 import Features from '../components/landingpage/Features';
@@ -18,9 +18,7 @@ const Home: React.FC = () => {
         <div className={`${geistSans.className} ${geistMono.className} font-sans min-h-screen bg-white flex flex-col`}>
             <Navbar />
             <Hero />
-            <section className="bg-white px-6">
-                {/* <SimulatedProfile /> */}
-            </section>
+
             <SocialProof />
             <Features />
             <CrackedDevs />
