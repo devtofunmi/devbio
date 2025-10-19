@@ -7,7 +7,7 @@ import { FiHome, FiBarChart2, FiSettings } from 'react-icons/fi';
 const Sidebar: React.FC = () => {
   const router = useRouter();
   const [showTooltip, setShowTooltip] = useState(false);
-  const tooltipRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLLIElement>(null); 
 
   const menuItems = [
     { href: '/dashboard', label: 'Your Page', icon: FiHome },
@@ -15,7 +15,6 @@ const Sidebar: React.FC = () => {
     { href: '/dashboard/settings', label: 'Settings', icon: FiSettings },
   ];
 
-  // Close tooltip when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
