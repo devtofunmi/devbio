@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -6,6 +6,8 @@ import { FiHome, FiBarChart2, FiSettings } from 'react-icons/fi';
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const menuItems = [
     { href: '/dashboard', label: 'Your Page', icon: FiHome },
@@ -13,12 +15,25 @@ const Sidebar: React.FC = () => {
     { href: '/dashboard/settings', label: 'Settings', icon: FiSettings },
   ];
 
+  // Close tooltip when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+        setShowTooltip(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       {/* Mobile Bottom Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 z-50">
-        <nav className="flex justify-center">
-          <ul className="flex">
+        <nav className="flex justify-center items-center">
+          <ul className="flex items-center">
             {menuItems.map((item) => (
               <li key={item.href}>
                 <Link href={item.href}>
@@ -34,6 +49,29 @@ const Sidebar: React.FC = () => {
                 </Link>
               </li>
             ))}
+
+            {/* User Avatar with Tooltip */}
+            <li className="relative mx-2 my-2" ref={tooltipRef}>
+              <button
+                onClick={() => setShowTooltip(!showTooltip)}
+                className="flex items-center justify-center p-1 rounded-full focus:outline-none"
+              >
+                <Image
+                  src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
+                  alt="User Avatar"
+                  width={36}
+                  height={36}
+                  className="rounded-full border border-gray-300"
+                />
+              </button>
+
+              {showTooltip && (
+                <div className="absolute bottom-14 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-lg rounded-xl p-3 w-40 text-start transition-all duration-200">
+                  <div className="font-bold text-gray-800">Jay</div>
+                  <div className="text-gray-500 text-sm">jay@example.com</div>
+                </div>
+              )}
+            </li>
           </ul>
         </nav>
       </div>
@@ -45,6 +83,7 @@ const Sidebar: React.FC = () => {
             <div className="bg-blue-400 h-10 w-10 rounded-full"></div>
           </Link>
         </div>
+
         <nav>
           <ul>
             {menuItems.map((item) => (
@@ -65,8 +104,9 @@ const Sidebar: React.FC = () => {
             ))}
           </ul>
         </nav>
+
         <div className="mt-auto">
-          <div className="bg-white p-4 rounded-xl border border-gray-200 h-20 flex items-center transform transition-transform duration-300 hover:scale-110 active:scale-105 ansition-all active:-rotate-2 hover:-rotate-2">
+          <div className="bg-white p-4 rounded-xl border border-gray-200 h-20 flex items-center transform transition-transform duration-300 hover:scale-110 active:scale-105 active:-rotate-2 hover:-rotate-2">
             <div className="flex items-center space-x-3">
               <Image
                 src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
