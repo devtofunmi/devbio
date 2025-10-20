@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FaEdit, FaReact, FaPlus } from 'react-icons/fa';
 import { SiNextdotjs, SiTypescript, SiTailwindcss, SiSupabase } from 'react-icons/si';
@@ -11,9 +10,14 @@ const allTech = [
   { name: 'Supabase', icon: <SiSupabase /> },
 ];
 
+interface Tech {
+  name: string;
+  icon: React.ReactNode;
+}
+
 const TechStackCard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [techStack, setTechStack] = useState<any[]>([]);
+  const [techStack, setTechStack] = useState<Tech[]>([]);
   const [showTechIcons, setShowTechIcons] = useState(true);
 
   const handleEdit = () => {
@@ -24,7 +28,7 @@ const TechStackCard: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const toggleTech = (tech: any) => {
+  const toggleTech = (tech: Tech) => {
     setTechStack(prev => 
       prev.find(t => t.name === tech.name) 
         ? prev.filter(t => t.name !== tech.name) 
