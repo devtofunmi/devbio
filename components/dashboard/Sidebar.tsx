@@ -32,9 +32,9 @@ const Sidebar: React.FC = () => {
       {/* Mobile Bottom Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 z-50">
         <nav className="flex justify-center items-center">
-          <ul className="flex items-center">
+          <li className="flex items-center">
             {menuItems.map((item) => (
-              <li key={item.href}>
+              <ul key={item.href}>
                 <Link href={item.href}>
                   <p
                     className={`flex items-center justify-center p-3 mx-2 my-2 rounded-full transition-colors ${
@@ -46,11 +46,11 @@ const Sidebar: React.FC = () => {
                     <item.icon />
                   </p>
                 </Link>
-              </li>
+              </ul>
             ))}
 
             {/* User Avatar with Tooltip */}
-            <li className="relative mx-2 my-2" ref={tooltipRef}>
+            <ul className="relative mx-2 my-2" ref={tooltipRef}>
               <button
                 onClick={() => setShowTooltip(!showTooltip)}
                 className="flex items-center justify-center p-1 rounded-full focus:outline-none"
@@ -70,8 +70,8 @@ const Sidebar: React.FC = () => {
                   <div className="text-gray-500 text-sm">jay@example.com</div>
                 </div>
               )}
-            </li>
-          </ul>
+            </ul>
+          </li>
         </nav>
       </div>
 
@@ -84,9 +84,9 @@ const Sidebar: React.FC = () => {
         </div>
 
         <nav>
-          <ul>
+          <li>
             {menuItems.map((item) => (
-              <li key={item.href}>
+              <ul key={item.href}>
                 <Link href={item.href}>
                   <p
                     className={`flex items-center p-3 my-2 rounded-full transition-colors ${
@@ -99,9 +99,9 @@ const Sidebar: React.FC = () => {
                     {item.label}
                   </p>
                 </Link>
-              </li>
+              </ul>
             ))}
-          </ul>
+          </li>
         </nav>
 
         <div className="mt-auto">
