@@ -133,7 +133,7 @@ const DashboardPage: React.FC = () => {
                           className="w-20 h-20 rounded-full object-cover"
                         />
                         <div>
-                          <h2 className="text-2xl font-bold text-gray-600">
+                          <h2 className="text-xl font-bold text-gray-600">
                             {profile.name}
                           </h2>
                           <p className="text-lg text-gray-600">
@@ -149,7 +149,7 @@ const DashboardPage: React.FC = () => {
                   } else if (card.id === "techstack") {
                     content = (
                       <div className="text-center">
-                        <h3 className="text-2xl font-bold text-gray-600 mb-4">
+                        <h3 className="text-xl font-bold text-gray-600 mb-4">
                           Add your tech stack
                         </h3>
                        
@@ -159,7 +159,7 @@ const DashboardPage: React.FC = () => {
                   } else if (card.id === "socials") {
                     content = (
                       <div className="text-center">
-                        <h3 className="text-2xl font-bold text-gray-600 mb-4">
+                        <h3 className="text-xl font-bold text-gray-600 mb-4">
                          Add your social links
                         </h3>
                         
