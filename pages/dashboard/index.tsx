@@ -36,7 +36,7 @@ interface SocialLink {
   href: string;
 }
 
-const iconOptions: { [key: string]: JSX.Element } = {
+const iconOptions: { [key: string]: React.ReactElement } = {
   FaReact: <FaReact />,
   SiNextdotjs: <SiNextdotjs />,
   SiTypescript: <SiTypescript />,
@@ -119,7 +119,7 @@ const DashboardPage: React.FC = () => {
                 {...provided.droppableProps}
               >
                 {cards.map((card, index) => {
-                  let content: JSX.Element | undefined;
+                  let content: React.ReactElement | undefined;
                   let onEditClick: (() => void) | undefined;
 
                   if (card.id === "profile") {
