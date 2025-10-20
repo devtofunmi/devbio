@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
+import Image from 'next/image';
 
 const ProfileCard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,9 +22,11 @@ const ProfileCard: React.FC = () => {
     <div className="relative group transition-transform duration-300 ease-in-out hover:-rotate-1 focus:-rotate-1 rounded-2xl overflow-hidden">
       <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
         <div className="flex flex-col items-center text-center space-y-3">
-          <img
+          <Image
             src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
             alt="Profile"
+            width={80}
+            height={80}
             className="w-20 h-20 rounded-full object-cover"
           />
           <div>
