@@ -7,7 +7,7 @@ import { FiHome, FiBarChart2, FiSettings } from 'react-icons/fi';
 const Sidebar: React.FC = () => {
   const router = useRouter();
   const [showTooltip, setShowTooltip] = useState(false);
-  const tooltipRef = useRef<HTMLLIElement>(null); 
+  const tooltipRef = useRef<HTMLUListElement>(null); 
 
   const menuItems = [
     { href: '/dashboard', label: 'Your Page', icon: FiHome },
