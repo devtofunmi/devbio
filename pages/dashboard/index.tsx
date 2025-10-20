@@ -19,6 +19,7 @@ import {
   SiTypescript,
   SiTailwindcss,
   SiSupabase,
+  SiFacebook
 } from "react-icons/si";
 import { RiEditCircleLine } from "react-icons/ri";
 
@@ -36,15 +37,19 @@ interface SocialLink {
   href: string;
 }
 
-const iconOptions: { [key: string]: React.ReactElement } = {
+const stackIconOptions: { [key: string]: React.ReactElement } = {
   FaReact: <FaReact />,
   SiNextdotjs: <SiNextdotjs />,
   SiTypescript: <SiTypescript />,
   SiTailwindcss: <SiTailwindcss />,
   SiSupabase: <SiSupabase />,
+};
+
+const socialIconOptions: { [key: string]: React.ReactElement } = {
   FaTwitter: <FaTwitter />,
   FaGithub: <FaGithub />,
   FaLinkedin: <FaLinkedin />,
+  SiFacebook: <SiFacebook />,
 };
 
 const DashboardPage: React.FC = () => {
@@ -93,7 +98,7 @@ const DashboardPage: React.FC = () => {
 
   const handleAddTech = () => {
     if (newTech.name.trim() !== "") {
-      setTechStack([...techStack, { name: newTech.name, icon: iconOptions[newTech.icon] }]);
+      setTechStack([...techStack, { name: newTech.name, icon: stackIconOptions[newTech.icon] }]);
       setNewTech({ name: "", icon: "FaReact" });
       setTechModalOpen(false);
     }
@@ -101,7 +106,7 @@ const DashboardPage: React.FC = () => {
 
   const handleAddSocial = () => {
     if (newSocial.name.trim() !== "" && newSocial.href.trim() !== "") {
-      setSocialLinks([...socialLinks, { ...newSocial, icon: iconOptions[newSocial.icon] }]);
+      setSocialLinks([...socialLinks, { ...newSocial, icon: socialIconOptions[newSocial.icon] }]);
       setNewSocial({ name: "", href: "", icon: "FaTwitter" });
       setSocialModalOpen(false);
     }
@@ -264,13 +269,13 @@ const DashboardPage: React.FC = () => {
               <div className="mb-6 mt-2">
                 <label className="block text-gray-800 text-sm font-bold mb-2">Or click on an icon:</label>
                 <div className="flex flex-wrap gap-3">
-                  {Object.keys(iconOptions).map(iconKey => (
+                  {Object.keys(stackIconOptions).map(iconKey => (
                     <button 
                       key={iconKey} 
                       onClick={() => setNewTech({ ...newTech, icon: iconKey })} 
                       className={`p-4 text-2xl text-black rounded-lg border-2 ${newTech.icon === iconKey ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'} transition-all`}
                     >
-                      {iconOptions[iconKey]}
+                      {stackIconOptions[iconKey]}
                     </button>
                   ))}
                 </div>
@@ -314,13 +319,13 @@ const DashboardPage: React.FC = () => {
               <div className="mb-6 mt-2">
                 <label className="block text-gray-800 text-sm font-bold mb-2">Or click on an Icon:</label>
                 <div className="flex flex-wrap gap-3">
-                  {Object.keys(iconOptions).map(iconKey => (
+                  {Object.keys(socialIconOptions).map(iconKey => (
                     <button 
                       key={iconKey} 
                       onClick={() => setNewSocial({ ...newSocial, icon: iconKey })} 
                       className={`p-4 text-2xl text-black rounded-lg border-2 ${newSocial.icon === iconKey ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'} transition-all`}
                     >
-                      {iconOptions[iconKey]}
+                      {socialIconOptions[iconKey]}
                     </button>
                   ))}
                 </div>
