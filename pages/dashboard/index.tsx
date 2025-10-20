@@ -148,7 +148,7 @@ const DashboardPage: React.FC = () => {
                     onEditClick = () => setProfileModalOpen(true);
                   } else if (card.id === "techstack") {
                     content = (
-                      <div className="flex justify-center text-center">
+                      <div className="flex justify-center text-center items-center">
                         <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                           Add your tech stack
                         </h3>
@@ -158,7 +158,7 @@ const DashboardPage: React.FC = () => {
                     onEditClick = () => setTechModalOpen(true);
                   } else if (card.id === "socials") {
                     content = (
-                      <div className="flex justify-center text-center">
+                      <div className="flex justify-center text-center items-center">
                         <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                          Add your social links
                         </h3>
@@ -262,7 +262,7 @@ const DashboardPage: React.FC = () => {
                 placeholder="Enter stack name"
               />
               <div className="mb-6 mt-2">
-                <label className="block text-gray-800 text-sm font-bold mb-2">Icon</label>
+                <label className="block text-gray-800 text-sm font-bold mb-2">Or click on an icon:</label>
                 <div className="flex flex-wrap gap-3">
                   {Object.keys(iconOptions).map(iconKey => (
                     <button 
@@ -312,7 +312,7 @@ const DashboardPage: React.FC = () => {
                 placeholder="Enter full URL"
               />
               <div className="mb-6 mt-2">
-                <label className="block text-gray-800 text-sm font-bold mb-2">Icon</label>
+                <label className="block text-gray-800 text-sm font-bold mb-2">Or click on an Icon:</label>
                 <div className="flex flex-wrap gap-3">
                   {Object.keys(iconOptions).map(iconKey => (
                     <button 
