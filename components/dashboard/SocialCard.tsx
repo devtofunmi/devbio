@@ -8,9 +8,15 @@ const allSocials = [
   { name: 'LinkedIn', icon: <FaLinkedin />, placeholder: 'https://linkedin.com/in/username' },
 ];
 
+interface SocialLink {
+  name: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
 const SocialCard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [socialLinks, setSocialLinks] = useState<any[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [showSocialIcons, setShowSocialIcons] = useState(true);
 
   const handleEdit = () => {
