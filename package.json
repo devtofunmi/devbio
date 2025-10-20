@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
     "framer-motion": "^12.23.24",
     "keen-slider": "^6.8.6",
     "next": "15.5.4",
