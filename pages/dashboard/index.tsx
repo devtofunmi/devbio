@@ -148,8 +148,8 @@ const DashboardPage: React.FC = () => {
                     onEditClick = () => setProfileModalOpen(true);
                   } else if (card.id === "techstack") {
                     content = (
-                      <div className="text-center">
-                        <h3 className="text-xl font-bold text-gray-600 mb-4">
+                      <div className="flex justify-center text-center">
+                        <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                           Add your tech stack
                         </h3>
                        
@@ -158,8 +158,8 @@ const DashboardPage: React.FC = () => {
                     onEditClick = () => setTechModalOpen(true);
                   } else if (card.id === "socials") {
                     content = (
-                      <div className="text-center">
-                        <h3 className="text-xl font-bold text-gray-600 mb-4">
+                      <div className="flex justify-center text-center">
+                        <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                          Add your social links
                         </h3>
                         
