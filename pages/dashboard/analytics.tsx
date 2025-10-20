@@ -1,11 +1,47 @@
-
 import React from 'react';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+const data = [
+  { name: 'Jan', views: 4000 },
+  { name: 'Feb', views: 3000 },
+  { name: 'Mar', views: 2000 },
+  { name: 'Apr', views: 2780 },
+  { name: 'May', views: 1890 },
+  { name: 'Jun', views: 2390 },
+  { name: 'Jul', views: 3490 },
+];
 
 const AnalyticsPage: React.FC = () => {
   return (
     <DashboardLayout>
-      <h1 className="text-2xl text-gray-700 font-bold">Analytics</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-gray-600">Total Views</h2>
+          <p className="text-xl font-bold text-gray-800">15,234</p>
+        </div>
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-gray-600">Total Likes</h2>
+          <p className="text-xl font-bold text-gray-800">5,678</p>
+        </div>
+        <div className="bg-white p-5 rounded-lg shadow">
+          <h2 className="text-lg font-semibold text-gray-600">Total Shares</h2>
+          <p className="text-xl font-bold text-gray-800">1,234</p>
+        </div>
+      </div>
+      <div className="mt-8 bg-white p-5 rounded-lg shadow">
+        <h2 className="text-lg font-semibold text-gray-600 mb-4">Page Views</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="views" fill="#60A5FA" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </DashboardLayout>
   );
 };
