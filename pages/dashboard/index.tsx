@@ -12,7 +12,6 @@ import {
   FaTwitter,
   FaGithub,
   FaLinkedin,
-  FaEdit,
   FaPlus,
 } from "react-icons/fa";
 import {
@@ -21,6 +20,7 @@ import {
   SiTailwindcss,
   SiSupabase,
 } from "react-icons/si";
+import { RiEditCircleLine } from "react-icons/ri";
 
 const geistSans = { className: "font-sans" };
 const geistMono = { className: "font-mono" };
@@ -53,10 +53,10 @@ const DashboardPage: React.FC = () => {
   const [isSocialModalOpen, setSocialModalOpen] = useState(false);
 
   const [profile, setProfile] = useState({
-    name: "Jay",
-    profession: "Frontend Developer",
+    name: "Your Name",
+    profession: "Your Profession",
     description:
-      "Passionate about building interactive web experiences and modern UIs.",
+      "Your description",
   });
 
   const [techStack, setTechStack] = useState<Tech[]>([
@@ -133,10 +133,10 @@ const DashboardPage: React.FC = () => {
                           className="w-20 h-20 rounded-full object-cover"
                         />
                         <div>
-                          <h2 className="text-lg font-bold text-gray-900">
+                          <h2 className="text-lg font-bold text-gray-600">
                             {profile.name}
                           </h2>
-                          <p className="text-sm text-gray-700">
+                          <p className="text-sm text-gray-600">
                             {profile.profession}
                           </p>
                         </div>
@@ -149,32 +149,20 @@ const DashboardPage: React.FC = () => {
                   } else if (card.id === "techstack") {
                     content = (
                       <div className="text-center">
-                        <h3 className="text-lg font-bold text-gray-900 mb-4">
-                          Tech Stack
+                        <h3 className="text-xl  text-gray-600 mb-4">
+                          Add your tech stack
                         </h3>
-                        <div className="flex justify-center flex-wrap gap-4">
-                          {techStack.map((tech) => (
-                            <div key={tech.name} className="text-3xl text-gray-700">
-                              {tech.icon}
-                            </div>
-                          ))}
-                        </div>
+                       
                       </div>
                     );
                     onEditClick = () => setTechModalOpen(true);
                   } else if (card.id === "socials") {
                     content = (
                       <div className="text-center">
-                        <h3 className="text-lg font-bold text-gray-900 mb-4">
-                          Social Links
+                        <h3 className="text-xl  text-gray-600 mb-4">
+                         Add your social links
                         </h3>
-                        <div className="flex justify-center flex-wrap gap-4">
-                          {socialLinks.map((social) => (
-                            <a key={social.name} href={social.href} className="text-3xl text-gray-700 hover:text-blue-500 transition-colors">
-                              {social.icon}
-                            </a>
-                          ))}
-                        </div>
+                        
                       </div>
                     );
                     onEditClick = () => setSocialModalOpen(true);
@@ -198,7 +186,7 @@ const DashboardPage: React.FC = () => {
                               onClick={onEditClick}
                               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                              <FaEdit />
+                              <RiEditCircleLine />
                             </button>
                             {content}
                           </div>
@@ -215,16 +203,15 @@ const DashboardPage: React.FC = () => {
 
         {/* Profile Modal */}
         {isProfileModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center p-4">
             <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md m-4">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Edit Profile</h3>
               <input
                 type="text"
                 value={profile.name}
                 onChange={(e) =>
                   setProfile({ ...profile, name: e.target.value })
                 }
-                className="w-full mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-black placeholder-gray-500"
+                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500 w-full"
                 placeholder="Name"
               />
               <input
@@ -233,7 +220,7 @@ const DashboardPage: React.FC = () => {
                 onChange={(e) =>
                   setProfile({ ...profile, profession: e.target.value })
                 }
-                className="w-full mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-black placeholder-gray-500"
+                className="flex-1 p-3 mt-5 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500 w-full"
                 placeholder="Profession"
               />
               <textarea
@@ -241,20 +228,20 @@ const DashboardPage: React.FC = () => {
                 onChange={(e) =>
                   setProfile({ ...profile, description: e.target.value })
                 }
-                className="w-full mb-6 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-black placeholder-gray-500"
+                className="flex-1 p-3 mt-5 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500 w-full"
                 placeholder="Description"
                 rows={4}
               />
-              <div className="flex justify-end space-x-4">
+              <div className="flex mt-5 justify-end space-x-4">
                 <button
                   onClick={() => setProfileModalOpen(false)}
-                  className="px-6 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
+                 className="px-6 py-4 w-[200px] cursor-pointer bg-gray-100 text-center text-gray-800 rounded-xl hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setProfileModalOpen(false)}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-md"
+                  className="px-6 py-4 w-[200px] cursor-pointer bg-blue-400 text-white rounded-xl hover:bg-blue-500 transition-colors shadow-md"
                 >
                   Save
                 </button>
@@ -265,24 +252,23 @@ const DashboardPage: React.FC = () => {
 
         {/* Tech Stack Modal */}
         {isTechModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="fixed inset-0 bg-black/50 flex justify-center items-center p-4">
             <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md m-4">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Add Tech Stack</h3>
               <input
                 type="text"
                 value={newTech.name}
                 onChange={(e) => setNewTech({ ...newTech, name: e.target.value })}
-                className="w-full mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-black placeholder-gray-500"
-                placeholder="Enter tech name"
+                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500 w-full"
+                placeholder="Enter stack name"
               />
-              <div className="mb-6">
+              <div className="mb-6 mt-2">
                 <label className="block text-gray-800 text-sm font-bold mb-2">Icon</label>
                 <div className="flex flex-wrap gap-3">
                   {Object.keys(iconOptions).map(iconKey => (
                     <button 
                       key={iconKey} 
                       onClick={() => setNewTech({ ...newTech, icon: iconKey })} 
-                      className={`p-4 text-2xl rounded-lg border-2 ${newTech.icon === iconKey ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'} transition-all`}
+                      className={`p-4 text-2xl text-black rounded-lg border-2 ${newTech.icon === iconKey ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'} transition-all`}
                     >
                       {iconOptions[iconKey]}
                     </button>
@@ -292,13 +278,13 @@ const DashboardPage: React.FC = () => {
               <div className="flex justify-end space-x-4">
                 <button
                   onClick={() => setTechModalOpen(false)}
-                  className="px-6 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
+                   className="px-6 py-4 w-[200px] cursor-pointer bg-gray-100 text-center text-gray-800 rounded-xl hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddTech}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-md flex items-center"
+                  className="px-6 py-4 w-[200px] cursor-pointer bg-blue-400 flex justify-center text-white rounded-xl hover:bg-blue-500 transition-colors shadow-md  items-center"
                 >
                   <FaPlus className="mr-2"/> Add
                 </button>
@@ -309,47 +295,46 @@ const DashboardPage: React.FC = () => {
 
         {/* Social Links Modal */}
         {isSocialModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+          <div className="fixed inset-0 bg-black/50 flex justify-center items-center p-4">
             <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md m-4">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Add Social Link</h3>
               <input
                 type="text"
                 value={newSocial.name}
                 onChange={(e) => setNewSocial({ ...newSocial, name: e.target.value })}
-                className="w-full mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-black placeholder-gray-500"
+                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500 w-full"
                 placeholder="Social media name"
               />
               <input
                 type="text"
                 value={newSocial.href}
                 onChange={(e) => setNewSocial({ ...newSocial, href: e.target.value })}
-                className="w-full mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-black placeholder-gray-500"
+                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 mt-5 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500 w-full"
                 placeholder="Enter full URL"
               />
-              <div className="mb-6">
+              <div className="mb-6 mt-2">
                 <label className="block text-gray-800 text-sm font-bold mb-2">Icon</label>
                 <div className="flex flex-wrap gap-3">
                   {Object.keys(iconOptions).map(iconKey => (
                     <button 
                       key={iconKey} 
                       onClick={() => setNewSocial({ ...newSocial, icon: iconKey })} 
-                      className={`p-4 text-2xl rounded-lg border-2 ${newSocial.icon === iconKey ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'} transition-all`}
+                      className={`p-4 text-2xl text-black rounded-lg border-2 ${newSocial.icon === iconKey ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'} transition-all`}
                     >
                       {iconOptions[iconKey]}
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="flex justify-end space-x-4">
+              <div className="flex justify-between space-x-4">
                 <button
                   onClick={() => setSocialModalOpen(false)}
-                  className="px-6 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="px-6 py-4 w-[200px] cursor-pointer bg-gray-100 text-center text-gray-800 rounded-xl hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddSocial}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-md flex items-center"
+                  className="px-6 py-4 w-[200px] cursor-pointer bg-blue-400 flex justify-center text-white rounded-xl hover:bg-blue-500 transition-colors shadow-md  items-center"
                 >
                   <FaPlus className="mr-2"/> Add
                 </button>
