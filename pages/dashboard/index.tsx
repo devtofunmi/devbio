@@ -19,7 +19,12 @@ import {
   SiTypescript,
   SiTailwindcss,
   SiSupabase,
-  SiFacebook
+  SiFacebook,
+  SiJavascript,
+  SiAngular,
+  SiNodedotjs,
+  SiExpress,
+  SiHono
 } from "react-icons/si";
 import { RiEditCircleLine } from "react-icons/ri";
 
@@ -40,9 +45,14 @@ interface SocialLink {
 const stackIconOptions: { [key: string]: React.ReactElement } = {
   FaReact: <FaReact />,
   SiNextdotjs: <SiNextdotjs />,
+  SiAngular: <SiAngular />,
+  SiNodedotjs: <SiNodedotjs />,
+  SiExpress: <SiExpress />,
+  SiHono: <SiHono />,
   SiTypescript: <SiTypescript />,
   SiTailwindcss: <SiTailwindcss />,
   SiSupabase: <SiSupabase />,
+  SiJavascript: <SiJavascript />,
 };
 
 const socialIconOptions: { [key: string]: React.ReactElement } = {
