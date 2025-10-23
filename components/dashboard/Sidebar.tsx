@@ -63,9 +63,9 @@ const Sidebar: React.FC = () => {
             </button>
 
             {showTooltip && (
-              <div className="absolute bottom-14 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-lg rounded-xl p-3 w-40 text-start transition-all duration-200">
+              <div className="absolute bottom-14 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-40 text-start transition-all duration-200">
                 <div className="font-bold text-gray-800">Jay</div>
-                <div className="text-gray-500 text-sm">jay@example.com</div>
+                <div className="text-gray-500 text-sm break-all">jay@example.com</div>
               </div>
             )}
           </div>
@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex w-70 bg-gray-50 border-r border-gray-200 p-5 flex-col h-screen">
+      <div className="hidden font-sans md:flex lg:fixed w-80 bg-gray-50 border-r border-gray-200 p-5 flex-col h-screen">
         <div className="border-1 p-5 rounded-2xl h-full border-gray-200 flex flex-col">
           {/* Logo */}
           <div className="flex items-center mb-10">
@@ -116,7 +116,7 @@ const Sidebar: React.FC = () => {
               />
               <div className="ml-3">
                 <div className="font-bold text-gray-800">Jay</div>
-                <div className="text-gray-500 text-sm">jay@example.com</div>
+                <div className="text-gray-500 text-sm break-all">jay@example.com</div>
               </div>
             </div>
           </div>
