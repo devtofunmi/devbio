@@ -42,7 +42,7 @@ const DashboardPage = () => {
     image: "",
   });
 
-  const [githubUsername, setGithubUsername] = useState("devtofunmi");
+  const [githubUsername, setGithubUsername] = useState("");
 
   const [techStack, setTechStack] = useState([
     { name: "React", icon: <FaReact /> },
@@ -158,14 +158,14 @@ const DashboardPage = () => {
                           )}
                         </div>
                         <div>
-                          <h2 className="font-bold font-bold text-lg text-gray-800 text-center text-gray-600">
+                          <h2 className="text-xl font-bold text-gray-600">
                             {profile.name}
                           </h2>
-                          <p className="text-md text-gray-600">
+                          <p className="text-lg text-gray-600">
                             {profile.profession}
                           </p>
                         </div>
-                        <p className="text-gray-600 text-md max-w-sm">
+                        <p className="text-gray-600 text-base max-w-sm">
                           {profile.description}
                         </p>
                       </div>
@@ -174,7 +174,7 @@ const DashboardPage = () => {
                   } else if (card.id === "techstack") {
                     content = (
                       <div className="flex justify-center text-center items-center">
-                        <h3 className="font-bold text-lg text-gray-800 text-center">
+                        <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                           Add your tech stack
                         </h3>
                        
@@ -184,7 +184,7 @@ const DashboardPage = () => {
                   } else if (card.id === "socials") {
                     content = (
                       <div className="flex justify-center text-center items-center">
-                        <h3 className="font-bold text-lg text-gray-800 text-center">
+                        <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                          Add your social links
                         </h3>
                         
@@ -194,15 +194,16 @@ const DashboardPage = () => {
                   } else if (card.id === "github") {
                     content = (
                       <div className="flex flex-col justify-center text-center items-center">
-                        <h3 className="font-bold text-lg text-gray-800 text-center">
+                        <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                           GitHub Contribution Graph
                         </h3>
-                        <Image
+                        <img
                          src={`https://ghchart.rshah.org/${githubUsername}`}
                          alt="GitHub Chart"
-                         width={800}
-                         height={200}
                          className="w-full h-auto max-h-[250px] object-contain rounded-lg"
+                         onError={(e) => {
+                          e.currentTarget.alt = "";
+                         }}
                        />
 
                       </div>
