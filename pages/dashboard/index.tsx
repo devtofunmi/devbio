@@ -26,55 +26,25 @@ import {
   SiExpress,
   SiHono
 } from "react-icons/si";
-import { RiEditCircleLine } from "react-icons/ri";
 
-const geistSans = { className: "font-sans" };
-const geistMono = { className: "font-mono" };
-
-interface Tech {
-  name: string;
-  icon: React.ReactElement;
-}
-
-interface SocialLink {
-  name: string;
-  icon: React.ReactElement;
-  href: string;
-}
-
-const stackIconOptions: { [key: string]: React.ReactElement } = {
-  FaReact: <FaReact />,
-  SiNextdotjs: <SiNextdotjs />,
-  SiAngular: <SiAngular />,
-  SiNodedotjs: <SiNodedotjs />,
-  SiExpress: <SiExpress />,
-  SiHono: <SiHono />,
-  SiTypescript: <SiTypescript />,
-  SiTailwindcss: <SiTailwindcss />,
-  SiSupabase: <SiSupabase />,
-  SiJavascript: <SiJavascript />,
-};
-
-const socialIconOptions: { [key: string]: React.ReactElement } = {
-  FaTwitter: <FaTwitter />,
-  FaGithub: <FaGithub />,
-  FaLinkedin: <FaLinkedin />,
-  SiFacebook: <SiFacebook />,
-};
-
-const DashboardPage: React.FC = () => {
-  const [isProfileModalOpen, setProfileModalOpen] = useState(false);
-  const [isTechModalOpen, setTechModalOpen] = useState(false);
-  const [isSocialModalOpen, setSocialModalOpen] = useState(false);
+const DashboardPage = () => {
+  const [cards, setCards] = useState([
+    { id: "profile", content: "Profile" },
+    { id: "techstack", content: "Tech Stack" },
+    { id: "socials", content: "Socials" },
+    { id: "github", content: "GitHub" },
+  ]);
 
   const [profile, setProfile] = useState({
-    name: "Your Name",
-    profession: "Your Profession",
-    description:
-      "Your description",
+    name: "Your name",
+    profession: "Your profession",
+    description: "Your description",
+    image: "",
   });
 
-  const [techStack, setTechStack] = useState<Tech[]>([
+  const [githubUsername, setGithubUsername] = useState("devtofunmi");
+
+  const [techStack, setTechStack] = useState([
     { name: "React", icon: <FaReact /> },
     { name: "Next.js", icon: <SiNextdotjs /> },
     { name: "TypeScript", icon: <SiTypescript /> },
@@ -82,49 +52,83 @@ const DashboardPage: React.FC = () => {
     { name: "Supabase", icon: <SiSupabase /> },
   ]);
 
-  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([
-    { name: "Twitter", icon: <FaTwitter />, href: "https://twitter.com/" },
-    { name: "GitHub", icon: <FaGithub />, href: "https://github.com/" },
-    { name: "LinkedIn", icon: <FaLinkedin />, href: "https://linkedin.com/" },
+  const [socials, setSocials] = useState([
+    { name: "Twitter", icon: <FaTwitter />, href: "#" },
+    { name: "GitHub", icon: <FaGithub />, href: "#" },
+    { name: "LinkedIn", icon: <FaLinkedin />, href: "#" },
   ]);
 
-  const [newTech, setNewTech] = useState({ name: "", icon: "FaReact" });
-  const [newSocial, setNewSocial] = useState({ name: "", href: "", icon: "FaTwitter" });
+  const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+  const [isTechModalOpen, setTechModalOpen] = useState(false);
+  const [isSocialModalOpen, setSocialModalOpen] = useState(false);
+  const [isGithubModalOpen, setGithubModalOpen] = useState(false);
 
-  const [cards, setCards] = useState([
-    { id: "profile" },
-    { id: "techstack" },
-    { id: "socials" },
-  ]);
+  const [newTech, setNewTech] = useState({ name: "", icon: "" });
+  const [newSocial, setNewSocial] = useState({ name: "", href: "", icon: "" });
 
-  // Handle drag reorder
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
-    const reordered = Array.from(cards);
-    const [moved] = reordered.splice(result.source.index, 1);
-    reordered.splice(result.destination.index, 0, moved);
-    setCards(reordered);
+    const items = Array.from(cards);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setCards(items);
+  };
+
+  const stackIconOptions: { [key: string]: React.ReactElement } = {
+    React: <FaReact />,
+    "Next.js": <SiNextdotjs />,
+    TypeScript: <SiTypescript />,
+    "Tailwind CSS": <SiTailwindcss />,
+    Supabase: <SiSupabase />,
+    JavaScript: <SiJavascript />,
+    Angular: <SiAngular />,
+    "Node.js": <SiNodedotjs />,
+    Express: <SiExpress />,
+    Hono: <SiHono />,
+  };
+
+  const socialIconOptions: { [key: string]: React.ReactElement } = {
+    Twitter: <FaTwitter />,
+    GitHub: <FaGithub />,
+    LinkedIn: <FaLinkedin />,
+    Facebook: <SiFacebook />,
   };
 
   const handleAddTech = () => {
-    if (newTech.name.trim() !== "") {
+    if (newTech.name && newTech.icon) {
       setTechStack([...techStack, { name: newTech.name, icon: stackIconOptions[newTech.icon] }]);
-      setNewTech({ name: "", icon: "FaReact" });
+      setNewTech({ name: "", icon: "" });
       setTechModalOpen(false);
     }
   };
 
   const handleAddSocial = () => {
-    if (newSocial.name.trim() !== "" && newSocial.href.trim() !== "") {
-      setSocialLinks([...socialLinks, { ...newSocial, icon: socialIconOptions[newSocial.icon] }]);
-      setNewSocial({ name: "", href: "", icon: "FaTwitter" });
+    if (newSocial.name && newSocial.href && newSocial.icon) {
+      setSocials([...socials, { name: newSocial.name, href: newSocial.href, icon: socialIconOptions[newSocial.icon] }]);
+      setNewSocial({ name: "", href: "", icon: "" });
       setSocialModalOpen(false);
+    }
+  };
+
+  const handleSetGithubUsername = () => {
+    setGithubModalOpen(false);
+  };
+
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target && e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          setProfile({ ...profile, image: event.target.result as string });
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
 
   return (
     <DashboardLayout>
-      <div className={`${geistSans.className} ${geistMono.className} font-sans border-1 p-5 rounded-2xl h-[95%] border-gray-200`}>
+      <div className={`font-sans border-1 p-5 rounded-3xl min-h-screen border-gray-200`}>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="cards">
             {(provided) => (
@@ -140,13 +144,19 @@ const DashboardPage: React.FC = () => {
                   if (card.id === "profile") {
                     content = (
                       <div className="flex flex-col items-center text-center space-y-3">
-                        <Image
-                          src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
-                          alt="Profile"
-                          width={80}
-                          height={80}
-                          className="w-20 h-20 rounded-full object-cover"
-                        />
+                        <div className="w-20 h-20 rounded-full bg-blue-400 flex items-center justify-center">
+                          {profile.image ? (
+                            <Image
+                              src={profile.image}
+                              alt="Profile"
+                              width={80}
+                              height={80}
+                              className="w-20 h-20 rounded-full object-cover"
+                            />
+                          ) : (
+                            <FaPlus className="text-white " />
+                          )}
+                        </div>
                         <div>
                           <h2 className="text-xl font-bold text-gray-600">
                             {profile.name}
@@ -181,6 +191,23 @@ const DashboardPage: React.FC = () => {
                       </div>
                     );
                     onEditClick = () => setSocialModalOpen(true);
+                  } else if (card.id === "github") {
+                    content = (
+                      <div className="flex flex-col justify-center text-center items-center">
+                        <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
+                          GitHub Contribution Graph
+                        </h3>
+                        <Image
+                         src={`https://ghchart.rshah.org/${githubUsername}`}
+                         alt="GitHub Chart"
+                         width={800}
+                         height={200}
+                         className="w-full h-auto max-h-[250px] object-contain rounded-lg"
+                       />
+
+                      </div>
+                    );
+                    onEditClick = () => setGithubModalOpen(true);
                   }
 
                   return (
@@ -190,19 +217,14 @@ const DashboardPage: React.FC = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
+                          onClick={onEditClick}
                           className={`relative group transition-transform duration-300 ease-in-out hover:-rotate-1 focus:-rotate-1 rounded-2xl overflow-hidden ${
                             snapshot.isDragging
-                              ? "rotate-1 scale-105 shadow-2xl"
+                              ? "rotate-1 scale-105 shadow-md"
                               : ""
                           }`}
                         >
                           <div className="relative bg-white rounded-2xl p-6 shadow-xl border border-gray-200 w-full h-full">
-                            <button
-                              onClick={onEditClick}
-                              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                              <RiEditCircleLine />
-                            </button>
                             {content}
                           </div>
                         </div>
@@ -220,6 +242,27 @@ const DashboardPage: React.FC = () => {
         {isProfileModalOpen && (
           <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center p-4">
             <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md m-4">
+              <div className="flex flex-col items-center mb-5">
+                <div className="w-24 h-24 rounded-full bg-blue-400 flex items-center justify-center mb-4">
+                  {profile.image ? (
+                    <Image
+                      src={profile.image}
+                      alt="Profile Preview"
+                      width={96}
+                      height={96}
+                      className="w-24 h-24 rounded-full object-cover"
+                    />
+                  ) : (
+                    <FaPlus className="text-white" />
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleProfileImageChange}
+                  className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+              </div>
               <input
                 type="text"
                 value={profile.name}
@@ -259,6 +302,35 @@ const DashboardPage: React.FC = () => {
                   className="px-6 py-4 w-[200px] cursor-pointer bg-blue-400 text-white rounded-xl hover:bg-blue-500 transition-colors shadow-md"
                 >
                   Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* GitHub Modal */}
+        {isGithubModalOpen && (
+          <div className="fixed inset-0 bg-black/50 flex justify-center items-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md m-4">
+              <input
+                type="text"
+                value={githubUsername}
+                onChange={(e) => setGithubUsername(e.target.value)}
+                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500 w-full"
+                placeholder="Enter your GitHub username"
+              />
+              <div className="flex justify-end space-x-4 mt-5">
+                <button
+                  onClick={() => setGithubModalOpen(false)}
+                  className="px-6 py-4 w-[200px] cursor-pointer bg-gray-100 text-center text-gray-800 rounded-xl hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSetGithubUsername}
+                  className="px-6 py-4 w-[200px] cursor-pointer bg-blue-400 text-white rounded-xl hover:bg-blue-500 transition-colors shadow-md"
+                >
+                  Set
                 </button>
               </div>
             </div>
