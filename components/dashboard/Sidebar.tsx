@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
             </button>
 
             {showTooltip && (
-              <div className="absolute bottom-14 left-1/2 -translate-x-1/2 bg-white border border-gray-200 shadow-lg rounded-lg p-3 w-40 text-start transition-all duration-200">
+              <div className="absolute bottom-14 left-[-25] -translate-x-1/2 bg-white border border-gray-200 rounded-lg p-3 w-40 text-start transition-all duration-200">
                 <div className="font-bold text-gray-800">Jay</div>
                 <div className="text-gray-500 text-sm break-all">jay@example.com</div>
               </div>
@@ -89,7 +89,7 @@ const Sidebar: React.FC = () => {
                 <li key={item.href}>
                   <Link href={item.href}>
                     <p
-                      className={`flex items-center p-3 my-2 rounded-full transition-colors ${
+                      className={`flex items-center font-bold text-md text-gray-800  p-3 my-2 rounded-full transition-colors ${
                         router.pathname === item.href
                           ? 'bg-blue-400 text-white'
                           : 'text-gray-700 hover:bg-gray-100'
