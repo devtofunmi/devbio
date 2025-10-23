@@ -124,7 +124,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className={`${geistSans.className} ${geistMono.className} font-sans`}>
+      <div className={`${geistSans.className} ${geistMono.className} font-sans border-1 p-5 rounded-2xl h-[95%] border-gray-200`}>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="cards">
             {(provided) => (
