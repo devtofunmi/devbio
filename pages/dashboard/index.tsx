@@ -197,14 +197,13 @@ const DashboardPage = () => {
                         <h3 className="text-xl text-center font-bold text-gray-600 mb-4">
                           GitHub Contribution Graph
                         </h3>
-                        <img
-                         src={`https://ghchart.rshah.org/${githubUsername}`}
-                         alt="GitHub Chart"
-                         className="w-full h-auto max-h-[250px] object-contain rounded-lg"
-                         onError={(e) => {
-                          e.currentTarget.alt = "";
-                         }}
-                       />
+                        {githubUsername && (
+                          <img
+                           src={`https://ghchart.rshah.org/${githubUsername}`}
+                           alt="GitHub Chart"
+                           className="w-full h-auto max-h-[250px] object-contain rounded-lg"
+                         />
+                        )}
 
                       </div>
                     );
