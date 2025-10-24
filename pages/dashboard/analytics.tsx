@@ -1,6 +1,6 @@
 import React from 'react';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, LineChart, Line } from 'recharts';
 
 const data = [
   { name: 'Jan', views: 4000 },
