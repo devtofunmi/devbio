@@ -397,7 +397,6 @@ const DashboardPage = () => {
               <button onClick={() => setSocialModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                 <FaTimes />
               </button>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">Edit Social Links</h2>
               {socials.map((social) => (
                 <div key={social.name} className="flex items-center mb-4">
                   <div className="text-2xl mr-4 text-gray-800">{social.icon}</div>
