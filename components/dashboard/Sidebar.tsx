@@ -89,7 +89,7 @@ const Sidebar: React.FC = () => {
                 <li key={item.href}>
                   <Link href={item.href}>
                     <p
-                      className={`flex items-center font-bold text-md text-gray-800  p-3 my-2 rounded-full transition-colors ${
+                      className={`flex items-center text-md text-gray-800  p-3 my-2 rounded-full transition-colors ${
                         router.pathname === item.href
                           ? 'bg-blue-400 text-white'
                           : 'text-gray-700 hover:bg-gray-100'
