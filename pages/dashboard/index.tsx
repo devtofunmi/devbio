@@ -55,6 +55,12 @@ const DashboardPage = () => {
     image: "",
   });
 
+  type Tech = {
+  name: string;
+  icon: React.JSX.Element;
+};
+
+
   const [githubUsername, setGithubUsername] = useState("");
 
   const [techStack, setTechStack] = useState<Tech[]>([]);
