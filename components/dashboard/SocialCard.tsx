@@ -85,9 +85,12 @@ const SocialCard: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex justify-end space-x-4">
+              <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300">
+                Cancel
+              </button>
               <button onClick={handleSave} className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
-                Done
+                Save
               </button>
             </div>
           </div>
