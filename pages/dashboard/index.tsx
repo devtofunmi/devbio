@@ -118,12 +118,12 @@ const YourPage = () => {
 
   return (
     <DashboardLayout>
-      <div className={`font-sans border-1 p-5 rounded-3xl min-h-screen border-gray-200`}>
+      <div className={`font-sans min-h-screen`}>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="cards">
             {(provided) => (
               <div
-                className="space-y-5"
+                className="space-y-5 p-5"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
