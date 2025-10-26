@@ -25,8 +25,8 @@ const TechStackModal: React.FC<TechStackModalProps> = ({
   setTechModalOpen,
 }) => {
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md m-4">
+    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-lg m-4 relative transform transition-all duration-300 ease-in-out scale-100">
         <button
           onClick={() => setTechModalOpen(false)}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
@@ -69,15 +69,10 @@ const TechStackModal: React.FC<TechStackModalProps> = ({
           ))}
         </div>
         <div className="flex justify-end space-x-4 mt-5">
+        
           <button
             onClick={() => setTechModalOpen(false)}
-            className="px-6 py-4 w-full cursor-pointer bg-gray-100 text-center text-gray-800 rounded-full hover:bg-gray-200 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => setTechModalOpen(false)}
-            className="px-6 py-4 w-full cursor-pointer bg-blue-400 text-white rounded-full hover:bg-blue-500 transition-colors shadow-md"
+            className="px-8 py-3 w-full cursor-pointer bg-blue-400 text-white text-center rounded-full hover:bg-blue-500 transition-colors duration-300 shadow-lg"
           >
             Done
           </button>
