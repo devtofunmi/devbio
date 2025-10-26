@@ -110,17 +110,7 @@ const YourPage = () => {
     setGithubModalOpen(false);
   };
 
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target && e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target) {
-          setProfile({ ...profile, image: event.target.result as string });
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
+
 
   const filteredTechs = allTechs.filter((tech) =>
     tech.name.toLowerCase().includes(techSearch.toLowerCase())
