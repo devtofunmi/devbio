@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { FaPlus } from "react-icons/fa";
+import AutoResizingTextarea from "./AutoResizingTextarea";
 
 type Profile = {
   name: string;
@@ -25,11 +26,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile: initialProfile }) =>
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setProfile(prev => ({ ...prev, image: event.target.result as string }));
-        }
-      };
+       reader.onload = (event) => {
+       const result = (event.target as FileReader | null)?.result;
+       if (result) {
+         setProfile(prev => ({ ...prev, image: result as string }));
+       }
+     };
+
       reader.readAsDataURL(e.target.files[0]);
     }
   };
@@ -78,12 +81,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile: initialProfile }) =>
           className="text-lg text-gray-600 bg-transparent focus:outline-none focus:ring-0 border-none text-center"
         />
       
-      <textarea
+      <AutoResizingTextarea
         name="description"
         value={profile.description}
         onChange={handleInputChange}
         onMouseDown={(e) => e.stopPropagation()}
-        className="text-gray-600 text-base max-w-sm bg-transparent focus:outline-none focus:ring-0 border-none text-center"
+        className="text-gray-600 text-base md:w-2xl bg-transparent focus:outline-none focus:ring-0 border-none text-center resize-none"
       />
     </div>
   );
