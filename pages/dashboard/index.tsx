@@ -123,7 +123,7 @@ const YourPage = () => {
           <Droppable droppableId="cards">
             {(provided) => (
               <div
-                className="space-y-5"
+                className="space-y-5 p-5"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
