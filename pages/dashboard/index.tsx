@@ -27,7 +27,7 @@ import ProfileCard from "../../components/dashboard/ProfileCard";
 import TechStackCard from "../../components/dashboard/TechStackCard";
 import SocialCard from "../../components/dashboard/SocialCard";
 import GitHubCard from "../../components/dashboard/GitHubCard";
-import ProfileModal from "../../components/dashboard/ProfileModal";
+
 import TechStackModal from "../../components/dashboard/TechStackModal";
 import SocialModal from "../../components/dashboard/SocialModal";
 import GitHubModal from "../../components/dashboard/GitHubModal";
@@ -75,7 +75,7 @@ const YourPage = () => {
     { name: "LinkedIn", icon: <FaLinkedin />, href: "https://linkedin.com/in/" },
   ]);
 
-  const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+  
   const [isTechModalOpen, setTechModalOpen] = useState(false);
   const [isSocialModalOpen, setSocialModalOpen] = useState(false);
   const [isGithubModalOpen, setGithubModalOpen] = useState(false);
@@ -143,7 +143,7 @@ const YourPage = () => {
 
                   if (card.id === "profile") {
                     content = <ProfileCard profile={profile} />;
-                    onEditClick = () => setProfileModalOpen(true);
+                    
                   } else if (card.id === "techstack") {
                     content = <TechStackCard techStack={techStack} />;
                     onEditClick = () => setTechModalOpen(true);
@@ -183,14 +183,7 @@ const YourPage = () => {
           </Droppable>
         </DragDropContext>
 
-        {isProfileModalOpen && (
-          <ProfileModal
-            profile={profile}
-            setProfile={setProfile}
-            setProfileModalOpen={setProfileModalOpen}
-            handleProfileImageChange={handleProfileImageChange}
-          />
-        )}
+        
 
         {isGithubModalOpen && (
           <GitHubModal
