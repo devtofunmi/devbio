@@ -118,7 +118,7 @@ const YourPage = () => {
 
   return (
     <DashboardLayout>
-      <div className={`font-sans border-1 p-5 rounded-3xl min-h-screen border-gray-200`}>
+      <div className={`font-sans md:border-1 p-5 rounded-3xl min-h-screen md:border-gray-200`}>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="cards">
             {(provided) => (
