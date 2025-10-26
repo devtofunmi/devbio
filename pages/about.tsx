@@ -24,7 +24,7 @@ const About: React.FC = () => {
               <div className="flex items-center space-x-4 pt-4 mb-16">
                 <Link href="/signup">
                 <button
-                  className="px-6 py-3 cursor-pointer text-white font-semibold bg-blue-400 rounded-xl shadow-lg hover:bg-blue-500 transition duration-150 flex items-center"
+                  className="px-6 py-3 cursor-pointer text-white font-semibold bg-blue-400 rounded-full shadow-lg hover:bg-blue-500 transition duration-150 flex items-center"
                 >
                   Create Your DevBio
                 </button>

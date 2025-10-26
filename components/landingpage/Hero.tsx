@@ -47,7 +47,7 @@ const Hero: React.FC = () => (
        
         <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mb-12">Your professional developer profile, all in one link. Connect, share, and grow your presence with a beautiful, customizable page.</p>
 
-        <Link href="/signup" className="inline-block w-full md:w-fit rounded-2xl bg-blue-400 text-white px-10 py-4 font-bold text-xl shadow-lg hover:bg-blue-500 transition transform hover:scale-105">
+        <Link href="/signup" className="inline-block w-full md:w-fit rounded-full bg-blue-400 text-white px-10 py-4 font-bold text-xl shadow-lg hover:bg-blue-500 transition transform hover:scale-105">
             Create Your DevBio
         </Link>
         <Link href="/login" className="mt-3 text-sm text-gray-500 hover:text-blue-500 transition">Log In</Link>

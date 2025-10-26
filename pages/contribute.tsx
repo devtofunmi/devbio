@@ -24,7 +24,7 @@ const Contribute: React.FC = () => {
                   href="https://github.com/devtofunmi/devbio"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 py-3 cursor-pointer text-white font-semibold bg-blue-400 rounded-xl shadow-lg hover:bg-blue-500 transition duration-150 flex items-center gap-2"
+                  className="px-6 py-3 cursor-pointer text-white font-semibold bg-blue-400 rounded-full shadow-lg hover:bg-blue-500 transition duration-150 flex items-center gap-2"
                 >
                   <SiGithub /> View on GitHub
                 </a>
