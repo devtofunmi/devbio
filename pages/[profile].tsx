@@ -75,22 +75,22 @@ const geistMono = { className: "font-mono" };
   // Mock projects data styled as cards
   const mockProjects = [
     {
-      title: "Atlas UI",
-      description: "A modern React component library for building accessible UIs.",
-      url: "https://github.com/alicej/atlas-ui",
-      tech: ["React", "TypeScript", "Storybook"]
+      title: "Prepkitty",
+      description: "Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.",
+      url: "https://www.prepkitty.co",
+      tech: ["Next.js", "TypeScript", "Tailwind"]
     },
     {
-      title: "DevOps Dashboard",
-      description: "A dashboard for monitoring CI/CD pipelines and deployments.",
-      url: "https://github.com/bobsmith/devops-dashboard",
-      tech: ["Node.js", "Express", "Docker"]
+      title: "Chat Flow",
+      description: "A Natural Language Interface for Building Flowcharts",
+      url: "https://chatt-flow.vercel.app/",
+      tech: ["Next.js", "TypeScript", "TamboSdk"]
     },
     {
-      title: "Scaling Apps Talk",
-      description: "Conference talk and resources on scaling web applications.",
-      url: "https://carol.dev/talks/scaling",
-      tech: ["Architecture", "Performance"]
+      title: "FolioRank",
+      description: "Submit your portfolio and get ranked by the community.",
+      url: "https://https://foliorank.netlify.app/",
+      tech: ["Next.js", "Tailwind", "Prisma", "Typescript"]
     }
   ];
 
@@ -130,14 +130,14 @@ const geistMono = { className: "font-mono" };
             <div className="md:col-span-1">
               <div className="w-full">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
-                <p className="text-lg text-gray-700 mb-6">{user.description}</p>
+                <p className="text-lg text-gray-700 mb-6">{user.about}</p>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">Tech Stack</h3>
                 <div className="flex flex-wrap gap-3 mb-8">
                   <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">React</span>
                   <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Node.js</span>
                   <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">TypeScript</span>
-                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">GraphQL</span>
-                  <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">CSS</span>
+                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Next js</span>
+                  <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">Tailwind</span>
                 </div>
                 {/* Mock GitHub Graph */}
                 <div className="mb-8">
@@ -172,7 +172,7 @@ const geistMono = { className: "font-mono" };
           </div>
         </div>
         <footer className="mt-12 text-center text-sm text-gray-400">
-          Made by <span className="font-semibold text-blue-400">devbio</span>
+          Made with <span className="font-semibold text-blue-400">devbio</span>
         </footer>
       </div>
     </div>
