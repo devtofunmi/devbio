@@ -14,7 +14,8 @@ export type User = {
   username: string;
   name: string;
   profession: string;
-  description: string;
+  description: string; // for sidebar
+  about?: string; // for about section
   image?: string;
   socials?: Socials;
   links?: LinkItem[];
@@ -27,12 +28,13 @@ const users: User[] = [
     profession: "Frontend Engineer",
     description:
       "I build delightful user interfaces, focus on accessibility and performance, and love mentoring.",
+    about:
+      "Alice is a passionate frontend engineer with 5+ years of experience. She specializes in React, accessibility, and design systems. Alice enjoys mentoring and contributing to open source.",
   image: "https://img.freepik.com/free-photo/portrait-beautiful-young-woman-smiling_23-2148859448.jpg?w=500&q=80",
     socials: {
       github: "alicej",
       twitter: "alice_ui",
       linkedin: "alice-johnson",
-      website: "https://alice.dev",
     },
     links: [
       { title: "Portfolio", url: "https://alice.dev" },
@@ -45,12 +47,13 @@ const users: User[] = [
     profession: "Backend Engineer",
     description:
       "I design reliable systems, scale APIs, and enjoy working with distributed services.",
-  image: "https://img.freepik.com/free-photo/portrait-handsome-young-man_23-2148886382.jpg?w=500&q=80",
+    about:
+      "Bob is a backend engineer who loves building scalable APIs and distributed systems. He is experienced in Node.js, cloud infrastructure, and DevOps practices.",
+  image: "https://img.freepik.com/free-photo/portrait-confident-indian-man_23-2148827054.jpg?w=500&q=80",
     socials: {
       github: "bobsmith",
       twitter: "bob_ops",
       linkedin: "bob-smith",
-      website: "https://bob.codes",
     },
     links: [
       { title: "Blog", url: "https://bob.codes/blog" },
@@ -63,12 +66,13 @@ const users: User[] = [
     profession: "Fullstack Developer",
     description:
       "I ship features end-to-end, build tools to make dev life better, and mentor junior devs.",
+    about:
+      "Carol is a fullstack developer with a knack for building tools that improve developer productivity. She enjoys working across the stack and sharing knowledge with the community.",
   image: "https://img.freepik.com/free-photo/portrait-young-woman-with-glasses_23-2148859446.jpg?w=500&q=80",
     socials: {
       github: "carollee",
       twitter: "carol_codes",
       linkedin: "carol-lee",
-      website: "https://carol.dev",
     },
     links: [
       { title: "Talk: Scaling Apps", url: "https://carol.dev/talks/scaling" },
@@ -76,16 +80,17 @@ const users: User[] = [
   },
   {
     username: "jay",
-    name: "Jay Patel",
-    profession: "DevOps Engineer",
+    name: "Jay",
+    profession: "Frontend Engineer",
     description:
-      "Automating infrastructure, building CI/CD pipelines, and ensuring smooth deployments.",
-  image: "https://img.freepik.com/free-photo/portrait-confident-indian-man_23-2148827054.jpg?w=500&q=80",
+      "A frontend developer passionate about building clean, responsive, and user friendly websites.",
+    image: "https://img.freepik.com/free-photo/portrait-handsome-young-man_23-2148886382.jpg?w=500&q=80",
+    about:
+      "I'm focused on modern web technologies and real-world problem solving. I shares my learning journey publicly and i'm dedicated to continuous improvement.",
     socials: {
-      github: "jaydevops",
-      twitter: "jay_ops",
-      linkedin: "jay-patel",
-      website: "https://jay.dev",
+      github: "devtofunmi",
+      twitter: "codebreak_er",
+      linkedin: "jesutofunmi-mayowa",
     },
     links: [
       { title: "Infra as Code", url: "https://github.com/jaydevops/infra-as-code" },
