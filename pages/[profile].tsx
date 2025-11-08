@@ -14,7 +14,7 @@ type Props = {
 const ProfilePage: React.FC<Props> = ({ user }) => {
   
 const geistSans = { className: "font-sans" };
-const geistMono = { className: "font-mono" };
+// const geistMono = { className: "font-mono" };
 
   if (!user) {
     return (
