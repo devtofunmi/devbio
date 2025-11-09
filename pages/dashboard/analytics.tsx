@@ -9,11 +9,13 @@ const data = [
   { date: "10/29", views: 0 },
   { date: "11/4", views: 0 },
 ];
+const geistSans = { className: "font-sans" };
 
 const AnalyticsPage: React.FC = () => {
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8">
+      <div className={`${geistSans.className} p-4 md:p-8`} >
+
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-lg font-semibold text-gray-700">Stats & Insights</h1>
@@ -46,7 +48,7 @@ const AnalyticsPage: React.FC = () => {
                   <Line
                     type="monotone"
                     dataKey="views"
-                    stroke="#a855f7"
+                    stroke="#60A5FA"
                     strokeWidth={2}
                     dot={false}
                   />

@@ -26,9 +26,11 @@ const SettingsPage: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  const geistSans = { className: "font-sans" };
+
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto">
+      <div className={`${geistSans.className} max-w-4xl mx-auto`} >
 
         {/* Theme Selection */}
         <section className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
@@ -67,13 +69,13 @@ const SettingsPage: React.FC = () => {
           <div className="space-y-6">
             {/* Change Password */}
             <div className="pb-6 border-b border-gray-200">
-              <h3 className="text-sm font-medium text-gray-900 mb-4">Change Password</h3>
+              <h3 className="text-sm font-semibold text-gray-700 mb-4">Change Password</h3>
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="current-password" className="block text-sm font-semibold text-gray-700">
                     Current Password
                   </label>
-                  <div className="relative flex-1">
+                  <div className="relative flex-1 mt-1">
                     <input
                       type={showCurrentPassword ? 'text' : 'password'}
                       id="current-password"
@@ -91,10 +93,10 @@ const SettingsPage: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="new-password" className="block text-sm font-semibold text-gray-700">
                     New Password
                   </label>
-                  <div className="relative flex-1">
+                  <div className="relative flex-1 mt-1">
                     <input
                       type={showNewPassword ? 'text' : 'password'}
                       id="new-password"
@@ -112,10 +114,10 @@ const SettingsPage: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="confirm-password" className="block text-sm font-semibold text-gray-700">
                     Confirm New Password
                   </label>
-                  <div className="relative flex-1">
+                  <div className="relative mt-1 flex-1">
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       id="confirm-password"
