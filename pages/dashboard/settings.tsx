@@ -5,6 +5,13 @@ import DashboardLayout from '../../components/dashboard/DashboardLayout';
 const themes = [
   { id: 'basics', name: 'Basics', preview: 'bg-white shadow-inner border border-gray-200' },
   { id: 'carbon', name: 'Carbon', preview: 'bg-gray-900' },
+  { id: 'monokai', name: 'Monokai', preview: 'bg-gradient-to-br from-[#272822] via-[#49483e] to-[#f92672] border border-[#f8f8f2]' },
+  { id: 'dracula', name: 'Dracula', preview: 'bg-gradient-to-br from-[#282a36] via-[#44475a] to-[#bd93f9] border border-[#6272a4]' },
+  { id: 'nord', name: 'Nord', preview: 'bg-gradient-to-br from-[#2e3440] via-[#4c566a] to-[#88c0d0] border border-[#81a1c1]' },
+  { id: 'gruvbox', name: 'Gruvbox', preview: 'bg-gradient-to-br from-[#282828] via-[#504945] to-[#fabd2f] border border-[#b8bb26]' },
+  { id: 'one-dark', name: 'One Dark', preview: 'bg-gradient-to-br from-[#282c34] via-[#3a3f4b] to-[#61afef] border border-[#98c379]' },
+  { id: 'github-dark', name: 'GitHub Dark', preview: 'bg-gradient-to-br from-[#0d1117] via-[#161b22] to-[#238636] border border-[#30363d]' },
+  { id: 'solarized-dark', name: 'Solarized Dark', preview: 'bg-gradient-to-br from-[#002b36] via-[#073642] to-[#b58900] border border-[#586e75]' },
   { id: 'christmas', name: 'Christmas', preview: 'bg-green-700' },
   { id: 'pride', name: 'Pride', preview: 'bg-gradient-to-b from-pink-500 via-yellow-400 to-green-500' },
   { id: 'glitch', name: 'Glitch', preview: 'bg-white border-2 border-black' },
