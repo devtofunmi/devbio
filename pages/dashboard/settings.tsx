@@ -1,95 +1,60 @@
 import React, { useState } from 'react';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
 
 const themes = [
-  {
-    id: 'light',
-    name: 'Light',
-    preview: 'bg-white border-2 border-gray-200',
-    description: 'Clean and bright for daytime use'
-  },
-  {
-    id: 'dark',
-    name: 'Dark',
-    preview: 'bg-gray-900 border-2 border-gray-700',
-    description: 'Easy on the eyes in low-light conditions'
-  },
-  {
-    id: 'system',
-    name: 'System',
-    preview: 'bg-gradient-to-r from-white to-gray-900 border-2 border-gray-400',
-    description: 'Automatically matches your system preferences'
-  },
-  {
-    id: 'midnight',
-    name: 'Midnight Blue',
-    preview: 'bg-gradient-to-r from-blue-900 to-indigo-900 border-2 border-blue-700',
-    description: 'Deep blue theme for night owls'
-  },
-  {
-    id: 'sepia',
-    name: 'Sepia',
-    preview: 'bg-amber-50 border-2 border-amber-200',
-    description: 'Warm, paper-like appearance'
-  },
-  {
-    id: 'forest',
-    name: 'Forest',
-    preview: 'bg-gradient-to-r from-green-800 to-emerald-900 border-2 border-green-700',
-    description: 'Nature-inspired dark green theme'
-  },
-  {
-    id: 'lavender',
-    name: 'Lavender',
-    preview: 'bg-gradient-to-r from-purple-100 to-purple-200 border-2 border-purple-300',
-    description: 'Soft, calming purple tones'
-  },
-  {
-    id: 'nord',
-    name: 'Nord',
-    preview: 'bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-slate-700',
-    description: 'Arctic-inspired cool colors'
-  },
-  {
-    id: 'sunset',
-    name: 'Sunset',
-    preview: 'bg-gradient-to-r from-orange-400 to-pink-500 border-2 border-orange-500',
-    description: 'Warm, vibrant sunset colors'
-  }
+  { id: 'basics', name: 'Basics', preview: 'bg-white shadow-inner border border-gray-200' },
+  { id: 'carbon', name: 'Carbon', preview: 'bg-gray-900' },
+  { id: 'christmas', name: 'Christmas', preview: 'bg-green-700' },
+  { id: 'pride', name: 'Pride', preview: 'bg-gradient-to-b from-pink-500 via-yellow-400 to-green-500' },
+  { id: 'glitch', name: 'Glitch', preview: 'bg-white border-2 border-black' },
+  { id: 'winter', name: 'Winter · Live', preview: 'bg-gradient-to-b from-blue-100 to-blue-300' },
+  { id: 'glassy', name: 'Glassy · Live', preview: 'bg-gradient-to-tr from-pink-100 via-white to-blue-100' },
+  { id: 'chameleon', name: 'Chameleon · Live', preview: 'bg-gradient-to-tr from-green-500 to-lime-400' },
+  { id: 'rainy-night', name: 'Rainy Night · Live', preview: 'bg-gradient-to-b from-gray-800 via-blue-900 to-gray-800' },
 ];
 
 const SettingsPage: React.FC = () => {
-  const [selectedTheme, setSelectedTheme] = useState('system');
+  const [selectedTheme, setSelectedTheme] = useState('basics');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto">
-        
+
         {/* Theme Selection */}
         <section className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Theme Preferences</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {themes.map((theme) => (
               <button
                 key={theme.id}
                 onClick={() => setSelectedTheme(theme.id)}
-                className={`p-4 rounded-lg transition-all ${
-                  selectedTheme === theme.id
+                className={`flex flex-col items-center p-3 rounded-2xl border transition-all 
+                  ${selectedTheme === theme.id
                     ? 'ring-2 ring-blue-500 ring-offset-2'
-                    : 'hover:bg-gray-50'
-                }`}
+                    : 'hover:ring-2 hover:ring-gray-300'}
+                `}
               >
-                <div className={`h-24 rounded-md mb-3 ${theme.preview}`} />
-                <div className="text-left">
-                  <h3 className="font-medium text-gray-900">{theme.name}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{theme.description}</p>
+                {/* Theme preview box */}
+                <div
+                  className={`w-full h-36 rounded-2xl mb-3 flex items-center justify-center ${theme.preview}`}
+                >
+                  {/* Simulated link blocks */}
+                  <div className="flex flex-col gap-2 w-2/3">
+                    <div className="h-4 rounded-full bg-white/80" />
+                    <div className="h-4 rounded-full bg-white/80" />
+                    <div className="h-4 rounded-full bg-white/80" />
+                  </div>
                 </div>
+                <p className="text-sm font-medium text-gray-800">{theme.name}</p>
               </button>
             ))}
           </div>
         </section>
-
-
 
         {/* Account Settings */}
         <section className="bg-white rounded-lg border border-gray-200 p-6">
@@ -103,35 +68,68 @@ const SettingsPage: React.FC = () => {
                   <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">
                     Current Password
                   </label>
-                  <input
-                    type="password"
-                    id="current-password"
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-                  />
+                  <div className="relative flex-1">
+                    <input
+                      type={showCurrentPassword ? 'text' : 'password'}
+                      id="current-password"
+                      placeholder="Current Password"
+                      className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 pr-16 text-black placeholder-gray-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      className="absolute right-0 top-0 h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showCurrentPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">
                     New Password
                   </label>
-                  <input
-                    type="password"
-                    id="new-password"
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-                  />
+                  <div className="relative flex-1">
+                    <input
+                      type={showNewPassword ? 'text' : 'password'}
+                      id="new-password"
+                      placeholder="New Password"
+                      className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 pr-16 text-black placeholder-gray-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-0 top-0 h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showNewPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
                     Confirm New Password
                   </label>
-                  <input
-                    type="password"
-                    id="confirm-password"
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm"
-                  />
+                  <div className="relative flex-1">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id="confirm-password"
+                      placeholder="Confirm New Password"
+                      className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 pr-16 text-black placeholder-gray-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-0 top-0 h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showConfirmPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                    </button>
+                  </div>
                 </div>
                 <button
                   type="button"
-                  className="inline-flex justify-center rounded-full border border-transparent bg-blue-400 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="cursor-pointer rounded-full flex justify-center py-2 mt-4 px-4 border border-transparent text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Update Password
                 </button>
@@ -158,7 +156,8 @@ const SettingsPage: React.FC = () => {
                     <div className="mt-4">
                       <button
                         type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        className="inline-flex justify-center rounded-full cursor-pointer border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        onClick={() => setShowDeleteModal(true)}
                       >
                         Delete Account
                       </button>
@@ -170,6 +169,30 @@ const SettingsPage: React.FC = () => {
           </div>
         </section>
       </div>
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
+            <h2 className="text-lg font-semibold text-gray-800 mb-2">Confirm Account Deletion</h2>
+            <p className="text-gray-600 mb-6">Are you sure you want to delete your account? This action cannot be undone.</p>
+            <div className="flex justify-end gap-3">
+              <button
+                className="px-4 py-2 cursor-pointer rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 cursor-pointer rounded-full bg-red-600 text-white hover:bg-red-700"
+                onClick={() => { setShowDeleteModal(false); /* Add delete logic here */ }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   );
 };
