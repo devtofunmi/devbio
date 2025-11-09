@@ -180,7 +180,7 @@ const SettingsPage: React.FC = () => {
       {/* Delete Account Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm w-4/5 md:w-[400px]">
             <h2 className="text-lg font-semibold text-gray-800 mb-2">Confirm Account Deletion</h2>
             <p className="text-gray-600 mb-6">Are you sure you want to delete your account? This action cannot be undone.</p>
             <div className="flex justify-end gap-3">
