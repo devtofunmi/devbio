@@ -14,9 +14,7 @@ const themes = [
   { id: 'solarized-dark', name: 'Solarized Dark', preview: 'bg-gradient-to-br from-[#002b36] via-[#073642] to-[#b58900] border border-[#586e75]' },
   { id: 'christmas', name: 'Christmas', preview: 'bg-green-700' },
   { id: 'pride', name: 'Pride', preview: 'bg-gradient-to-b from-pink-500 via-yellow-400 to-green-500' },
-  { id: 'glitch', name: 'Glitch', preview: 'bg-white border-2 border-black' },
   { id: 'winter', name: 'Winter · Live', preview: 'bg-gradient-to-b from-blue-100 to-blue-300' },
-  { id: 'glassy', name: 'Glassy · Live', preview: 'bg-gradient-to-tr from-pink-100 via-white to-blue-100' },
   { id: 'chameleon', name: 'Chameleon · Live', preview: 'bg-gradient-to-tr from-green-500 to-lime-400' },
   { id: 'rainy-night', name: 'Rainy Night · Live', preview: 'bg-gradient-to-b from-gray-800 via-blue-900 to-gray-800' },
 ];
