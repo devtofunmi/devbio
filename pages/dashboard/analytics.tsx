@@ -37,8 +37,8 @@ const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Page Views */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-gray-700 mb-4">Page Views</h2>
+          <div className="bg-white border border-gray-200 rounded-xl pt-5">
+            <h2 className="text-sm font-semibold text-gray-700 mb-4 px-5">Page Views</h2>
             <div className="h-56 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data}>
