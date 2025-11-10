@@ -7,6 +7,7 @@ type Profile = {
   name: string;
   profession: string;
   description: string;
+  about: string;
   image: string;
 };
 
@@ -84,6 +85,13 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile: initialProfile }) =>
       <AutoResizingTextarea
         name="description"
         value={profile.description}
+        onChange={handleInputChange}
+        onMouseDown={(e) => e.stopPropagation()}
+        className="text-gray-600 text-base md:w-2xl bg-transparent focus:outline-none focus:ring-0 border-none text-center resize-none"
+      />
+      <AutoResizingTextarea
+        name="about"
+        value={profile.about}
         onChange={handleInputChange}
         onMouseDown={(e) => e.stopPropagation()}
         className="text-gray-600 text-base md:w-2xl bg-transparent focus:outline-none focus:ring-0 border-none text-center resize-none"
