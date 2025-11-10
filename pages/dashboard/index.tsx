@@ -57,6 +57,7 @@ const YourPage = () => {
     name: "Your name",
     profession: "Your profession",
     description: "Your description",
+    about: "Your about",
     image: "",
   });
 
