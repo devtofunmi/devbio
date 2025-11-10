@@ -81,7 +81,7 @@ const LoginPage: React.FC = () => {
               <Link href="/dashboard">
                 <button
                   type="button"
-                  className="w-full cursor-pointer flex justify-center py-3 mt-4 px-4 border border-transparent rounded-lg shadow-sm font-semibold text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="w-full cursor-pointer flex justify-center py-3 mt-4 px-4 border border-transparent rounded-full shadow-sm font-semibold text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Login
                 </button>
@@ -94,7 +94,7 @@ const LoginPage: React.FC = () => {
             {/* Github Sign-in Button */}
             <button
               type="button"
-              className="flex cursor-pointer items-center justify-center w-full bg-gray-800 hover:bg-black text-white font-semibold py-3 px-4 rounded-lg shadow-md transition-colors"
+              className="flex cursor-pointer items-center justify-center w-full bg-gray-800 hover:bg-black text-white font-semibold py-3 px-4 rounded-full shadow-md transition-colors"
               onClick={() => console.log('GitHub Sign-in clicked')}
             >
               <SiGithub className="mr-2" size={20} />
