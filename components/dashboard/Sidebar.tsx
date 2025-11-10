@@ -68,7 +68,7 @@ const Sidebar: React.FC = () => {
             {showTooltip && (
               <div className="absolute bottom-14 left-[-25] -translate-x-1/2 bg-white border border-gray-200 rounded-lg p-3 w-40 text-start transition-all duration-200 shadow-md">
                 <div className="font-bold text-gray-800">Jay</div>
-                <div className="text-gray-500 text-[12px] break-all mb-3">
+                <div className="text-gray-500 text-[12px] break-all underline mb-3">
                   <Link href="https://devvbio.vercel.app/jay">devvbio.vercel.app/jay</Link>
                 </div>
                 <button
@@ -128,7 +128,7 @@ const Sidebar: React.FC = () => {
                 />
                 <div className="ml-3">
                   <div className="font-bold text-gray-800">Jay</div>
-                  <div className="text-gray-500 text-[12px] break-all">
+                  <div className="text-gray-500 text-[12px] break-all underline">
                     <Link href="https://devvbio.vercel.app/jay">devvbio.vercel.app/jay</Link>
                   </div>
                 </div>
