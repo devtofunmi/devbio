@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
+import DeleteAccountModal from '../../components/dashboard/DeleteAccountModal';
 
 const themes = [
   { id: 'basics', name: 'Basics', preview: 'bg-white shadow-inner border border-gray-200' },
@@ -14,9 +15,9 @@ const themes = [
   { id: 'solarized-dark', name: 'Solarized Dark', preview: 'bg-gradient-to-br from-[#002b36] via-[#073642] to-[#b58900] border border-[#586e75]' },
   { id: 'christmas', name: 'Christmas', preview: 'bg-green-700' },
   { id: 'pride', name: 'Pride', preview: 'bg-gradient-to-b from-pink-500 via-yellow-400 to-green-500' },
-  { id: 'winter', name: 'Winter · Live', preview: 'bg-gradient-to-b from-blue-100 to-blue-300' },
-  { id: 'chameleon', name: 'Chameleon · Live', preview: 'bg-gradient-to-tr from-green-500 to-lime-400' },
-  { id: 'rainy-night', name: 'Rainy Night · Live', preview: 'bg-gradient-to-b from-gray-800 via-blue-900 to-gray-800' },
+  { id: 'winter', name: 'Winter', preview: 'bg-gradient-to-b from-blue-100 to-blue-300' },
+  { id: 'chameleon', name: 'Chameleon', preview: 'bg-gradient-to-tr from-green-500 to-lime-400' },
+  { id: 'rainy-night', name: 'Rainy Night', preview: 'bg-gradient-to-b from-gray-800 via-blue-900 to-gray-800' },
 ];
 
 const SettingsPage: React.FC = () => {
@@ -26,12 +27,15 @@ const SettingsPage: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const geistSans = { className: "font-sans" };
+  const geistSans = { className: 'font-sans' };
+
+  const handleDeleteConfirm = () => {
+    console.log('Account deletion confirmed');
+  };
 
   return (
     <DashboardLayout>
-      <div className={`${geistSans.className} max-w-4xl mx-auto`} >
-
+      <div className={`${geistSans.className} max-w-4xl mx-auto`}>
         {/* Theme Selection */}
         <section className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-700 mb-4">Theme Preferences</h2>
@@ -40,17 +44,11 @@ const SettingsPage: React.FC = () => {
               <button
                 key={theme.id}
                 onClick={() => setSelectedTheme(theme.id)}
-                className={`flex flex-col items-center p-3 rounded-2xl border transition-all 
-                  ${selectedTheme === theme.id
-                    ? 'ring-2 ring-blue-500 ring-offset-2'
-                    : 'hover:ring-2 hover:ring-gray-300'}
-                `}
+                className={`flex flex-col items-center p-3 rounded-2xl border transition-all ${
+                  selectedTheme === theme.id ? 'ring-2 ring-blue-500 ring-offset-2' : 'hover:ring-2 hover:ring-gray-300'
+                }`}
               >
-                {/* Theme preview box */}
-                <div
-                  className={`w-full h-36 rounded-2xl mb-3 flex items-center justify-center ${theme.preview}`}
-                >
-                  {/* Simulated link blocks */}
+                <div className={`w-full h-36 rounded-2xl mb-3 flex items-center justify-center ${theme.preview}`}>
                   <div className="flex flex-col gap-2 w-2/3">
                     <div className="h-4 rounded-full bg-white/80" />
                     <div className="h-4 rounded-full bg-white/80" />
@@ -92,6 +90,7 @@ const SettingsPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+
                 <div>
                   <label htmlFor="new-password" className="block text-sm font-semibold text-gray-700">
                     New Password
@@ -113,6 +112,7 @@ const SettingsPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+
                 <div>
                   <label htmlFor="confirm-password" className="block text-sm font-semibold text-gray-700">
                     Confirm New Password
@@ -134,6 +134,7 @@ const SettingsPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+
                 <button
                   type="button"
                   className="cursor-pointer rounded-full flex justify-center py-2 mt-4 px-4 border border-transparent text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -149,8 +150,17 @@ const SettingsPage: React.FC = () => {
               <div className="rounded-md bg-red-50 p-4">
                 <div className="flex">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                    <svg
+                      className="h-5 w-5 text-red-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div className="ml-3">
@@ -177,29 +187,11 @@ const SettingsPage: React.FC = () => {
         </section>
       </div>
 
-      {/* Delete Account Confirmation Modal */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center p-4 z-50">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-lg m-4 relative transform transition-all duration-300 ease-in-out scale-100">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">Confirm Account Deletion</h2>
-            <p className="text-gray-600 mb-6">Are you sure you want to delete your account? This action cannot be undone.</p>
-            <div className="flex justify-end gap-3">
-              <button
-                className="px-4 py-2 cursor-pointer rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 cursor-pointer rounded-full bg-red-600 text-white hover:bg-red-700"
-                onClick={() => { setShowDeleteModal(false); /* Add delete logic here */ }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeleteAccountModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </DashboardLayout>
   );
 };
