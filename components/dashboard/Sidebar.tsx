@@ -2,13 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { FiHome, FiBarChart2, FiSettings } from 'react-icons/fi';
+import { FiHome, FiBarChart2, FiSettings, FiLogOut } from 'react-icons/fi';
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
-
 
   const menuItems = [
     { href: '/dashboard', label: 'Your Page', icon: FiHome },
@@ -27,6 +26,10 @@ const Sidebar: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleLogout = () => {
+    router.push('/login');
+  };
 
   return (
     <>
@@ -63,9 +66,17 @@ const Sidebar: React.FC = () => {
             </button>
 
             {showTooltip && (
-              <div className="absolute bottom-14 left-[-25] -translate-x-1/2 bg-white border border-gray-200 rounded-lg p-3 w-40 text-start transition-all duration-200">
+              <div className="absolute bottom-14 left-[-25] -translate-x-1/2 bg-white border border-gray-200 rounded-lg p-3 w-40 text-start transition-all duration-200 shadow-md">
                 <div className="font-bold text-gray-800">Jay</div>
-                <div className="text-gray-500 text-sm break-all">jay@example.com</div>
+                <div className="text-gray-500 text-[12px] break-all mb-3">
+                  <Link href="https://devvbio.vercel.app/jay">devvbio.vercel.app/jay</Link>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-red-500 text-[12px] font-semibold hover:underline"
+                >
+                  <FiLogOut size={16} /> Logout
+                </button>
               </div>
             )}
           </div>
@@ -74,7 +85,7 @@ const Sidebar: React.FC = () => {
 
       {/* Desktop Sidebar */}
       <div className="hidden font-sans md:flex lg:fixed w-80 bg-gray-50 border-r border-gray-200 p-5 flex-col h-screen">
-        <div className="border-1 p-5 rounded-2xl h-full border-gray-200 flex flex-col">
+        <div className="p-5 rounded-2xl h-full border-gray-200 flex flex-col">
           {/* Logo */}
           <div className="flex items-center mb-10">
             <Link href="/">
@@ -89,7 +100,7 @@ const Sidebar: React.FC = () => {
                 <li key={item.href}>
                   <Link href={item.href}>
                     <p
-                      className={`flex items-center text-md text-gray-800  p-3 my-2 rounded-full transition-colors ${
+                      className={`flex items-center text-md text-gray-800 p-3 my-2 rounded-full transition-colors ${
                         router.pathname === item.href
                           ? 'bg-blue-400 text-white'
                           : 'text-gray-700 hover:bg-gray-100'
@@ -106,18 +117,29 @@ const Sidebar: React.FC = () => {
 
           {/* User Profile (footer section) */}
           <div className="mt-auto">
-            <div className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center transform transition-transform duration-300 hover:scale-105 hover:-rotate-1">
-              <Image
-                src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
-                alt="User Avatar"
-                width={48}
-                height={48}
-                className="rounded-full"
-              />
-              <div className="ml-3">
-                <div className="font-bold text-gray-800">Jay</div>
-                <div className="text-gray-500 text-sm break-all">jay@example.com</div>
+            <div className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center justify-between transform transition-transform duration-300 hover:scale-105 hover:-rotate-1">
+              <div className="flex items-center">
+                <Image
+                  src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"
+                  alt="User Avatar"
+                  width={48}
+                  height={48}
+                  className="rounded-full"
+                />
+                <div className="ml-3">
+                  <div className="font-bold text-gray-800">Jay</div>
+                  <div className="text-gray-500 text-[12px] break-all">
+                    <Link href="https://devvbio.vercel.app/jay">devvbio.vercel.app/jay</Link>
+                  </div>
+                </div>
               </div>
+              <button
+                onClick={handleLogout}
+                className="cursor-pointer text-red-500 hover:text-red-600 transition-colors"
+                title="Logout"
+              >
+                <FiLogOut size={18} />
+              </button>
             </div>
           </div>
         </div>
