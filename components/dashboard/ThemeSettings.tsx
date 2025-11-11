@@ -21,7 +21,7 @@ const ThemeSettings = () => {
     const [selectedTheme, setSelectedTheme] = useState('basics');
 
     return (
-        <section className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+        <section className="bg-white rounded-lg md:border border-gray-200 p-6 mb-8">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {themes.map((theme) => (
                     <button

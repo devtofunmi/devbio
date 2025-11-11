@@ -12,7 +12,7 @@ const AccountSettings = () => {
     };
 
     return (
-        <section className="bg-white rounded-lg border border-gray-200 p-6">
+        <section className="bg-white rounded-lg md:border border-gray-200 p-6">
             <div className="space-y-6">
                 {/* Change Password */}
                 <div className="pb-6 border p-5 rounded-2xl border-gray-200">
