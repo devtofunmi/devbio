@@ -15,7 +15,7 @@ const AccountSettings = () => {
         <section className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="space-y-6">
                 {/* Change Password */}
-                <div className="pb-6 border-b border-gray-200">
+                <div className="pb-6 border p-5 rounded-2xl border-gray-200">
                     <h3 className="text-sm font-semibold text-gray-700 mb-4">Change Password</h3>
                     <div className="space-y-4">
                         
@@ -74,7 +74,7 @@ const AccountSettings = () => {
                 </div>
 
                 {/* Danger Zone */}
-                <div className="pt-4">
+                <div className="pt-4 border border-red-200 p-5 rounded-2xl">
                     <h3 className="text-sm font-medium text-red-600 mb-4">Danger Zone</h3>
                     <div className="rounded-md bg-red-50 p-4">
                         <div className="flex">
