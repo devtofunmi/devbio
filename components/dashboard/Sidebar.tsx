@@ -99,16 +99,18 @@ const Sidebar: React.FC = () => {
               {menuItems.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href}>
-                    <p
-                      className={`flex items-center text-md text-gray-800 p-3 my-2 rounded-full transition-colors ${
+                    <div
+                      className={`flex items-center text-center font-semibold text-md text-gray-700 p-3 my-2 rounded-full transition-colors ${
                         router.pathname === item.href
                           ? 'bg-blue-400 text-white'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
                     >
-                      <item.icon className="mr-3" />
+                      <item.icon size='20' className="mr-3" />
+                      <p className="text-center">
                       {item.label}
-                    </p>
+                      </p>
+                    </div>
                   </Link>
                 </li>
               ))}
