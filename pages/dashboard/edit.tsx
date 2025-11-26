@@ -15,7 +15,6 @@ import {
   FaInfoCircle,
   FaTrash,
   FaLink,
-  FaGripVertical,
 } from "react-icons/fa";
 import { LuUpload } from "react-icons/lu";
 import {
@@ -39,11 +38,11 @@ import {
 
 // Import local utilities and components
 import { getUserByUsername, User } from "../../lib/mockUsers";
-import SocialModal from "../../components/dashboard/SocialModal";
-import TechStackModal from "../../components/dashboard/TechStackModal";
-import ProjectModal from "../../components/dashboard/ProjectModal";
-import GitHubModal from "../../components/dashboard/GitHubModal";
-import InlineEdit from "../../components/dashboard/InlineEdit";
+import SocialModal from "../../components/dashboard/edit/SocialModal";
+import TechStackModal from "../../components/dashboard/edit/TechStackModal";
+import ProjectModal from "../../components/dashboard/edit/ProjectModal";
+import GitHubModal from "../../components/dashboard/edit/GitHubModal";
+import InlineEdit from "../../components/dashboard/edit/InlineEdit";
 
 // A static list of all available technologies for the Tech Stack section
 const allTechs = [
