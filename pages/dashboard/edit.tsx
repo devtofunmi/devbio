@@ -289,7 +289,7 @@ const EditPage: React.FC = () => {
       case "projects":
         if (!mockProjects || mockProjects.length === 0) return null;
         return (
-                    <div className="bg-white rounded-2xl p-6 border border-gray-200">
+                    <div className="p-6">
                        <div className="flex items-start justify-between gap-2">
                           <InlineEdit value={user.headings?.projects || "Projects"} onSave={(value) => handleHeadingUpdate("projects", value)} className="text-2xl font-bold text-gray-900 mb-4" placeholder="Projects section title" showCursor={true}/>
                           <button onClick={handleDeleteProjects} className="p-1 rounded-full hover:bg-gray-200 cursor-pointer" title="Delete Section">
