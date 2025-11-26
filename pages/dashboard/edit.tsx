@@ -416,20 +416,20 @@ const EditPage: React.FC = () => {
                 </div>
 
       {/* --- Bottom Action Bar --- */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-sm z-50 flex items-center justify-center gap-x-4 sm:gap-x-6 border border-gray-200 rounded-full px-4">
-        <button onClick={() => setSocialModalOpen(true)} className="bg-white hover:bg-gray-100 text-gray-700 rounded-full p-4 transition-colors cursor-pointer" title="Add Social Links">
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-blue-400 backdrop-blur-sm z-50 flex items-center justify-center gap-x-4 sm:gap-x-6 border border-gray-200 rounded-full px-4">
+        <button onClick={() => setSocialModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add Social Links">
           <FaLink size={22} />
         </button>
-        <button onClick={handleAddAbout} className="bg-white hover:bg-gray-100 text-gray-700 rounded-full p-4 transition-colors cursor-pointer" title="Add About Section">
+        <button onClick={handleAddAbout} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add About Section">
           <FaInfoCircle size={22} />
         </button>
-        <button onClick={() => setTechStackModalOpen(true)} className="bg-white hover:bg-gray-100 text-gray-700 rounded-full p-4 transition-colors cursor-pointer" title="Add Tech Stack">
+        <button onClick={() => setTechStackModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add Tech Stack">
           <FaCode size={22} />
         </button>
-        <button onClick={() => setProjectModalOpen(true)} className="bg-white hover:bg-gray-100 text-gray-700 rounded-full p-4 transition-colors cursor-pointer" title="Add Projects">
+        <button onClick={() => setProjectModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add Projects">
           <FaProjectDiagram size={22} />
         </button>
-        <button onClick={() => setGithubModalOpen(true)} className="bg-white hover:bg-gray-100 text-gray-700 rounded-full p-4 transition-colors cursor-pointer" title="Add GitHub Contributions">
+        <button onClick={() => setGithubModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add GitHub Contributions">
           <FaGithub size={22} />
         </button>
       </div>
