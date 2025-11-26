@@ -351,7 +351,7 @@ const EditPage: React.FC = () => {
                         <input type="file" ref={imageUploadRef} onChange={handleImageUpload} accept="image/*" className="hidden"/>
                         
                         {/* Profile Image with Upload Placeholder */}
-                        <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-gray-200 cursor-pointer flex items-center justify-center" onClick={() => imageUploadRef.current?.click()}>
+                        <div className="relative w-[7rem] h-[7rem] sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-gray-200 cursor-pointer flex items-center justify-center" onClick={() => imageUploadRef.current?.click()}>
                           {user.image ? (
                             <Image src={user.image} alt={user.name} fill className="object-cover" />
                           ) : (
