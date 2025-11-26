@@ -53,7 +53,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-50 flex justify-center items-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl m-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl m-4 relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+          <FaTimes />
+        </button>
         <div className="max-h-96 overflow-y-auto">
           {editedProjects.map((project, index) => (
             <div key={index} className="mb-4 p-4 border rounded-lg">
@@ -111,16 +114,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
         >
           Add Project
         </button>
-        <div className="flex mt-5 justify-end space-x-4">
-          <button
-            onClick={onClose}
-            className="px-6 py-4 w-[200px] cursor-pointer bg-gray-100 text-center text-gray-800 rounded-full hover:bg-gray-200 transition-colors"
-          >
-            Cancel
-          </button>
+        <div className="flex mt-5 justify-end">
           <button
             onClick={() => onSave(editedProjects)}
-            className="px-6 py-4 w-[200px] cursor-pointer bg-blue-400 text-white rounded-full hover:bg-blue-500 transition-colors shadow-md"
+            className="px-6 py-4 w-full cursor-pointer bg-blue-400 text-white rounded-full hover:bg-blue-500 transition-colors shadow-md"
           >
             Save
           </button>
