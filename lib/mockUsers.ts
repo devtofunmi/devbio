@@ -19,6 +19,16 @@ export type User = {
   image?: string;
   socials?: Socials;
   links?: LinkItem[];
+  projects?: {
+    title: string;
+    description: string;
+    url: string;
+    tech: string[];
+  }[];
+  techStack?: string[];
+  headings?: {
+    [key: string]: string;
+  };
 };
 
 const users: User[] = [
@@ -40,25 +50,38 @@ const users: User[] = [
       { title: "Portfolio", url: "https://alice.dev" },
       { title: "Project: Atlas UI", url: "https://github.com/alicej/atlas-ui" },
     ],
+    projects: [
+      {
+        title: "Prepkitty",
+        description: "Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.",
+        url: "https://www.prepkitty.co",
+        tech: ["Next.js", "TypeScript", "Tailwind"]
+      },
+    ],
+    techStack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
   },
   {
     username: "bob",
-    name: "Bob Smith",
-    profession: "Backend Engineer",
+    name: "",
+    profession: "",
     description:
-      "I design reliable systems, scale APIs, and enjoy working with distributed services.",
+      "",
     about:
-      "Bob is a backend engineer who loves building scalable APIs and distributed systems. He is experienced in Node.js, cloud infrastructure, and DevOps practices.",
-  image: "https://img.freepik.com/free-photo/portrait-confident-indian-man_23-2148827054.jpg?w=500&q=80",
+      "",
+  image: "",
     socials: {
-      github: "bobsmith",
-      twitter: "bob_ops",
-      linkedin: "bob-smith",
+      github: "",
+      twitter: "",
+      linkedin: "",
     },
     links: [
-      { title: "Blog", url: "https://bob.codes/blog" },
-      { title: "Open Source", url: "https://github.com/bobsmith" },
+      { title: "", url: "" },
+      { title: "", url: "" },
     ],
+    projects: [
+     
+    ],
+    techStack: [],
   },
   {
     username: "carol",
@@ -77,6 +100,15 @@ const users: User[] = [
     links: [
       { title: "Talk: Scaling Apps", url: "https://carol.dev/talks/scaling" },
     ],
+    projects: [
+      {
+        title: "FolioRank",
+        description: "Submit your portfolio and get ranked by the community.",
+        url: "https://https://foliorank.netlify.app/",
+        tech: ["Next.js", "Tailwind", "Prisma", "Typescript"]
+      }
+    ],
+    techStack: ["JavaScript", "Angular", "Supabase"],
   },
   {
     username: "jay",
@@ -95,6 +127,27 @@ const users: User[] = [
     links: [
       { title: "Infra as Code", url: "https://github.com/jaydevops/infra-as-code" },
     ],
+    projects: [
+      {
+        title: "Prepkitty",
+        description: "Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.",
+        url: "https://www.prepkitty.co",
+        tech: ["Next.js", "TypeScript", "Tailwind"]
+      },
+      {
+        title: "Chat Flow",
+        description: "A Natural Language Interface for Building Flowcharts",
+        url: "https://chatt-flow.vercel.app/",
+        tech: ["Next.js", "TypeScript", "TamboSdk"]
+      },
+      {
+        title: "FolioRank",
+        description: "Submit your portfolio and get ranked by the community.",
+        url: "https://https://foliorank.netlify.app/",
+        tech: ["Next.js", "Tailwind", "Prisma", "Typescript"]
+      }
+    ],
+    techStack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Supabase", "JavaScript", "Angular", "Node.js", "Express", "Hono"],
   },
 ];
 
