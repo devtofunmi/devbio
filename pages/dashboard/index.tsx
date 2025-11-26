@@ -11,7 +11,7 @@ const DashboardPage: React.FC = () => {
       <div
         className={`${geistSans.className} text-gray-800 flex flex-col items-center justify-center text-center min-h-screen`}
       >
-        <div className="max-w-xl flex flex-col justify-center items-center">
+        <div className="max-w-xl w-full flex flex-col justify-center items-center">
           <p className="text-xl text-gray-600 mb-8">
             Showcase your skills, projects, and social profiles in a beautiful,
             customizable page.
