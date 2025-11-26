@@ -69,7 +69,6 @@ const EditPage: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   
   // State for controlling the visibility of various modals
-  const [isProfileModalOpen, setProfileModalOpen] = useState(false);
   const [isSocialModalOpen, setSocialModalOpen] = useState(false);
   const [isTechStackModalOpen, setTechStackModalOpen] = useState(false);
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
@@ -346,7 +345,7 @@ const EditPage: React.FC = () => {
                         </button>
                       </div>
           
-                      <div className="flex flex-col md:mt-16 mt-20 items-start space-y-4">
+                      <div className="flex flex-col md:mt-16 mt-20 items-start mb-10 md:mb-0 space-y-4">
                         
                         {/* Hidden file input for image upload */}
                         <input type="file" ref={imageUploadRef} onChange={handleImageUpload} accept="image/*" className="hidden"/>

@@ -23,7 +23,7 @@ const DashboardPage: React.FC = () => {
           </div>
           <Link
             href="/dashboard/edit"
-            className="inline-flex mt-5 items-center px-8 py-4 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors shadow-lg"
+            className="inline-flex mt-5 items-center px-8 py-4 bg-blue-400 text-white rounded-full hover:bg-blue-500 transition-colors shadow-lg"
           >
             Create Your Page <FaArrowRight className="ml-2" />
           </Link>
