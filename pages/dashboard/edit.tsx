@@ -247,7 +247,7 @@ const EditPage: React.FC = () => {
       case "about":
         if (!user.about) return null;
         return (
-          <div className="w-full bg-white rounded-2xl p-6 border border-gray-200">
+          <div className="w-full p-6 ">
             <div className="flex items-start justify-between gap-2">
               <InlineEdit
                 value={user.headings?.about || "About"}
@@ -266,7 +266,7 @@ const EditPage: React.FC = () => {
       case "techstack":
         if (!user.techStack || user.techStack.length === 0) return null;
         return (
-          <div className="w-full bg-white rounded-2xl p-6 border border-gray-200">
+          <div className="w-full p-6">
             <div className="flex items-start justify-between gap-2">
               <InlineEdit
                 value={user.headings?.techstack || "Tech Stack"}
