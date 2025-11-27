@@ -27,6 +27,7 @@ import {
   SiNodedotjs,
   SiExpress,
   SiHono,
+  SiGithub,
 } from "react-icons/si";
 // Import Drag and Drop components
 import {
@@ -73,6 +74,9 @@ const EditPage: React.FC = () => {
   const [isTechStackModalOpen, setTechStackModalOpen] = useState(false);
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
   const [isGithubModalOpen, setGithubModalOpen] = useState(false);
+  const chartColor = '39c362'; // Lighter green for the chart data
+  const bgColor = '#33363D'; // Dark background for the card
+  const cardBgColor = '#F2F2F2';
 
   // Ref for the hidden file input to trigger image uploads
   const imageUploadRef = useRef<HTMLInputElement>(null);
@@ -309,14 +313,50 @@ const EditPage: React.FC = () => {
                 case "github":
                   if (!githubUsername) return null;
                           return (
-                              <div style={{ resize: 'both', overflow: 'auto', border: '1px solid #ddd', padding: '1rem' }}>
-                                  <div className="flex items-center justify-end mb-1">
-                                      <button onClick={handleDeleteGithub} className="p-1 rounded-full hover:bg-gray-200 cursor-pointer" title="Delete Section" >
-                                          <FaTrash size={16} className="text-gray-500 hover:text-red-500" />
-                                      </button>
-                                  </div>
-                                  <img src={`https://ghchart.rshah.org/${githubUsername}`} alt="GitHub Contributions" className="w-full h-auto" />
-                              </div>
+                            <div className="w-full">
+  <div 
+    style={{
+      // Styling the outer "card"
+      backgroundColor: cardBgColor,
+      borderRadius: '12px',
+      padding: '1.5rem', 
+    }}
+    className="relative shadow-lg" // The shadow and positioning context
+  >
+    {/* Header Section for Icon and Button */}
+    <div className="flex justify-between items-center mb-4"> 
+      
+      {/* GitHub Icon (Octocat) */}
+      <div 
+        style={{
+          backgroundColor: '#000',
+          borderRadius: '50%',
+          padding: '4px',
+        }}
+        className="flex items-center justify-center" // Center icon within its circle
+      >
+        <SiGithub size={18} className="text-white" />
+      </div>
+
+      {/* Trash button */}
+      <button 
+        onClick={handleDeleteGithub} 
+        className="p-1 rounded-full hover:bg-gray-300 cursor-pointer" 
+        title="Delete Section" 
+      >
+        <FaTrash size={16} className="text-gray-500 hover:text-red-500" />
+      </button>
+    </div>
+
+    {/* The actual Contributions Graph image */}
+    <img 
+      // This is the key: w-full ensures it scales to the width of the card's padding area
+      src={`https://ghchart.rshah.org/${chartColor}/${githubUsername}`} 
+      alt="GitHub Contributions" 
+      className="w-full h-auto" 
+    />
+  </div>
+</div>
                           );                default:
                   return null;
               }
