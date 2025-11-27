@@ -154,8 +154,6 @@ const EditPage: React.FC = () => {
    * Saves the GitHub username to the user's state.
    */
   const handleSetGithubUsername = () => {
-    if (!user) return;
-    setUser({ ...user, socials: { ...user.socials, github: githubUsername } });
     setGithubModalOpen(false);
   };
   
@@ -193,9 +191,7 @@ const EditPage: React.FC = () => {
   const handleDeleteTechStack = () => user && setUser({ ...user, techStack: [] });
   const handleDeleteProjects = () => user && setUser({ ...user, projects: [] });
   const handleDeleteGithub = () => {
-    if (!user) return;
     setGithubUsername("");
-    setUser({ ...user, socials: { ...user.socials, github: "" } });
   };
   // --------------------------------
 
