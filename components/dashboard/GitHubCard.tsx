@@ -62,14 +62,7 @@ const GithubCard: React.FC<GithubCardProps> = ({
             />
           </div>
 
-          {/* --- LAYER 2: Floating Icons --- */}
-          
-          {/* Top Left: Github Icon */}
-          <div className="absolute top-5 left-5 z-10">
-            <div className="bg-black rounded-full p-2.5 flex items-center justify-center shadow-lg">
-              <SiGithub size={20} className="text-white" />
-            </div>
-          </div>
+         
 
           {/* Top Right: Delete Button */}
           <div className="absolute top-5 right-5 z-10">
