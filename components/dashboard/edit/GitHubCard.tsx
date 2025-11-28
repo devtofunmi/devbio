@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { ResizableBox } from 'react-resizable';
-import { SiGithub } from 'react-icons/si';
 import { FaTrash } from 'react-icons/fa';
 
 import 'react-resizable/css/styles.css'; 

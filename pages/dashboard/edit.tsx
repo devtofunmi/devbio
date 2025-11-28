@@ -27,7 +27,6 @@ import {
   SiNodedotjs,
   SiExpress,
   SiHono,
-  SiGithub,
 } from "react-icons/si";
 // Import Drag and Drop components
 import {
@@ -44,7 +43,7 @@ import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import ProjectModal from "../../components/dashboard/edit/ProjectModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import InlineEdit from "../../components/dashboard/edit/InlineEdit";
-import GithubCard from "../../components/dashboard/GitHubCard";
+import GithubCard from "../../components/dashboard/edit/GitHubCard";
 
 // A static list of all available technologies for the Tech Stack section
 const allTechs = [
@@ -75,9 +74,6 @@ const EditPage: React.FC = () => {
   const [isTechStackModalOpen, setTechStackModalOpen] = useState(false);
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
   const [isGithubModalOpen, setGithubModalOpen] = useState(false);
-  const chartColor = '39c362'; // Lighter green for the chart data
-  const bgColor = '#33363D'; // Dark background for the card
-  const cardBgColor = '#F2F2F2';
 
   // Ref for the hidden file input to trigger image uploads
   const imageUploadRef = useRef<HTMLInputElement>(null);
