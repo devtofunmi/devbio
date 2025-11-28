@@ -15,7 +15,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
       <Sidebar
       />
       <main
-        className="flex-1 p-5 w-full md:pb-20 pb-16"
+        className="flex-1 p-5 w-full md:pb-20 pb-16 lg:ml-80"
       >
         
         {children}
