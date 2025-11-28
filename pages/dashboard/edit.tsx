@@ -224,7 +224,7 @@ const EditPage: React.FC = () => {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="w-16 h-16 border-4 border-blue-400 border-dashed rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-2 border-blue-400 border-dashed rounded-full animate-spin"></div>
       </div>
     );
   }
