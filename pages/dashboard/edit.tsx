@@ -44,6 +44,7 @@ import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import ProjectModal from "../../components/dashboard/edit/ProjectModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import InlineEdit from "../../components/dashboard/edit/InlineEdit";
+import GithubCard from "../../components/dashboard/GitHubCard";
 
 // A static list of all available technologies for the Tech Stack section
 const allTechs = [
@@ -311,56 +312,17 @@ const EditPage: React.FC = () => {
                     </div>
                   );
                 case "github":
-                  if (!githubUsername) return null;
-                          return (
-                            <div className="w-full">
-  <div 
-    style={{
-      // Styling the outer "card"
-      backgroundColor: cardBgColor,
-      borderRadius: '12px',
-      padding: '1.5rem', 
-    }}
-    className="relative shadow-lg" // The shadow and positioning context
-  >
-    {/* Header Section for Icon and Button */}
-    <div className="flex justify-between items-center mb-4"> 
-      
-      {/* GitHub Icon (Octocat) */}
-      <div 
-        style={{
-          backgroundColor: '#000',
-          borderRadius: '50%',
-          padding: '4px',
-        }}
-        className="flex items-center justify-center" // Center icon within its circle
-      >
-        <SiGithub size={18} className="text-white" />
-      </div>
-
-      {/* Trash button */}
-      <button 
-        onClick={handleDeleteGithub} 
-        className="p-1 rounded-full hover:bg-gray-300 cursor-pointer" 
-        title="Delete Section" 
-      >
-        <FaTrash size={16} className="text-gray-500 hover:text-red-500" />
-      </button>
-    </div>
-
-    {/* The actual Contributions Graph image */}
-    <img 
-      // This is the key: w-full ensures it scales to the width of the card's padding area
-      src={`https://ghchart.rshah.org/${chartColor}/${githubUsername}`} 
-      alt="GitHub Contributions" 
-      className="w-full h-auto" 
-    />
-  </div>
-</div>
-                          );                default:
-                  return null;
-              }
-            };
+        if (!githubUsername) return null;
+        return (
+          <GithubCard
+            githubUsername={githubUsername}
+            onDelete={handleDeleteGithub}
+          />
+        );
+      default:
+        return null;
+    }
+  };
             // #endregion
           
             // #region Main Component JSX
