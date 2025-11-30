@@ -54,7 +54,7 @@ interface CrackedDevCardProps {
 }
 
 const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar }) => (
-    <div className="relative w-40 h-40 rounded-md overflow-hidden">
+    <div className="relative w-64 h-64 rounded-md overflow-hidden">
         <Image
             src={avatar}
             alt={`${name}'s avatar`}
@@ -91,7 +91,7 @@ const CrackedDevs: React.FC = () => {
     return (
         <section className="py-20 bg-[#0a0a0a] text-white">
             <div className="max-w-6xl mx-auto">
-                <h2 className="text-3xl font-extrabold text-center mb-12">
+                <h2 className="text-5xl font-extrabold text-center mb-12">
                     Loved by <span className="text-blue-400">Cracked Devs</span>
                 </h2>
                 <div ref={sliderRef} className="keen-slider">

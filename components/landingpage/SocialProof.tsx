@@ -8,7 +8,7 @@ const SocialProof: React.FC = () => (
         <h3 className="text-4xl sm:text-5xl font-extrabold  mb-8">
             Tech Stacks. Social Links.
         </h3>
-        <p className="text-xl text-white max-w-2xl">
+        <p className="text-2xl text-white max-w-2xl">
             All your development content <span className="text-[#6f90fe]">integrated</span> into your personal page. No more hiding your work behind simple text links.
         </p>
     </section>

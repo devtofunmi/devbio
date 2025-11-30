@@ -41,7 +41,7 @@ const LinkSlider: React.FC = () => {
 
 const CallToAction: React.FC = () => (
     <section className="flex flex-col items-center justify-center py-16 px-6 ">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-8 text-white">Ready to build your developer brand?</h2>
+        <h2 className="text-4xl font-bold mb-8 text-white">Ready to build your developer brand?</h2>
          <div className="flex justify-center w-[300px] items-center text-3xl font-mono mt-4">
             <span className="text-white text-2xl md:text-4xl">devbio.co/</span>
             <div className="flex justify-start text-start text-2xl">

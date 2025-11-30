@@ -78,7 +78,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ name, handle, quote, 
 
 const Testimonials: React.FC = () => (
     <section id="testimonials" className="py-20 px-6 bg-[#0a0a0a] border-y border-[#2a2a2a]">
-        <h2 className="text-2xl font-extrabold text-center text-white mb-16">
+        <h2 className="text-5xl font-extrabold text-center text-white mb-16">
             What Devs Are <span className="text-blue-400">Saying</span>
         </h2>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
