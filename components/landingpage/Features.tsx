@@ -1,92 +1,143 @@
 import React from 'react';
 import { FaReact, FaNodeJs, FaDatabase, FaJs, FaHtml5 } from 'react-icons/fa';
 
-const Features: React.FC = () => {
-  const cardClasses = "bg-white p-6 rounded-xl border border-gray-200 transform transition-all duration-300 active:-rotate-2 hover:rotate-2 relative group overflow-hidden";
+const Features: React.FC = () => (
+  <div className="bg-white rounded-4xl p-4 md:p-8 py-16 md:py-24">
+    <div className="max-w-5xl mx-auto flex flex-col gap-20 md:gap-28">
 
-  return (
-    <div  className="min-h-screen p-4 md:p-8">
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-12 max-w-7xl mx-auto">
-
-        {/* 1. Project List */}
-        <div className={`md:col-span-3 ${cardClasses}`}>
-          <h3 className="font-bold text-lg text-gray-800 mb-2">Project List</h3>
-          <p className="text-gray-600 mb-4">Showcase your projects with titles, descriptions, and links.</p>
-          <div className="space-y-3">
-            <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-              <p className="font-semibold text-sm text-gray-700">Project Alpha</p>
-            </div>
-            <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-              <p className="font-semibold text-sm text-gray-700">Project Beta</p>
-            </div>
-          </div>
-           <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-        </div>
-
-        {/* 2. Built-in Analytics */}
-        <div className={`md:col-span-6 ${cardClasses} transform md:-translate-y-10`}>
-          <h3 className="font-bold text-lg text-gray-800 mb-2">Built-in Analytics</h3>
-          <p className="text-gray-600 mb-4">See who is viewing your profile and where your traffic is coming from.</p>
-          <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 h-32 flex items-end space-x-2">
-            <div className="w-1/4 bg-blue-400 h-1/3 rounded-t-md"></div>
-            <div className="w-1/4 bg-blue-400 h-2/3 rounded-t-md"></div>
-            <div className="w-1/4 bg-blue-400 h-1/2 rounded-t-md"></div>
-            <div className="w-1/4 bg-blue-400 h-3/4 rounded-t-md"></div>
-          </div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"></div>
-        </div>
-
-        {/* 3. Tech Stack Visuals */}
-        <div className={`md:col-span-3 ${cardClasses}`}>
-          <h3 className="font-bold text-lg text-gray-800 mb-2">Tech Stack Visuals</h3>
-          <p className="text-gray-600 mb-4">Display your languages and frameworks.</p>
-          <div className="flex justify-around items-center h-24 text-2xl text-gray-500">
-            <FaReact className="hover:text-blue-500" />
-            <FaNodeJs className="hover:text-green-500" />
-            <FaDatabase className="hover:text-purple-500" />
-            <FaJs className="hover:text-yellow-500" />
-            <FaHtml5 className="hover:text-orange-500" />
-          </div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"></div>
-        </div>
-        
-        <div className={`md:col-span-3 md:col-start-10 md:row-start-2 ${cardClasses}`}>
-          <h3 className="font-bold text-lg text-gray-800 mb-2">Customizable Profile</h3>
-          <p className="text-gray-600 mb-4">Make a professional first impression.</p>
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-full bg-gray-300"></div>
-            <div>
-              <div className="w-24 h-4 bg-gray-300 rounded-md mb-2"></div>
-              <div className="w-16 h-3 bg-gray-200 rounded-md"></div>
+      {/* Project List Feature */}
+      <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
+        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+            <h3 className="font-bold text-lg text-gray-800 mb-2">Project List</h3>
+            <div className="space-y-3 mt-4">
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <p className="font-semibold text-sm text-gray-700">Project Alpha</p>
+              </div>
+              <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <p className="font-semibold text-sm text-gray-700">Project Beta</p>
+              </div>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"></div>
         </div>
-
-        <div className={`md:col-span-3 ${cardClasses} flex flex-col justify-between`}>
-            <div className="flex items-start space-x-4">
-               <h3 className="font-bold text-lg text-gray-800 mb-2">Custom Domains</h3>
-            </div>
-            <p className="text-gray-600 mb-4">Link your own domain for a professional brand.</p>
-            <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
-              <p className="text-center font-mono text-blue-400">yourname.dev</p>
-            </div>
-            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"></div>
-        </div>
-
-        <div className={`md:col-span-6 ${cardClasses} transform translate-y-10`}>
-          <h3 className="font-bold text-start text-lg text-gray-800 mb-2">Github Contribution</h3>
-          <p className="text-gray-600 mb-4">Embed your GitHub contributions and activity.</p>
-          <div className="mt-4 grid grid-flow-col grid-rows-7 gap-1">
-            {Array(182).fill(0).map((_, i) => (
-                <div key={i} className={`aspect-square rounded-sm ${i % 6 === 0 ? 'bg-green-600' : i % 4 === 0 ? 'bg-green-400' : 'bg-green-200'}`}></div>
-            ))}
-          </div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"></div>
+        <div className="md:w-7/12 w-full">
+          <h3 className="font-bold text-3xl text-gray-800 mb-3">Showcase Your Best Work</h3>
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Go beyond a simple list of projects. With DevBio, you can create a rich, detailed portfolio. Add descriptions, tech stacks, and live links. Embed images and videos to give recruiters and collaborators a comprehensive look at what you&apos;ve built.
+          </p>
         </div>
       </div>
+
+      {/* Built-in Analytics Feature */}
+      <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
+        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+            <h3 className="font-bold text-lg text-gray-800 mb-2">Built-in Analytics</h3>
+            <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 h-32 flex items-end space-x-2 mt-4">
+              <div className="w-1/4 bg-blue-400 h-1/3 rounded-t-md"></div>
+              <div className="w-1/4 bg-blue-400 h-2/3 rounded-t-md"></div>
+              <div className="w-1/4 bg-blue-400 h-1/2 rounded-t-md"></div>
+              <div className="w-1/4 bg-blue-400 h-3/4 rounded-t-md"></div>
+            </div>
+          </div>
+        </div>
+        <div className="md:w-7/12 w-full">
+          <h3 className="font-bold text-3xl text-gray-800 mb-3">Understand Your Audience</h3>
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Knowledge is power. Our built-in analytics give you valuable insights into your profile&apos;s performance. See how many people are viewing your page, where they&apos;re coming from, and what content is most popular. Use this data to tailor your profile and grow your online presence.
+          </p>
+        </div>
+      </div>
+
+      {/* GitHub Contributions Feature */}
+      <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
+        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+            <h3 className="font-bold text-lg text-gray-800 mb-2">GitHub Contributions</h3>
+            <div className="mt-4 grid grid-flow-col grid-rows-7 gap-1">
+              {Array.from({ length: 182 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`aspect-square rounded-sm ${
+                    i % 6 === 0 ? 'bg-green-600' : i % 4 === 0 ? 'bg-green-400' : 'bg-green-200'
+                  }`}
+                ></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="md:w-7/12 w-full">
+          <h3 className="font-bold text-3xl text-gray-800 mb-3">Sync Your GitHub Activity</h3>
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Keep your profile dynamic and up-to-date automatically. DevBio seamlessly integrates with your GitHub account to display your contribution graph and recent activity. It&rsquo;s the easiest way to show you&apos;re an active and engaged developer.
+          </p>
+        </div>
+      </div>
+
+      {/* Tech Stack Feature */}
+      <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
+        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+            <h3 className="font-bold text-lg text-gray-800 mb-2">Tech Stack Visuals</h3>
+            <div className="flex justify-around items-center h-24 text-4xl text-gray-500 mt-4">
+              <FaReact className="hover:text-blue-500" />
+              <FaNodeJs className="hover:text-green-500" />
+              <FaDatabase className="hover:text-purple-500" />
+              <FaJs className="hover:text-yellow-500" />
+              <FaHtml5 className="hover:text-orange-500" />
+            </div>
+          </div>
+        </div>
+        <div className="md:w-7/12 w-full">
+          <h3 className="font-bold text-3xl text-gray-800 mb-3">Display Your Expertise</h3>
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Don&apos;t just list your skills—show them. Our visual tech stack allows you to display the languages, frameworks, and tools you&apos;re proficient in. It&rsquo;s a quick and effective way for visitors to gauge your technical abilities.
+          </p>
+        </div>
+      </div>
+
+      {/* Customizable Profile Feature */}
+      <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
+        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+            <h3 className="font-bold text-lg text-gray-800 mb-2">Customizable Profile</h3>
+            <div className="bg-gray-50 p-4 mt-4 rounded-lg border border-gray-200 flex items-center space-x-3">
+              <div className="w-12 h-12 rounded-full bg-gray-300"></div>
+              <div>
+                <div className="w-24 h-4 bg-gray-300 rounded-md mb-2"></div>
+                <div className="w-16 h-3 bg-gray-200 rounded-md"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="md:w-7/12 w-full">
+          <h3 className="font-bold text-3xl text-gray-800 mb-3">Make It Uniquely Yours</h3>
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Your personal brand matters. Choose from multiple themes and layouts to create a profile that reflects your style. Make a memorable first impression that sets you apart from the crowd.
+          </p>
+        </div>
+      </div>
+
+      {/* Custom Domains Feature */}
+      <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
+        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+            <h3 className="font-bold text-lg text-gray-800 mb-2">Custom Domains</h3>
+            <div className="bg-gray-50 p-3 mt-4 rounded-lg border border-gray-200">
+              <p className="text-center font-mono text-blue-400 text-lg">yourname.dev</p>
+            </div>
+          </div>
+        </div>
+        <div className="md:w-7/12 w-full">
+          <h3 className="font-bold text-3xl text-gray-800 mb-3">Own Your Online Identity</h3>
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Strengthen your professional brand by linking your profile to your own custom domain. A personal domain like `yourname.dev` makes your portfolio more professional, easier to share, and more likely to be remembered.
+          </p>
+        </div>
+      </div>
+
     </div>
-  );
-};
+  </div>
+);
 
 export default Features;

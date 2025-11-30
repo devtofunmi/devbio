@@ -15,7 +15,7 @@ const geistMono = { className: "font-mono" };
 
 const Home: React.FC = () => {
     return (
-        <div className={`${geistSans.className} ${geistMono.className} font-sans min-h-screen bg-white flex flex-col`}>
+        <div className={`${geistSans.className} ${geistMono.className} font-sans min-h-screen bg-black flex flex-col`}>
             <Navbar />
             <Hero />
 
