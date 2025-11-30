@@ -30,7 +30,7 @@ const FAQ = () => {
   return (
     <section id="faq" className="bg-[#0a0a0a] py-20">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center text-white mb-12">Frequently Asked Questions</h2>
+        <h2 className="text-3xl font-bold text-center text-white mb-12">Got Questions? Answered</h2>
         <div className="max-w-3xl mx-auto grid gap-4">
           {faqs.map((faq, index) => (
             <div key={index} className="bg-[#1c1c1c] border border-[#2a2a2a] rounded-lg transition-transform duration-300 hover:rotate-2 active:rotate-2">
