@@ -8,7 +8,7 @@ const Features: React.FC = () => (
       {/* Project List Feature */}
       <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
         <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+          <div className="bg-[#f4f4f4] p-6 rounded-xl border border-gray-200 w-full">
             <h3 className="font-bold text-lg text-gray-800 mb-2">Project List</h3>
             <div className="space-y-3 mt-4">
               <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
@@ -31,7 +31,7 @@ const Features: React.FC = () => (
       {/* Built-in Analytics Feature */}
       <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
         <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+          <div className="bg-[#f4f4f4] p-6 rounded-xl border border-gray-200 w-full">
             <h3 className="font-bold text-lg text-gray-800 mb-2">Built-in Analytics</h3>
             <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 h-32 flex items-end space-x-2 mt-4">
               <div className="w-1/4 bg-blue-400 h-1/3 rounded-t-md"></div>
@@ -52,7 +52,7 @@ const Features: React.FC = () => (
       {/* GitHub Contributions Feature */}
       <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
         <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+          <div className="bg-[#f4f4f4] p-6 rounded-xl border border-gray-200 w-full">
             <h3 className="font-bold text-lg text-gray-800 mb-2">GitHub Contributions</h3>
             <div className="mt-4 grid grid-flow-col grid-rows-7 gap-1">
               {Array.from({ length: 182 }).map((_, i) => (
@@ -77,7 +77,7 @@ const Features: React.FC = () => (
       {/* Tech Stack Feature */}
       <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
         <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+          <div className="bg-[#f4f4f4] p-6 rounded-xl border border-gray-200 w-full">
             <h3 className="font-bold text-lg text-gray-800 mb-2">Tech Stack Visuals</h3>
             <div className="flex justify-around items-center h-24 text-4xl text-gray-500 mt-4">
               <FaReact className="hover:text-blue-500" />
@@ -99,7 +99,7 @@ const Features: React.FC = () => (
       {/* Customizable Profile Feature */}
       <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
         <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+          <div className="bg-[#f4f4f4] p-6 rounded-xl border border-gray-200 w-full">
             <h3 className="font-bold text-lg text-gray-800 mb-2">Customizable Profile</h3>
             <div className="bg-gray-50 p-4 mt-4 rounded-lg border border-gray-200 flex items-center space-x-3">
               <div className="w-12 h-12 rounded-full bg-gray-300"></div>
@@ -121,7 +121,7 @@ const Features: React.FC = () => (
       {/* Custom Domains Feature */}
       <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
         <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
-          <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+          <div className="bg-[#f4f4f4] p-6 rounded-xl border border-gray-200 w-full">
             <h3 className="font-bold text-lg text-gray-800 mb-2">Custom Domains</h3>
             <div className="bg-gray-50 p-3 mt-4 rounded-lg border border-gray-200">
               <p className="text-center font-mono text-blue-400 text-lg">yourname.dev</p>
