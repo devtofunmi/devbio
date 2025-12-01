@@ -90,7 +90,7 @@ const CrackedDevs: React.FC = () => {
     })
     return (
         <section className="py-20 bg-[#0a0a0a] text-white">
-            <div className="max-w-6xl mx-auto">
+            <div className=" mx-auto">
                 <h2 className="text-5xl font-extrabold text-center mb-12">
                     Loved by <span className="text-blue-400">Cracked Devs</span>
                 </h2>
