@@ -2,7 +2,7 @@ import React from 'react';
 import { FaReact, FaNodeJs, FaDatabase, FaJs, FaHtml5 } from 'react-icons/fa';
 
 const Features: React.FC = () => (
-  <div className="text-2xl">
+  <div id="features" className="text-2xl">
     {/* Project List Feature */}
     <div className="bg-blue-400 py-16 md:py-24 h-screen flex items-center">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
