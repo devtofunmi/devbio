@@ -45,7 +45,7 @@ const Hero: React.FC = () => (
         <div className="relative z-10 max-w-4xl">
             {/* <OwnPageIcon /> */}
             {/* Reverted to original brand text/placeholder */}
-            <p className="text-white text-lg font-medium mb-2 opacity-80">devbio.co</p>
+            <p className="text-white text-2xl font-medium mb-2 opacity-80">devbio.co</p>
 
             {/* Reverted to original developer-focused headline */}
             <h1 className="text-5xl sm:text-6xl leading-tight font-extrabold mb-4 text-white">
@@ -53,14 +53,14 @@ const Hero: React.FC = () => (
             </h1>
             
             {/* Reverted to original subtext */}
-            <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+            <p className="text-2xl text-gray-400 max-w-2xl mx-auto mb-10">
                 Your professional developer profile, all in one link. Connect, share, and grow your presence with a beautiful, customizable page.
             </p>
 
             {/* Main Call to Action Button */}
             <Link 
                 href="/signup" 
-                className="inline-block w-full md:w-fit rounded-full bg-white text-gray-900 px-10 py-3 font-bold text-lg shadow-xl hover:bg-gray-100 transition transform hover:scale-105"
+                className="inline-block w-full md:w-fit rounded-full bg-white text-gray-900 px-10 py-3 font-bold text-2xl shadow-xl hover:bg-gray-100 transition transform hover:scale-105"
             >
                 Create Your DevBio
             </Link>
