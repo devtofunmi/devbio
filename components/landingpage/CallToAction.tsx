@@ -32,7 +32,7 @@ const LinkSlider: React.FC = () => {
         <div ref={sliderRef} className="keen-slider" style={{ height: 40 }}>
             {usernames.map((name, index) => (
                 <div className="keen-slider__slide" key={index}>
-                    <span className="text-blue-400 text-4xl text-start">{name}</span>
+                    <span className="text-blue-400 text-3xl md:text-4xl text-center">{name}</span>
                 </div>
             ))}
         </div>
@@ -41,14 +41,14 @@ const LinkSlider: React.FC = () => {
 
 const CallToAction: React.FC = () => (
     <section className="flex flex-col items-center justify-center py-16 px-6 ">
-        <h2 className="text-4xl font-bold mb-8 text-white">Ready to build your developer brand?</h2>
-         <div className="flex justify-center w-[300px] items-center text-3xl font-mono mt-4">
-            <span className="text-white text-2xl md:text-4xl">devbio.co/</span>
-            <div className="flex justify-start text-start text-2xl">
+        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 text-white text-center">Ready to build your developer brand?</h2>
+         <div className="flex justify-center items-center font-mono mt-4">
+            <span className="text-white text-3xl md:text-5xl">devbio.co/</span>
+            <div className="flex justify-center  text-3xl md:text-5xl w-48 md:w-64">
             <LinkSlider />
             </div>
         </div>
-        <Link href="/signup" className="inline-block mt-10 rounded-full bg-blue-400 text-white font-bold px-10 py-4 text-lg hover:bg-blue-500 transition transform hover:scale-105">
+        <Link href="/signup" className="inline-block mt-10 rounded-full bg-blue-400 text-white font-bold px-10 py-4 text-2xl hover:bg-blue-500 transition transform hover:scale-105">
             Get Your Free DevBio
         </Link>
     </section>
