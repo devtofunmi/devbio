@@ -48,7 +48,7 @@ const CallToAction: React.FC = () => (
             <LinkSlider />
             </div>
         </div>
-        <Link href="/signup" className="inline-block mt-10 rounded-full bg-blue-400 text-white font-bold px-10 py-4 text-2xl hover:bg-blue-500 transition transform hover:scale-105">
+        <Link href="/signup" className="inline-block mt-10 rounded-full bg-blue-400 text-white font-bold px-10 py-4 text-xl md:text-2xl hover:bg-blue-500 transition transform hover:scale-105">
             Get Your Free DevBio
         </Link>
     </section>

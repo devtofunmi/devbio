@@ -60,7 +60,7 @@ const Hero: React.FC = () => (
             {/* Main Call to Action Button */}
             <Link 
                 href="/signup" 
-                className="inline-block w-full md:w-fit rounded-full bg-white text-gray-900 px-10 py-3 font-bold text-2xl shadow-xl hover:bg-gray-100 transition transform hover:scale-105"
+                className="inline-block w-full md:w-fit rounded-full bg-white text-gray-900 px-10 py-3 font-bold text-xl md:text-2xl shadow-xl hover:bg-gray-100 transition transform hover:scale-105"
             >
                 Create Your DevBio
             </Link>
