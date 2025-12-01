@@ -5,7 +5,7 @@ const Footer: React.FC = () => (
     <footer className="py-12 text-center text-gray-400 text-sm ">
         
 
-        <div className="flex justify-center gap-6 text-lg md:text-2xl text-gray-500">
+        <div className="flex justify-center gap-6 text-lg  text-gray-500">
             <Link href="/about" className="hover:text-white">About us</Link>
             <Link href="/contribute" className="hover:text-white">Contribute</Link>
         </div>

@@ -21,7 +21,7 @@ const Features: React.FC = () => (
             </div>
           </div>
           <div className="md:w-7/12 w-full">
-            <h3 className="font-bold text-4xl md:text-5xl text-[#cee933] mb-3">Showcase Your Best Work</h3>
+            <h3 className="font-bold text-4xl md:text-5xl text-[#c8ea40] mb-3">Showcase Your Best Work</h3>
             <p className="text-white leading-relaxed text-xl md:text-2xl">
               Go beyond a simple list of projects. With DevBio, you can create a rich, detailed portfolio. Add descriptions, tech stacks, and live links.
             </p>
