@@ -30,12 +30,12 @@ const FAQ = () => {
   return (
     <section id="faq" className="bg-[#0a0a0a] py-20">
       <div className="container mx-auto px-4">
-        <h2 className="text-5xl font-bold text-center text-white mb-12">Got Questions? Answered</h2>
+        <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-12">Got Questions? Answered</h2>
         <div className="max-w-3xl mx-auto grid gap-4">
           {faqs.map((faq, index) => (
             <div key={index} className="bg-[#1c1c1c] border border-[#2a2a2a] rounded-lg transition-transform duration-300 hover:rotate-2 active:rotate-2">
               <button
-                className="w-full flex justify-between items-center text-left text-xl font-medium text-white p-6 focus:outline-none"
+                className="w-full flex justify-between items-center text-left text-xl md:text-2xl font-medium text-white p-6 focus:outline-none"
                 onClick={() => toggleFAQ(index)}
               >
                 <span>{faq.question}</span>
@@ -52,7 +52,7 @@ const FAQ = () => {
                 </svg>
               </button>
               {activeIndex === index && (
-                <div className="px-6 pb-6 text-lg text-gray-300">
+                <div className="px-6 pb-6 text-base md:text-2xl text-gray-300">
                   <p>{faq.answer}</p>
                 </div>
               )}
