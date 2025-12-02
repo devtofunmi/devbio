@@ -30,9 +30,9 @@ const Navbar: React.FC = () => {
                         <Link href="/">DevBio</Link>
                     </div>
                     <nav className="hidden md:flex items-center space-x-6">
-                        <Link href="#features" className="text-gray-300 hover:text-white transition">Features</Link>
-                        <Link href="#testimonials" className="text-gray-300 hover:text-white transition">Testimonials</Link>
-                        <Link href="#faq" className="text-gray-300 hover:text-white transition">FAQ</Link>
+                        <Link href="/#features" className="text-gray-300 hover:text-white transition">Features</Link>
+                        <Link href="/#testimonials" className="text-gray-300 hover:text-white transition">Testimonials</Link>
+                        <Link href="/#faq" className="text-gray-300 hover:text-white transition">FAQ</Link>
                         <Link href="/signup" className="text-white px-5 py-2 rounded-full font-bold transition border border-gray-300 hover:bg-gray-300 hover:text-black">
                             Sign Up
                         </Link>
@@ -53,9 +53,9 @@ const Navbar: React.FC = () => {
                             </button>
                         </div>
                         <nav className="pt-20 px-8 flex flex-col space-y-4">
-                            <Link href="#features" className="font-bold py-2 border-b border-gray-600 text-xl text-gray-300 hover:text-white transition" onClick={() => setIsMenuOpen(false)}>Features</Link>
-                            <Link href="#testimonials" className="font-bold py-2 border-b border-gray-600 text-xl text-gray-300 hover:text-white transition" onClick={() => setIsMenuOpen(false)}>Testimonials</Link>
-                            <Link href="#faq" className="font-bold py-2 border-b border-gray-600 text-xl text-gray-300 hover:text-white transition" onClick={() => setIsMenuOpen(false)}>FAQ</Link>
+                            <Link href="/#features" className="font-bold py-2 border-b border-gray-600 text-xl text-gray-300 hover:text-white transition" onClick={() => setIsMenuOpen(false)}>Features</Link>
+                            <Link href="/#testimonials" className="font-bold py-2 border-b border-gray-600 text-xl text-gray-300 hover:text-white transition" onClick={() => setIsMenuOpen(false)}>Testimonials</Link>
+                            <Link href="/#faq" className="font-bold py-2 border-b border-gray-600 text-xl text-gray-300 hover:text-white transition" onClick={() => setIsMenuOpen(false)}>FAQ</Link>
                             <Link href="/signup" className="font-bold py-2 border-b border-gray-600 text-xl text-gray-300 hover:text-white transition" onClick={() => setIsMenuOpen(false)}>
                                 Sign Up
                             </Link>
