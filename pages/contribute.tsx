@@ -6,11 +6,11 @@ import Footer from '../components/landingpage/Footer';
 
 const Contribute: React.FC = () => {
     return (
-        <>  <div className="">
+        <>  <div className="bg-gray-800">
             <Navbar />
         </div>
             {/* Section 1: Build with us */}
-            <div className=" py-16 md:py-24 flex items-center">
+            <div className="bg-gray-800 py-16 md:py-24 flex items-center">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
                         <div className="md:w-7/12 w-full">
@@ -81,7 +81,7 @@ const Contribute: React.FC = () => {
                         </div>
                         <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
                             <div className="bg-white p-6 rounded-xl border border-gray-200 w-full text-center">
-                                <FaBook className="text-6xl text-gray-800 mx-auto mb-4" />
+                                <FaBook className="text-6xl text-purple-600 mx-auto mb-4" />
                                 <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-4">Improve Documentation</h3>
                                 <a href="https://github.com/devtofunmi/devbio/tree/main/docs" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
                                     View Docs
