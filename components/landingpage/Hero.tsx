@@ -48,7 +48,7 @@ const Hero: React.FC = () => (
             <p className="text-white text-2xl font-medium mb-2 opacity-80">devbio.co</p>
 
             {/* Reverted to original developer-focused headline */}
-            <h1 className="text-5xl sm:text-6xl leading-tight font-extrabold mb-4 text-white">
+            <h1 className="text-5xl md:text-6xl leading-tight font-bold mb-4 text-white">
                 Showcase Your<br /> Code, Stats, and Stack.
             </h1>
             
