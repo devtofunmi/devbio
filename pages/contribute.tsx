@@ -1,142 +1,147 @@
-import { GoRocket  } from 'react-icons/go';
-import { SiGithub } from 'react-icons/si';
-
-const geistSans = { className: "font-sans" };
-const geistMono = { className: "font-mono" };
+import React from 'react';
+import { GoRocket } from 'react-icons/go';
+import { FaCode, FaBook, FaUsers, FaGavel } from 'react-icons/fa';
+import Navbar from '../components/landingpage/Navbar';
+import Footer from '../components/landingpage/Footer';
 
 const Contribute: React.FC = () => {
-  return (
-    <div className={`${geistSans.className} ${geistMono.className} font-sans min-h-screen bg-gray-50 p-8 sm:p-12 md:p-16`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="lg:flex lg:gap-8">
-          {/* Left Column */}
-          <div className="lg:w-1/3 lg:fixed lg:top-16 lg:h-screen lg:overflow-y-auto">
-            <div className="flex flex-col items-start space-y-4">
-              <div className="bg-blue-400 h-20 w-20 sm:h-32 sm:w-32 md:h-40 md:w-40 lg:h-50 lg:w-50 rounded-full"></div>
-              <h1 className="md:text-4xl text-3xl font-extrabold text-gray-900 flex items-center gap-3">
-                Build with us <GoRocket />
-              </h1>
-              <p className="text-2xl text-gray-600 max-w-sm">
-                DevBio is open-source and community-driven. We welcome contributions of all kinds, from bug reports to new features. Help us build the best link-in-bio tool for developers.
-              </p>
-              <div className="flex items-center space-x-4 pt-4 mb-16">
-                <a
-                  href="https://github.com/devtofunmi/devbio"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 cursor-pointer text-white font-semibold bg-blue-400 rounded-full shadow-lg hover:bg-blue-500 transition duration-150 flex items-center gap-2"
-                >
-                  <SiGithub /> View on GitHub
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Spacer */}
-          <div className="hidden lg:block lg:w-1/3"></div>
-
-          {/* Right side content (Middle and Right columns) */}
-          <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 lg:mt-0">
-            {/* Middle Column */}
-            <div className="md:col-span-1 space-y-8">
-              {/* Card: Report a Bug */}
-              <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
-                  <div className="flex items-start mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Report a Bug</h2>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Found something that isn&apos;t working as expected? Create a detailed issue on GitHub so we can fix it.
-                  </p>
-                  <a href="https://github.com/devtofunmi/devbio/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
-                    Create Issue
-                  </a>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-              </div>
-
-              {/* Card: Code Contributions */}
-              <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
-                  <div className="flex items-start mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Code Contributions</h2>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Ready to write some code? Fork the repo, create a new branch, and submit a pull request. We appreciate all contributions, big or small.
-                  </p>
-                  <a href="https://github.com/devtofunmi/devbio/pulls" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
-                    View Pull Requests
-                  </a>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-              </div>
-
-              {/* Card: Code of Conduct */}
-              <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
-                  <div className="flex items-start mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Code of Conduct</h2>
-                  </div>
-                  <p className="text-gray-600">
-                    We are committed to a welcoming and inclusive community. Please read and follow our Code of Conduct to ensure a positive environment for everyone.
-                  </p>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-              </div>
-            </div>
-
-            {/* Right Column */}
-            <div className="md:col-span-1 space-y-8">
-              {/* Card: Suggest a Feature */}
-              <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
-                  <div className="flex items-start mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Suggest a Feature</h2>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Have a great idea for a new feature? We&apos;d love to hear it. Open an issue to start a discussion with the community.
-                  </p>
-                  <a href="https://github.com/devtofunmi/devbio/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFEAT%5D" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
-                    Request Feature
-                  </a>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-              </div>
-
-              {/* Card: Improve Documentation */}
-              <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
-                  <div className="flex items-start mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Improve Documentation</h2>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Good documentation is key. If you see a typo, a missing explanation, or an area for improvement, please let us know or submit a PR.
-                  </p>
-                  <a href="https://github.com/devtofunmi/devbio/tree/main/docs" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
-                    View Docs
-                  </a>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-              </div>
-
-              {/* Card: Join the Community */}
-              <div tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
-                  <div className="flex items-start mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Join the Community</h2>
-                  </div>
-                  <p className="text-gray-600">
-                    Join our community on GitHub Discussions to ask questions, share ideas, and connect with other contributors.
-                  </p>
-                </div>
-                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-              </div>
-            </div>
-          </div>
+    return (
+        <>  <div className="">
+            <Navbar />
         </div>
-      </div>
-    </div>
-  );
+            {/* Section 1: Build with us */}
+            <div className=" py-16 md:py-24 flex items-center">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
+                        <div className="md:w-7/12 w-full">
+                            <h3 className="font-bold text-4xl md:text-6xl text-white mb-3 flex items-center gap-3">
+                                Build with us <GoRocket />
+                            </h3>
+                            <p className="text-gray-200 leading-relaxed text-xl md:text-2xl">
+                                DevBio is open-source and community-driven. We welcome contributions of all kinds, from bug reports to new features. Help us build the best link-in-bio tool for developers.
+                            </p>
+                        </div>
+                        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+                            <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
+                                <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-2">Get Started</h3>
+                                <div className="space-y-4 mt-4">
+                                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                        <p className="font-semibold text-lg text-gray-700">Report a Bug</p>
+                                        <p className="text-sm text-gray-500 mb-2">Help us find and fix issues.</p>
+                                        <a href="https://github.com/devtofunmi/devbio/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5BBUG%5D" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center text-sm hover:bg-gray-800 transition duration-150">
+                                            Create Issue
+                                        </a>
+                                    </div>
+                                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                                        <p className="font-semibold text-lg text-gray-700">Suggest a Feature</p>
+                                        <p className="text-sm text-gray-500 mb-2">Have an idea? We&apos;d love to hear it.</p>
+                                        <a href="https://github.com/devtofunmi/devbio/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=%5BFEAT%5D" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center text-sm hover:bg-gray-800 transition duration-150">
+                                            Request Feature
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section 2: Code Contributions */}
+            <div className="bg-green-500 py-16 md:py-24 min-h-screen flex items-center">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
+                        <div className="md:w-7/12 w-full">
+                            <h3 className="font-bold text-4xl md:text-6xl text-white mb-3">Ready to Write Some Code?</h3>
+                            <p className="text-gray-100 leading-relaxed text-xl md:text-2xl">
+                                Fork the repo, create a new branch, and submit a pull request. We appreciate all contributions, big or small.
+                            </p>
+                        </div>
+                        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+                            <div className="bg-white p-6 rounded-xl border border-gray-200 w-full text-center">
+                                <FaCode className="text-6xl text-green-500 mx-auto mb-4" />
+                                <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-4">Code Contributions</h3>
+                                <a href="https://github.com/devtofunmi/devbio/pulls" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
+                                    View Pull Requests
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section 3: Improve Documentation */}
+            <div className="bg-purple-600 py-16 md:py-24 min-h-screen flex items-center">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
+                        <div className="md:w-7/12 w-full">
+                            <h3 className="font-bold text-4xl md:text-6xl text-white mb-3">Help Us Improve Our Docs</h3>
+                            <p className="text-gray-300 leading-relaxed text-xl md:text-2xl">
+                                See a typo or a missing explanation? Please let us know or submit a PR to improve our documentation.
+                            </p>
+                        </div>
+                        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+                            <div className="bg-white p-6 rounded-xl border border-gray-200 w-full text-center">
+                                <FaBook className="text-6xl text-gray-800 mx-auto mb-4" />
+                                <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-4">Improve Documentation</h3>
+                                <a href="https://github.com/devtofunmi/devbio/tree/main/docs" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
+                                    View Docs
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section 4: Join the Community */}
+            <div className="bg-blue-400 py-16 md:py-24 min-h-screen flex items-center">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row-reverse gap-8 lg:gap-12 items-center">
+                        <div className="md:w-7/12 w-full">
+                            <h3 className="font-bold text-4xl md:text-6xl text-white mb-3">Be a Part of Our Community</h3>
+                            <p className="text-gray-100 leading-relaxed text-xl md:text-2xl">
+                                Ask questions, share ideas, and connect with other contributors on GitHub Discussions.
+                            </p>
+                        </div>
+                        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+                            <div className="bg-white p-6 rounded-xl border border-gray-200 w-full text-center">
+                                <FaUsers className="text-6xl text-blue-400 mx-auto mb-4" />
+                                <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-4">Join the Community</h3>
+                                <a href="https://github.com/devtofunmi/devbio/discussions" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
+                                    Go to Discussions
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {/* Section 5: Code of Conduct */}
+            <div className="bg-[#860005] py-16 md:py-24 min-h-screen flex items-center">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
+                        <div className="md:w-7/12 w-full">
+                            <h3 className="font-bold text-4xl md:text-6xl text-white mb-3">Our Pledge</h3>
+                            <p className="text-gray-200 leading-relaxed text-xl md:text-2xl">
+                                We are committed to a welcoming and inclusive community. Please read and follow our Code of Conduct to ensure a positive environment for everyone.
+                            </p>
+                        </div>
+                        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
+                            <div className="bg-white p-6 rounded-xl border border-gray-200 w-full text-center">
+                                <FaGavel className="text-6xl text-[#860005] mx-auto mb-4" />
+                                <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-4">Code of Conduct</h3>
+                                <a href="https://github.com/devtofunmi/devbio/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener noreferrer" className="bg-black text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-800 transition duration-150">
+                                    Read Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="bg-black">
+            <Footer />
+            </div>
+        </>
+    );
 };
 
 export default Contribute;
