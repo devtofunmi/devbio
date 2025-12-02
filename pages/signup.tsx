@@ -43,11 +43,11 @@ const Floating = ({
 );
 
   return (
-    <div className={`${geistSans.className} ${geistMono.className}  flex min-h-screen items-center justify-center bg-white md:p-4`}>
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl rounded-xl">
+    <div className={`${geistSans.className} ${geistMono.className}  flex min-h-screen items-center justify-center bg-black`}>
+      <div className="flex flex-col lg:flex-row w-full">
         {/* Left Side: Signup Form */}
-        <div className="flex-1 p-10 md:p-16">
-          <h1 className="md:text-4xl text-2xl font-bold text-gray-900 mb-2">
+        <div className="flex-1 bg-black p-10 md:p-16 lg:w-1/2">
+          <h1 className="md:text-4xl text-2xl md:text-left text-center font-bold text-white mb-2">
             Create your DevBio
           </h1>
          
@@ -57,23 +57,23 @@ const Floating = ({
               <input
                 type="text"
                 placeholder="Username"
-                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500"
+                className="flex-1 p-3 border border-gray-700 rounded-lg  focus:outline-none focus:ring-2 focus:ring-gray-800 text-white placeholder-gray-400"
               />
               <input
                 type="email"
                 placeholder="Email address"
-                className="flex-1 p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black placeholder-gray-500"
+                className="flex-1 p-3 border border-gray-700 rounded-lg  focus:outline-none focus:ring-2 focus:ring-gray-800 text-white placeholder-gray-400"
               />
               <div className="relative flex-1">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 pr-16 text-black placeholder-gray-500"
+                  className="w-full p-3 border border-gray-700 rounded-lg  focus:outline-none focus:ring-2 focus:ring-gray-800 pr-16 text-white placeholder-gray-400"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-0 h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                  className="absolute right-0 top-0 h-full px-4 text-sm font-medium text-gray-400 hover:text-white transition-colors"
                 >
                   {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                 </button>
@@ -82,24 +82,24 @@ const Floating = ({
 
             <button
               type="submit"
-              className="w-full cursor-pointer flex justify-center py-3 mt-4 px-4 border border-transparent rounded-full shadow-sm font-semibold text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full cursor-pointer flex justify-center py-3 mt-4 px-4 border border-transparent rounded-full shadow-sm font-semibold text-black bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
             >
               Create Account
             </button>
 
-            <div className="relative flex py-5 items-center"><div className="flex-grow border-t border-gray-200"></div><span className="flex-shrink mx-4 text-gray-400 text-sm">Or</span><div className="flex-grow border-t border-gray-200"></div></div>
+            <div className="relative flex py-5 items-center"><div className="flex-grow border-t border-gray-700"></div><span className="flex-shrink mx-4 text-gray-500 text-sm">Or</span><div className="flex-grow border-t border-gray-700"></div></div>
 
             <button
               type="button"
-              className="flex cursor-pointer items-center justify-center w-full bg-gray-800 hover:bg-black text-white font-semibold py-3 px-4 rounded-full shadow-md transition-colors"
+              className="flex cursor-pointer items-center justify-center w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 px-4 rounded-full shadow-md transition-colors"
               onClick={() => console.log('GitHub Sign-up clicked')}
             >
               <SiGithub className="mr-2" size={20} />
               Sign up with Github
             </button>
-             <p className="text-sm text-gray-700 mt-4">
+             <p className="text-sm text-gray-300 mt-4">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-sm  text-gray-800 hover:text-black">
+            <Link href="/login" className="font-medium text-sm  text-gray-300 hover:text-white">
               Log in
             </Link>
           </p>
@@ -108,7 +108,7 @@ const Floating = ({
         </div>
 
         {/* Right Side: Illustration */}
-    <div className="flex flex-1 items-center justify-center relative bg-white p-8 lg:p-0">
+    <div className="hidden lg:flex bg-gray-800 lg:w-1/2 items-center justify-center relative h-screen">
       <div className="relative w-full max-w-[450px] aspect-square scale-75 sm:scale-100">
         <Floating className="absolute top-10 left-5 w-20 h-20 bg-[#20232A] rounded-xl flex items-center justify-center text-[#61DAFB] hover:scale-110">
           <SiReact size={40} />
