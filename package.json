@@ -13,7 +13,7 @@
     "framer-motion": "^12.23.24",
     "geist": "^1.5.1",
     "keen-slider": "^6.8.6",
-    "next": "15.5.4",
+    "next": "15.5.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-grid-layout": "^1.5.2",
