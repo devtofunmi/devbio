@@ -165,7 +165,7 @@ const DashboardPage: React.FC = () => {
 
             <button className="bg-blue-600 cursor-pointer text-white px-8 py-3 rounded-[1.5rem] font-black text-sm hover:bg-blue-500 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-500/20 flex items-center gap-3">
               <FaSave />
-              <span>Publish</span>
+              <span className="hidden md:block">Publish</span>
             </button>
           </motion.div>
         </div>

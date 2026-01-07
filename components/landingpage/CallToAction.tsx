@@ -61,9 +61,9 @@ const CallToAction: React.FC = () => (
                 transition={{ delay: 0.2 }}
                 className="glass-card p-1 items-center rounded-3xl md:rounded-[3rem] inline-flex mb-12 border-white/10 group hover:border-blue-500/50 transition-colors"
             >
-                <div className="flex items-center px-8 md:px-12 py-6 gap-2">
-                    <span className="text-white/30 text-3xl md:text-6xl font-bold tracking-tighter">devbio.co/</span>
-                    <div className="text-3xl md:text-6xl w-[180px] md:w-[350px]">
+                <div className="flex items-center px-6 md:px-12 py-6 gap-1 md:gap-2">
+                    <span className="text-white/30 text-2xl md:text-6xl font-bold tracking-tighter">devbio.co/</span>
+                    <div className="text-2xl md:text-6xl w-[140px] md:w-[350px]">
                         <LinkSlider />
                     </div>
                 </div>

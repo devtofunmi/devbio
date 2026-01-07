@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
     <>
       {/* Mobile Bottom Bar */}
       <div className="md:hidden fixed bottom-6 left-6 right-6 z-50">
-        <nav className="glass rounded-[2.5rem] p-2 flex justify-between items-center border-white/10 shadow-2xl">
+        <nav className="glass bg-black/60 backdrop-blur-xl rounded-[2.5rem] p-2 flex justify-between items-center border-white/10 shadow-2xl">
           {menuItems.map((item) => (
             <Link key={item.href} href={item.href}>
               <div
