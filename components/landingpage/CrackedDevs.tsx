@@ -70,7 +70,7 @@ const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar, t
                 alt={`${name}'s avatar`}
                 fill
                 unoptimized
-                className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-50 group-hover:opacity-100"
+                className="object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0 group-active:grayscale-0 opacity-50 group-hover:opacity-100 group-active:opacity-100"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
         </div>
@@ -166,8 +166,8 @@ const CrackedDevs: React.FC = () => {
             </div>
 
             <div className="mt-20 text-center">
-                <p className="text-white/20 font-black uppercase tracking-[0.3em] text-xs">
-                    Join 10,000+ engineers building their legacy
+                <p className="text-white/20 leading-[1.1] font-black uppercase tracking-[0.3em] text-xs">
+                    Join 10,000+ engineers<br /> building their legacy
                 </p>
             </div>
         </section>
