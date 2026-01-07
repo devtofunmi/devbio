@@ -7,12 +7,10 @@ const geistMono = { className: "font-mono" };
 
 const ContributePage: React.FC = () => {
   return (
-    <div className={`${geistSans.className} ${geistMono.className} font-sans  bg-gray-800 flex flex-col`}>
+    <div className="bg-black flex flex-col min-h-screen">
       <Navbar />
       <Contribute />
-      <div className='bg-black'>
       <Footer />
-      </div>
     </div>
   );
 };

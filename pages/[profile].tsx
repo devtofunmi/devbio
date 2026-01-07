@@ -1,180 +1,264 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { GetServerSideProps } from "next";
-import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaTwitter, FaLinkedin, FaExternalLinkAlt, FaCode, FaInfoCircle } from "react-icons/fa";
+import { motion } from "framer-motion";
 import { getUserByUsername, User } from "../lib/mockUsers";
-
+import { BackgroundBeams } from "../components/BackgroundBeams";
+import GitHubCard from "../components/GitHubCard";
+import Link from "next/link";
 
 type Props = {
   user: User;
 };
 
-
 const ProfilePage: React.FC<Props> = ({ user }) => {
-  
-const geistSans = { className: "font-sans" };
-// const geistMono = { className: "font-mono" };
-
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white p-8 rounded-xl text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">404 - User Not Found</h1>
-          <Link href="/" className="text-blue-600 hover:underline">Go back home</Link>
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <div className="glass-card p-12 rounded-3xl text-center">
+          <h1 className="text-4xl font-bold text-red-500 mb-6">404 - User Not Found</h1>
+          <a href="/" className="px-6 py-3 bg-white text-black rounded-full font-semibold hover:scale-105 transition">Go back home</a>
         </div>
       </div>
     );
   }
 
-  
-  // --- Inlined GitHubGraph ---
-  const GitHubGraph = ({ username = "anon", size = 20 }: { username?: string; size?: number }) => {
-    const rows = 7;
-    const cols = size;
-    const seed = username.split("").reduce((s, c) => s + c.charCodeAt(0), 0) || 1;
-    const seededRandom = (seedVal: number) => {
-      let s = seedVal;
-      return () => {
-        s = (s * 9301 + 49297) % 233280;
-        return s / 233280;
-      };
-    };
-    const rand = seededRandom(seed);
-    const grid = Array.from({ length: cols }).map(() =>
-      Array.from({ length: rows }).map(() => Math.floor(rand() * 5))
-    );
-    const colorFor = (v: number) => {
-      switch (v) {
-        case 0:
-          return "bg-gray-200";
-        case 1:
-          return "bg-green-100";
-        case 2:
-          return "bg-green-300";
-        case 3:
-          return "bg-green-500";
-        default:
-          return "bg-green-700";
-      }
-    };
-
-    return (
-      <div className="w-full">
-        <div className="grid w-full" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
-          {grid.map((col, ci) =>
-            col.map((cell, ri) => (
-              <div key={`${ci}-${ri}`} title={`Contrib: ${cell}`} className={`h-3 m-[2px] rounded-sm ${colorFor(cell)}`} />
-            ))
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  // Mock projects data styled as cards
   const mockProjects = [
     {
       title: "Prepkitty",
-      description: "Engage with our AI-driven interview coach in a real-time, personalized practice environment. Receive actionable feedback to enhance your professional delivery.",
+      description: "AI-driven interview coach with real-time feedback.",
       url: "https://www.prepkitty.co",
-      tech: ["Next.js", "TypeScript", "Tailwind"]
+      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+      tech: ["Next.js", "AI", "TypeScript"]
     },
     {
       title: "Chat Flow",
-      description: "A Natural Language Interface for Building Flowcharts",
+      description: "Natural Language Interface for Building Flowcharts.",
       url: "https://chatt-flow.vercel.app/",
-      tech: ["Next.js", "TypeScript", "TamboSdk"]
-    },
-    {
-      title: "FolioRank",
-      description: "Submit your portfolio and get ranked by the community.",
-      url: "https://https://foliorank.netlify.app/",
-      tech: ["Next.js", "Tailwind", "Prisma", "Typescript"]
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      tech: ["React", "SDK", "Node.js"]
     }
   ];
 
   return (
-    <div className={`${geistSans.className} min-h-screen bg-gray-50 p-8 sm:p-12 md:p-16 text-gray-800`}>
-      <div className="max-w-7xl mx-auto">
-        <div className="lg:flex lg:gap-8">
-          {/* Sidebar */}
-          <div className="lg:w-1/3 lg:fixed lg:top-16 lg:h-screen lg:overflow-y-auto">
-            <div className="flex flex-col items-start space-y-4">
-              <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-blue-400">
-                {user.image ? (
-                  <Image src={user.image} alt={user.name} fill className="object-cover" />
-                ) : null}
-              </div>
-              <h1 className="text-4xl font-extrabold text-gray-900 flex items-center">{user.name}</h1>
-              <p className="text-xl text-gray-600">{user.profession}</p>
-              <div className="flex items-center space-x-4 pt-2">
-                {user.socials?.github && (
-                  <a href={`https://github.com/${user.socials.github}`} target="_blank" rel="noreferrer" className="text-gray-700 hover:text-black"><FaGithub size={22} /></a>
-                )}
-                {user.socials?.twitter && (
-                  <a href={`https://twitter.com/${user.socials.twitter}`} target="_blank" rel="noreferrer" className="text-blue-400 hover:text-blue-700"><FaTwitter size={22} /></a>
-                )}
-                {user.socials?.linkedin && (
-                  <a href={`https://www.linkedin.com/in/${user.socials.linkedin}`} target="_blank" rel="noreferrer" className="text-blue-700 hover:text-blue-900"><FaLinkedin size={22} /></a>
-                )}
-               
-              </div>
-              {user.description && <p className="mt-4 text-gray-700 leading-relaxed text-base max-w-sm">{user.description}</p>}
+    <div className="min-h-screen text-white selection:bg-blue-500/30">
+      <BackgroundBeams />
+
+      <main className="max-w-7xl mx-auto px-6 py-12 md:py-16">
+        {/* Hero Section: Profile Identity */}
+        <div className="mb-10 md:mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-white/5"
+          >
+            {/* High-End Background Effect */}
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80"
+                alt="Cover"
+                fill
+                className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[2s] opacity-40 blur-sm"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent" />
+
+              {/* Ambient Glows */}
+              <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-500/10 blur-[150px] rounded-full" />
+              <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-purple-500/10 blur-[120px] rounded-full" />
             </div>
-          </div>
-          <div className="hidden lg:block lg:w-1/3"></div>
-          {/* Main content */}
-          <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 lg:mt-0">
-            {/* About & Tech Stack */}
-            <div className="md:col-span-1">
-              <div className="w-full">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
-                <p className="text-lg text-gray-700 mb-6">{user.about}</p>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Tech Stack</h3>
-                <div className="flex flex-wrap gap-3 mb-8">
-                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">React</span>
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Node.js</span>
-                  <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">TypeScript</span>
-                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Next js</span>
-                  <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">Tailwind</span>
+
+            <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
+              {/* Avatar Container */}
+              <div className="relative shrink-0">
+                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 shadow-2xl relative">
+                  {user.image && (
+                    <Image
+                      src={user.image}
+                      alt={user.name}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
                 </div>
-                {/* Mock GitHub Graph */}
-                <div className="mb-8">
-                  <div className="bg-gray-50 p-4 rounded-lg w-full">
-                    <GitHubGraph username={user.socials?.github || user.username} size={20} />
-                  </div>
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-green-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl border-4 border-black">
+                  <span className="w-3 h-3 rounded-full bg-white animate-pulse" />
                 </div>
               </div>
-            </div>
-            {/* Projects */}
-            <div className="md:col-span-1">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Projects</h2>
-              <div className="grid grid-cols-1 gap-6">
-                {mockProjects.map((project) => (
-                  <div key={project.url} tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                    <div className="relative bg-white rounded-2xl p-6 shadow-xl group-hover:shadow-none transition-shadow border border-gray-200 w-full h-full">
-                      <a href={project.url} target="_blank" rel="noreferrer" className="text-xl font-bold text-black hover:underline">
-                        {project.title}
-                      </a>
-                      <p className="text-gray-700 mt-1 mb-2">{project.description}</p>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {project.tech.map((t) => (
-                          <span key={t} className="bg-blue-100 text-blue-400 px-2 py-0.5 rounded text-xs font-medium">{t}</span>
-                        ))}
-                      </div>
+
+              {/* Info Section */}
+              <div className="flex-1 space-y-6 w-full overflow-hidden">
+                <div className="flex flex-col gap-2">
+                  <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white block leading-[1.1]">
+                    {user.name}
+                  </h1>
+                  <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+                    <p className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight">
+                      {user.profession}
+                    </p>
+                    <span className="hidden lg:block w-1.5 h-1.5 rounded-full bg-white/20" />
+                    <div className="flex items-center justify-center lg:justify-start gap-1.5 text-white/40 font-mono text-xs md:text-sm">
+                      <span>devbio.co/</span>
+                      <span className="text-white">{user.username}</span>
                     </div>
-                    <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
                   </div>
+                </div>
+
+                <div className="max-w-2xl mx-auto lg:mx-0">
+                  <p className="text-base md:text-xl text-white/50 leading-relaxed font-light">
+                    {user.description}
+                  </p>
+                </div>
+
+                {/* Social Links */}
+                <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
+                  {user.socials?.github && (
+                    <a href={`https://github.com/${user.socials.github}`} target="_blank" rel="noreferrer" className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
+                      <FaGithub size={20} className="text-white/40 group-hover:text-blue-400 transition-colors" />
+                    </a>
+                  )}
+                  {user.socials?.twitter && (
+                    <a href={`https://twitter.com/${user.socials.twitter}`} target="_blank" rel="noreferrer" className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
+                      <FaTwitter size={20} className="text-white/40 group-hover:text-blue-400 transition-colors" />
+                    </a>
+                  )}
+                  {user.socials?.linkedin && (
+                    <a href={`https://linkedin.com/in/${user.socials.linkedin}`} target="_blank" rel="noreferrer" className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
+                      <FaLinkedin size={20} className="text-white/40 group-hover:text-blue-400 transition-colors" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
+          {/* Left Column: GitHub & Tech Stack */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="md:col-span-8 flex flex-col gap-8"
+          >
+            {/* GitHub DNA */}
+            <div className="glass-card rounded-[2rem] border-white/5 shadow-2xl overflow-hidden h-fit flex items-center justify-center">
+              <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
+                <GitHubCard githubUsername={user.socials?.github || user.username} size={48} />
+              </div>
+            </div>
+
+            {/* Tech Stack */}
+            <div className="glass-card rounded-[2rem] p-10 border-white/5">
+              <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400">
+                    <FaCode size={18} />
+                  </div>
+                  <h4 className="text-2xl font-black text-white tracking-tight leading-none">Tech Stack</h4>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {["React", "TypeScript", "Next.js", "Tailwind", "Node.js"].map((tech) => (
+                  <span key={tech} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
+                    {tech}
+                  </span>
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
+
+          {/* Right Column: About & Status */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="md:col-span-4 space-y-8"
+          >
+            {/* About Me */}
+            <div className="glass-card rounded-[2rem] p-10 border-white/5 bg-white/[0.01]">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400">
+                    <FaInfoCircle size={18} />
+                  </div>
+                  <h4 className="text-xl font-black text-white tracking-tight">About Me</h4>
+                </div>
+              </div>
+              <p className="text-sm text-white/40 leading-relaxed font-light min-h-[120px]">
+                {user.about}
+              </p>
+            </div>
+
+            {/* Status Card */}
+            <div className="glass-card rounded-[1.5rem] p-8 border-white/5 flex items-center justify-between group">
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
+                <span className="text-sm font-black flex items-center gap-3 text-white">
+                  <span className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)] animate-pulse" />
+                  Available for hire
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Projects Showcase - Full Width */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="md:col-span-12"
+          >
+            <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
+              <div className="text-center md:text-left">
+                <h3 className="text-4xl font-black text-white tracking-tighter mb-2">Featured Projects</h3>
+                <p className="text-white/30 font-light">Showcase of best builds and creations.</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {mockProjects.map((project, i) => (
+                <div key={i} className="glass-card rounded-[2rem] p-6 border-white/5 group hover:border-blue-500/30 transition-all">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <Link href={project.url} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
+                      <FaExternalLinkAlt size={14} />
+                    </Link>
+                  </div>
+
+                  <h4 className="text-xl font-bold text-white mb-2 tracking-tight">{project.title}</h4>
+                  <p className="text-white/40 font-light mb-6 text-sm leading-relaxed min-h-[40px]">{project.description}</p>
+
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {project.tech.map(t => (
+                      <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg border border-white/5">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
-        <footer className="mt-12 text-center text-sm text-gray-400">
-          Made with <span className="font-semibold text-blue-400">devbio</span>
-        </footer>
-      </div>
+
+        <motion.footer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mt-16 text-center text-white/20 text-sm font-medium tracking-widest uppercase"
+        >
+          Built with <span className="text-white/40">DevBio.co</span>
+        </motion.footer>
+      </main>
     </div>
   );
 };

@@ -1,62 +1,75 @@
-
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiChevronDown } from 'react-icons/fi';
 
 const faqs = [
   {
     question: 'What is DevBio?',
-    answer: 'DevBio is a platform for developers to create a professional online presence and showcase their skills and projects.',
+    answer: 'DevBio is the ultra-premium bio link for developers. It connects your engineering DNA—GitHub stats, tech stack, and projects—into one stunning, shareable link.',
   },
   {
-    question: 'Is DevBio free?',
-    answer: 'Yes, DevBio offers a free tier with all the essential features to create a stunning developer portfolio.',
+    question: 'Is it really free?',
+    answer: 'Absolutely. We believe every developer deserves a world-class profile. The core platform is free forever for individual engineers.',
   },
   {
-    question: 'What stacks can I showcase on my DevBio?',
-    answer: 'You can showcase any technology you work with. Our platform is flexible and allows you to add a wide range of skills and projects.',
+    question: 'Can I showcase any tech stack?',
+    answer: 'Yes! From obscure COBOL to the latest AI frameworks, our platform is built by engineers, for engineers. If you code it, you can showcase it.',
   },
   {
-    question: 'Can I use my own domain name?',
-    answer: 'This feature is coming soon! We are working on allowing users to connect their own domain names to their DevBio profiles.',
+    question: 'Are custom domains supported?',
+    answer: 'Custom domains are currently in beta. You will soon be able to point yourname.dev or yourname.me directly to your DevBio.',
   },
 ];
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const toggleFAQ = (index: number) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-
   return (
-    <section id="faq" className="bg-[#0a0a0a] py-20">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-12">Got Questions? Answered</h2>
-        <div className="max-w-3xl mx-auto grid gap-4">
+    <section id="faq" className="bg-black py-24 px-6 relative">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-extrabold text-gradient mb-6 tracking-tight">Got Questions?</h2>
+          <p className="text-xl text-white/40 font-light">Everything you need to know about DevBio.</p>
+        </div>
+
+        <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-[#1c1c1c] border border-[#2a2a2a] rounded-lg transition-transform duration-300 hover:rotate-2 active:rotate-2">
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false }}
+              className={`glass-card rounded-[2rem] overflow-hidden transition-all duration-500 ${activeIndex === index ? 'border-blue-500/30' : ''}`}
+            >
               <button
-                className="w-full flex justify-between items-center text-left text-xl md:text-2xl font-medium text-white p-6 focus:outline-none"
-                onClick={() => toggleFAQ(index)}
+                className="w-full flex justify-between items-center text-left p-8 focus:outline-none group"
+                onClick={() => setActiveIndex(activeIndex === index ? null : index)}
               >
-                <span>{faq.question}</span>
-                <svg
-                  className={`w-6 h-6 transform transition-transform ${
-                    activeIndex === index ? 'rotate-180' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                <span className={`text-xl md:text-2xl font-bold transition-colors ${activeIndex === index ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>
+                  {faq.question}
+                </span>
+                <FiChevronDown
+                  className={`text-2xl transition-transform duration-500 ${activeIndex === index ? 'rotate-180 text-blue-400' : 'text-white/20'}`}
+                />
               </button>
-              {activeIndex === index && (
-                <div className="px-6 pb-6 text-base md:text-2xl text-gray-300">
-                  <p>{faq.answer}</p>
-                </div>
-              )}
-            </div>
+
+              <AnimatePresence>
+                {activeIndex === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                  >
+                    <div className="px-8 pb-8 text-lg text-white/50 leading-relaxed font-light border-t border-white/5 pt-4">
+                      {faq.answer}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
       </div>

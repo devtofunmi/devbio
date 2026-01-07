@@ -7,9 +7,10 @@ interface InlineEditProps {
   className?: string;
   placeholder?: string;
   showCursor?: boolean;
+  rows?: number;
 }
 
-const InlineEdit: React.FC<InlineEditProps> = ({ value, onSave, as = 'input', className, placeholder, showCursor = false }) => {
+const InlineEdit: React.FC<InlineEditProps> = ({ value, onSave, as = 'input', className, placeholder, showCursor = false, rows = 1 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
 
@@ -33,6 +34,15 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onSave, as = 'input', cl
     }
   `;
 
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  React.useEffect(() => {
+    if (isEditing && textareaRef.current && as === 'textarea') {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, [currentValue, isEditing, as]);
+
   if (isEditing) {
     const commonProps = {
       value: currentValue,
@@ -48,11 +58,11 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onSave, as = 'input', cl
         }
       },
       autoFocus: true,
-      className: `w-full bg-transparent border-none outline-none p-0 m-0 focus:ring-0 focus:outline-none resize-none ${className}`
+      className: `w-full bg-transparent border-none outline-none p-0 m-0 focus:ring-0 focus:outline-none resize-none break-words overflow-hidden ${className}`
     };
 
     return as === 'textarea' ? (
-      <textarea {...commonProps} rows={4} placeholder={placeholder}></textarea>
+      <textarea ref={textareaRef} {...commonProps} rows={rows} placeholder={placeholder}></textarea>
     ) : (
       <input {...commonProps} placeholder={placeholder} />
     );
@@ -61,9 +71,14 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onSave, as = 'input', cl
   return (
     <>
       <style>{cursorStyle}</style>
-      <div onClick={() => setIsEditing(true)} className={`group/inline-edit cursor-pointer flex items-center ${className}`}>
-        {value || <span className="text-gray-400">{placeholder}</span>}
-        {showCursor && <span className="blinking-cursor opacity-0 group-hover/inline-edit:opacity-100 transition-opacity"></span>}
+      <div
+        onClick={() => setIsEditing(true)}
+        className={`group/inline-edit cursor-pointer block max-w-full ${className}`}
+      >
+        <span className="whitespace-pre-wrap break-words inline-block w-full">
+          {value || <span className="text-white/20">{placeholder}</span>}
+          {showCursor && <span className="blinking-cursor opacity-0 group-hover/inline-edit:opacity-100 transition-opacity shrink-0"></span>}
+        </span>
       </div>
     </>
   );

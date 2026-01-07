@@ -1,95 +1,50 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React from 'react';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
-import ThemeSettings from '../../components/dashboard/ThemeSettings';
 import AccountSettings from '../../components/dashboard/AccountSettings';
-import { FiSun, FiUser } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
 const SettingsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('theme');
-  const [tabPositions, setTabPositions] = useState<{ [key: string]: DOMRect }>({});
-  const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
-
-  // Use useMemo to avoid recreating tabs array on every render
-  const tabs = useMemo(
-    () => [
-      { id: 'theme', name: 'Theme', icon: FiSun },
-      { id: 'account', name: 'Account', icon: FiUser },
-    ],
-    []
-  );
-
-  useEffect(() => {
-    const positions: { [key: string]: DOMRect } = {};
-    tabs.forEach((tab) => {
-      const el = tabRefs.current[tab.id];
-      if (el) positions[tab.id] = el.getBoundingClientRect();
-    });
-    setTabPositions(positions);
-
-    const handleResize = () => {
-      const newPositions: { [key: string]: DOMRect } = {};
-      tabs.forEach((tab) => {
-        const el = tabRefs.current[tab.id];
-        if (el) newPositions[tab.id] = el.getBoundingClientRect();
-      });
-      setTabPositions(newPositions);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [tabs]);
-
-  const geistSans = { className: 'font-sans' };
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'theme':
-        return <ThemeSettings />;
-      case 'account':
-        return <AccountSettings />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <DashboardLayout>
-      <div className={`${geistSans.className} max-w-4xl mx-auto py-8`}>
-        <div className="relative flex justify-center mb-8">
-          <div className="flex rounded-full border border-gray-200 p-1 relative">
-            {/* Sliding highlight */}
-            {tabPositions[activeTab] && (
-              <motion.div
-                layout
-                className="absolute bg-blue-400 rounded-full top-1 bottom-1 z-0"
-                initial={false}
-                animate={{
-                  left: tabRefs.current[activeTab]?.offsetLeft,
-                  width: tabRefs.current[activeTab]?.offsetWidth,
-                }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              />
-            )}
+      {/* Mobile Layout - No Fixed Border */}
+      <div className="lg:hidden py-12 px-4">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-3">
+            Account <span className="text-gradient">Settings</span>
+          </h1>
+          <p className="text-white/40 text-base font-light italic">Manage your profile and security preferences.</p>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <AccountSettings />
+        </motion.div>
+      </div>
 
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                ref={(el) => {
-                  tabRefs.current[tab.id] = el ?? null; 
-                }}
-                className={`relative z-10 px-6 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-colors duration-200 ${
-                  activeTab === tab.id ? 'text-white' : 'text-gray-600 hover:text-gray-900'
-                }`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <tab.icon size={16} /> {tab.name}
-              </button>
-            ))}
+      {/* Desktop Layout - Fixed Border */}
+      <div className="hidden lg:block fixed inset-0 lg:left-80 p-8 z-10">
+        <div className="glass-card w-full max-w-6xl h-full mx-auto rounded-[3rem] border-white/5 flex flex-col overflow-hidden">
+          {/* Fixed Header */}
+          <div className="flex-shrink-0 text-center px-10 pt-10 pb-8">
+            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-3">
+              Account <span className="text-gradient">Settings</span>
+            </h1>
+            <p className="text-white/40 text-base font-light italic">Manage your profile and security preferences.</p>
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto px-10 pb-10 custom-scrollbar">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <AccountSettings />
+            </motion.div>
           </div>
         </div>
-
-        <div>{renderContent()}</div>
       </div>
     </DashboardLayout>
   );

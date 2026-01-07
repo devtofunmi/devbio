@@ -1,12 +1,9 @@
-// components/LoginPage.tsx
 import React from 'react';
-import { FiEye, FiEyeOff } from 'react-icons/fi'; // Used for the password show/hide button
-import { SiGithub, SiReact, SiNodedotjs, SiMongodb, SiNextdotjs, SiTailwindcss, SiX, SiLinkedin } from 'react-icons/si';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
 import Link from 'next/link';
 import { motion } from "framer-motion";
-
-const geistSans = { className: "font-sans" };
-const geistMono = { className: "font-mono" };
+import { BackgroundBeams } from "../components/BackgroundBeams";
 
 const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -18,7 +15,7 @@ const LoginPage: React.FC = () => {
     duration?: number;
     className?: string;
   };
-  
+
   const Floating = ({
     children,
     delay = 0,
@@ -44,123 +41,122 @@ const LoginPage: React.FC = () => {
   );
 
   return (
-    <div className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-black`}>
-      <div className="flex flex-col lg:flex-row w-full">
+    <div className="flex min-h-screen items-center justify-center bg-black text-white relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto px-6 relative z-10">
         {/* Left Side: Login Form */}
-        <div className="flex-1 bg-black p-10 md:p-16 lg:w-1/2">
-          <h1 className="md:text-4xl md:text-left text-center text-2xl font-bold text-white mb-2">
-            Log in to your Devbio
-          </h1>
-          <p className="text-xl md:text-left text-center text-gray-300 mb-10">
-            Good to have you back!
-          </p>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex-1 p-6 md:p-16 lg:w-1/2 flex flex-col justify-center min-h-screen"
+        >
+          <div className="w-full mx-auto md:max-w-md lg:mx-0">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+              Welcome Back.
+            </h1>
+            <p className="text-xl text-white/50 mb-12 font-light">
+              Log in to manage your professional identity.
+            </p>
 
-          <form className="max-w-sm">
-            {/* Input Fields */}
-            <div className="flex flex-col space-x-2 mb-4">
-              <input
-                type="email"
-                placeholder="Email address"
-                className="flex-1 p-3 border border-gray-700 rounded-lg  focus:outline-none focus:ring-2 focus:ring-gray-800 text-white placeholder-gray-400"
-              />
-              <div className="relative mt-5 flex-1">
+            <form className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  className="w-full p-3 border border-gray-700 rounded-lg  focus:outline-none focus:ring-2 focus:ring-gray-800 pr-16 text-white placeholder-gray-400"
+                  type="email"
+                  placeholder="engineer@devbio.co"
+                  className="w-full glass p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 placeholder:text-white/20 bg-transparent"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-0 h-full px-4 text-sm font-medium text-gray-400 hover:text-white transition-colors"
-                >
-                  {/* Using an icon for the 'Show' button for better visual */}
-                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-                </button>
               </div>
-              <Link href="/dashboard">
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-1">Password</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="w-full glass p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 pr-14 placeholder:text-white/20 bg-transparent"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors cursor-pointer"
+                  >
+                    {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              <Link href="/dashboard" className="block text-center">
                 <button
                   type="button"
-                  className="w-full cursor-pointer flex justify-center py-3 mt-4 px-4 border border-transparent rounded-full shadow-sm font-semibold text-black bg-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="w-full bg-white text-black py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 cursor-pointer"
                 >
-                  Login
+                  Sign In
                 </button>
               </Link>
-            </div>
 
-            
-            <div className="relative flex py-5 items-center"><div className="flex-grow border-t border-gray-700"></div></div>
+              <div className="relative flex items-center py-4">
+                <div className="flex-grow border-t border-white/5"></div>
+                <span className="flex-shrink mx-4 text-white/20 text-xs font-bold uppercase tracking-widest">or</span>
+                <div className="flex-grow border-t border-white/5"></div>
+              </div>
 
-            {/* Github Sign-in Button */}
-            <button
-              type="button"
-              className="flex cursor-pointer items-center justify-center w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 px-4 rounded-full shadow-md transition-colors"
-              onClick={() => console.log('GitHub Sign-in clicked')}
+              <button
+                type="button"
+                className="w-full glass hover:bg-white/5 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all border-white/5 cursor-pointer"
+              >
+                <SiGithub size={20} />
+                <span>Continue with GitHub</span>
+              </button>
+
+              <p className="text-center text-sm text-white/40 pt-4">
+                Don't have an account? <Link href="/signup" className="text-blue-400 font-bold hover:underline">Sign up</Link>
+              </p>
+            </form>
+          </div>
+        </motion.div>
+
+        {/* Right Side: Visuals */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="hidden lg:flex lg:w-1/2 lg:fixed lg:right-0 lg:top-0 lg:h-screen lg:items-center lg:justify-center"
+        >
+          <div className="relative w-full max-w-[500px] aspect-square">
+            <Floating className="absolute top-10 left-5 w-20 h-20 glass rounded-3xl flex items-center justify-center text-blue-400 shadow-2xl">
+              <SiReact size={40} />
+            </Floating>
+            <Floating delay={0.5} distance={10} duration={5} className="absolute top-0 right-20 w-16 h-16 glass rounded-full flex items-center justify-center text-green-400">
+              <SiNodedotjs size={32} />
+            </Floating>
+            <Floating delay={1} distance={12} duration={4.5} className="absolute bottom-10 left-0 w-24 h-24 glass rounded-3xl flex items-center justify-center text-white">
+              <SiNextdotjs size={50} />
+            </Floating>
+            <Floating delay={0.3} distance={10} duration={6} className="absolute bottom-5 right-24 w-28 h-28 glass rounded-3xl flex items-center justify-center text-blue-400">
+              <SiTailwindcss size={60} />
+            </Floating>
+            <Floating delay={0.8} distance={10} duration={4} className="absolute top-24 right-0 w-16 h-16 glass rounded-full flex items-center justify-center text-white" >
+              <SiGithub size={40} />
+            </Floating>
+
+            {/* Contrib Grid Box */}
+            <Floating
+              delay={1.2}
+              distance={10}
+              duration={6}
+              className="absolute top-32 left-32 w-64 h-28 glass rounded-3xl transform rotate-3 flex items-center justify-center p-4 border-white/10"
             >
-              <SiGithub className="mr-2" size={20} />
-              Login with Github
-            </button>
-            
-            {/* Or Sign Up Link */}
-            <p className="mt-4 text-sm text-gray-400">
-              or <Link href="/signup" className="text-gray-300 underline cursor-pointer hover:text-white">sign up</Link>
-            </p>
-          </form>
-        </div>
-
-        {/* Right Side: Illustration (Placeholder) */}
-         <div className="hidden lg:flex bg-green-500 lg:w-1/2 items-center justify-center relative h-screen">
-              <div className="relative w-full max-w-[450px] aspect-square scale-75 sm:scale-100">
-                <Floating className="absolute top-10 left-5 w-20 h-20 bg-[#20232A] rounded-xl flex items-center justify-center text-[#61DAFB] hover:scale-110">
-                  <SiReact size={40} />
-                </Floating>
-                <Floating delay={0.5} distance={10} duration={5} className="absolute top-0 right-20 w-16 h-16 bg-[#339933] rounded-full flex items-center justify-center text-white hover:scale-110">
-                  <SiNodedotjs size={32} />
-                </Floating>
-                <Floating delay={1} distance={12} duration={4.5} className="absolute bottom-10 left-0 w-24 h-24 bg-[#47A248] rounded-lg flex items-center justify-center text-white hover:scale-110">
-                  <SiMongodb size={60} />
-                </Floating>
-                <Floating delay={0.3} distance={10} duration={6} className="absolute bottom-5 right-24 w-28 h-28 bg-black rounded-xl flex items-center justify-center text-white hover:scale-110">
-                  <SiNextdotjs size={60} />
-                </Floating>
-                <Floating delay={1} distance={8} duration={3.5} className="absolute bottom-0 right-0 w-20 h-20 bg-[#06B6D4] rounded-full flex items-center justify-center text-white hover:scale-110">
-                  <SiTailwindcss size={40} />
-                </Floating>
-                <Floating delay={0.8} distance={10} duration={4} className="absolute top-24 right-0 w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center text-white hover:scale-110">
-                  <SiGithub size={40} />
-                </Floating>
-                <Floating delay={0.4} distance={12} duration={4.2} className="absolute top-40 left-16 w-14 h-14 bg-[#1DA1F2] rounded-full flex items-center justify-center text-white hover:scale-110">
-                  <SiX size={28} />
-                </Floating>
-                <Floating delay={0.6} distance={10} duration={5} className="absolute bottom-24 right-0 w-16 h-16 bg-[#0A66C2] rounded-lg flex items-center justify-center text-white hover:scale-110">
-                  <SiLinkedin size={32} />
-                </Floating>
-        
-               {/* Grid Box */}
-               <Floating
-                 delay={1.2}
-                 distance={10}
-                 duration={6}
-                 className="absolute top-20 left-32 w-52 h-24 bg-gray-100 rounded-lg transform rotate-3 hover:scale-110 flex items-center justify-center p-3"
-               >
-                 <div className="grid grid-cols-20 grid-rows-7 gap-[2px]">
-                   {Array.from({ length: 140 }).map((_, i) => (
-                     <div
-                       key={i}
-                       className={`w-2.5 h-2.5 rounded-sm ${
-                         i % 6 === 0
-                           ? "bg-green-600"
-                           : i % 4 === 0
-                           ? "bg-green-400"
-                           : "bg-green-200"
-                       }`}
-                     ></div>
-                   ))}
-                 </div>
-               </Floating>
-        
+              <div className="grid grid-cols-12 grid-rows-4 gap-1 w-full h-full opacity-40">
+                {Array.from({ length: 48 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`rounded-[2px] ${i % 7 === 0 ? "bg-blue-600" : i % 5 === 0 ? "bg-blue-400" : "bg-white/10"
+                      }`}
+                  />
+                ))}
               </div>
-              </div>
+            </Floating>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

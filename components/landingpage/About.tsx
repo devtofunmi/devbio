@@ -1,97 +1,105 @@
 import React from 'react';
-import { FaGithub, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaTwitter, FaArrowRight } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { BackgroundBeams } from '../BackgroundBeams';
 
 const About = () => {
     return (
-        <>
-            <div className=" py-16 md:py-24  flex items-center">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
-                        <div className="md:w-7/12 w-full">
-                            <h3 className="font-bold text-4xl md:text-6xl text-white mb-3">All-in-One Link for Developers</h3>
-                            <p className="text-white leading-relaxed text-xl ">
-                                DevBio is the all-in-one link for developers to showcase their work, stack, and grow their personal brand. Create a beautiful, customizable page that reflects your skills and personality.
-                            </p>
-                        </div>
-                        <div className="md:w-5/12 w-full transform transition-transform duration-500 hover:scale-105">
-                            <div className="bg-white p-6 rounded-xl border border-gray-200 w-full">
-                                <h3 className="font-bold text-xl md:text-2xl text-gray-800 mb-2">Connect with Us</h3>
-                                <div className="space-y-4 mt-4">
-                                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <FaGithub className="text-2xl text-gray-800 mr-3" />
-                                            <div>
-                                                <p className="font-semibold text-lg text-gray-700">Star our repo</p>
-                                                <p className="text-sm text-gray-500">on GitHub</p>
-                                            </div>
+        <div className="bg-black min-h-screen relative overflow-hidden">
+            <BackgroundBeams />
+
+            <div className="max-w-7xl mx-auto px-6 py-32 relative z-10">
+                {/* Hero Section */}
+                <div className="flex flex-col lg:flex-row gap-16 items-center mb-32">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="lg:w-7/12"
+                    >
+                        <h1 className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-tight">
+                            The Developer <br />
+                            <span className="text-gradient">Standard.</span>
+                        </h1>
+                        <p className="text-2xl text-white/50 font-light leading-relaxed max-w-2xl">
+                            DevBio is the all-in-one link for developers to showcase their work, stack, and identity. Built by engineers, for engineers who care about aesthetics.
+                        </p>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="lg:w-5/12 w-full"
+                    >
+                        <div className="glass-card p-10 rounded-[3rem] border-white/10 relative group">
+                            <div className="absolute inset-0 bg-blue-500/5 blur-3xl rounded-full scale-75 group-hover:scale-100 transition-transform duration-700" />
+                            <h3 className="text-2xl font-bold text-white mb-8 relative z-10">Join the movement</h3>
+                            <div className="space-y-4 relative z-10">
+                                <a href="https://github.com/devtofunmi/devbio" className="flex items-center justify-between p-5 glass rounded-2xl border-white/5 hover:border-blue-500/50 transition-all group/item">
+                                    <div className="flex items-center gap-4">
+                                        <FaGithub size={24} className="text-white" />
+                                        <div>
+                                            <p className="font-bold text-white text-lg">GitHub</p>
+                                            <p className="text-white/40 text-sm">Star the foundation</p>
                                         </div>
-                                        <a
-                                            href="https://github.com/devtofunmi/devbio"
-                                            className="bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-700 transition duration-150"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Star
-                                        </a>
                                     </div>
-                                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <FaTwitter className="text-2xl text-blue-400 mr-3" />
-                                            <div>
-                                                <p className="font-semibold text-lg text-gray-700">Follow on Twitter</p>
-                                                <p className="text-sm text-gray-500">@devbio</p>
-                                            </div>
+                                    <FaArrowRight size={14} className="text-white/20 group-hover/item:text-blue-400 group-hover/item:translate-x-1 transition-all" />
+                                </a>
+                                <a href="https://twitter.com/devbio" className="flex items-center justify-between p-5 glass rounded-2xl border-white/5 hover:border-blue-400/50 transition-all group/item">
+                                    <div className="flex items-center gap-4">
+                                        <FaTwitter size={24} className="text-blue-400" />
+                                        <div>
+                                            <p className="font-bold text-white text-lg">Twitter</p>
+                                            <p className="text-white/40 text-sm">@devbio</p>
                                         </div>
-                                        <a
-                                            href="https://twitter.com/devbio"
-                                            className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg text-center hover:bg-blue-600 transition duration-150"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Follow
-                                        </a>
                                     </div>
-                                </div>
+                                    <FaArrowRight size={14} className="text-white/20 group-hover/item:text-blue-400 group-hover/item:translate-x-1 transition-all" />
+                                </a>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
+                </div>
+
+                {/* Content Sections */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        className="glass-card p-12 rounded-[3.5rem] border-white/5"
+                    >
+                        <span className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-4 block">Our DNA</span>
+                        <h3 className="text-3xl font-bold text-white mb-6">Why DevBio?</h3>
+                        <div className="space-y-6 text-xl text-white/50 font-light leading-relaxed">
+                            <p>
+                                In a crowded digital world, developers struggle to stand out. Your GitHub profile shows your code, but what about the developer behind it?
+                            </p>
+                            <p>
+                                DevBio solves this by providing a single, beautiful page to showcase your projects, your skills, and your story. It&apos;s more than just a tool—it&apos;s your professional identity.
+                            </p>
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        transition={{ delay: 0.1 }}
+                        className="glass-card p-12 rounded-[3.5rem] border-white/5"
+                    >
+                        <span className="text-purple-400 font-bold uppercase tracking-widest text-xs mb-4 block">Our Pulse</span>
+                        <h3 className="text-3xl font-bold text-white mb-6">The Mission</h3>
+                        <div className="space-y-6 text-xl text-white/50 font-light leading-relaxed">
+                            <p>
+                                We empower developers to take control of their online presence. We believe a great presentation can transform a career.
+                            </p>
+                            <p>
+                                Our theme is designed to be clean, professional, and uncompromisingly high-end. Built for those who understand that details aren&apos;t just details—they are the product.
+                            </p>
+                        </div>
+                    </motion.div>
                 </div>
             </div>
-            <div className=" text-white py-20 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="">
-                        <div className="space-y-4">
-                            <h3 className="text-2xl font-bold">Why DevBio?</h3>
-                            <p className="text-gray-400">
-                                In a crowded digital world, developers struggle to stand out. Your GitHub profile shows your code, but what about the developer behind it? DevBio solves this by providing a single, beautiful page to showcase your projects, your skills, and your story.
-                            </p>
-                            <p className="text-gray-400">
-                                It&apos;s more than just a link-in-bio tool it&apos;s a portfolio, and a personal brand builder, all in one.
-                            </p>
-                        </div>
-                        <div className="space-y-4">
-                            <h3 className="text-2xl mt-5 font-bold">Our Mission</h3>
-                            <p className="text-gray-400">
-                                Our mission is to empower developers to take control of their online presence. We believe that a great presentation of your work can make a huge difference in your career. Our theme is designed to be clean, professional, and highly customizable. You can choose from a variety of themes or create your own to perfectly match your personal brand.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="mt-5">
-                        <div className="">
-                            <div className="space-y-4">
-                                <h3 className="text-2xl font-bold">We created DevBio...</h3>
-                                <p className="text-gray-400">
-                                    ...because we believe developers deserve a better way to showcase their complete professional identity. While this page tells our story, your DevBio page will tell yours.
-                                </p>
-                                <p className="text-gray-400">
-                                    What else would you like to see here? Maybe a timeline of our journey, more about the team, or a deep dive into our tech stack? Your feedback helps us grow!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
+        </div>
     );
 }
 

@@ -1,42 +1,40 @@
-// Import necessary dependencies from React and Next.js
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-// Import icons from react-icons library
 import {
-  FaGithub,
-  FaTwitter,
-  FaLinkedin,
-  FaReact,
-  FaArrowLeft,
-  FaSave,
-  FaCode,
-  FaProjectDiagram,
-  FaInfoCircle,
-  FaTrash,
-  FaLink,
+    FaGithub,
+    FaTwitter,
+    FaLinkedin,
+    FaArrowLeft,
+    FaSave,
+    FaCode,
+    FaProjectDiagram,
+    FaInfoCircle,
+    FaTrash,
+    FaLink,
+    FaUserAlt,
+    FaChartLine,
 } from "react-icons/fa";
 import { LuUpload } from "react-icons/lu";
 import {
-  SiNextdotjs,
-  SiTypescript,
-  SiTailwindcss,
-  SiSupabase,
-  SiJavascript,
-  SiAngular,
-  SiNodedotjs,
-  SiExpress,
-  SiHono,
+    SiNextdotjs,
+    SiTypescript,
+    SiTailwindcss,
+    SiSupabase,
+    SiJavascript,
+    SiAngular,
+    SiNodedotjs,
+    SiExpress,
+    SiHono,
 } from "react-icons/si";
-// Import Drag and Drop components
 import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
+    DragDropContext,
+    Droppable,
+    Draggable,
+    DropResult,
 } from "@hello-pangea/dnd";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Import local utilities and components
 import { getUserByUsername, User } from "../../lib/mockUsers";
 import SocialModal from "../../components/dashboard/edit/SocialModal";
 import TechStackModal from "../../components/dashboard/edit/TechStackModal";
@@ -44,407 +42,373 @@ import ProjectModal from "../../components/dashboard/edit/ProjectModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import InlineEdit from "../../components/dashboard/edit/InlineEdit";
 import GithubCard from "../../components/dashboard/edit/GitHubCard";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
-// A static list of all available technologies for the Tech Stack section
 const allTechs = [
-  { name: "React", icon: <FaReact /> },
-  { name: "Next.js", icon: <SiNextdotjs /> },
-  { name: "TypeScript", icon: <SiTypescript /> },
-  { name: "Tailwind CSS", icon: <SiTailwindcss /> },
-  { name: "Supabase", icon: <SiSupabase /> },
-  { name: "JavaScript", icon: <SiJavascript /> },
-  { name: "Angular", icon: <SiAngular /> },
-  { name: "Node.js", icon: <SiNodedotjs /> },
-  { name: "Express", icon: <SiExpress /> },
-  { name: "Hono", icon: <SiHono /> },
+    { name: "React", icon: <FaCode /> },
+    { name: "Next.js", icon: <SiNextdotjs /> },
+    { name: "TypeScript", icon: <SiTypescript /> },
+    { name: "Tailwind CSS", icon: <SiTailwindcss /> },
+    { name: "Supabase", icon: <SiSupabase /> },
+    { name: "JavaScript", icon: <SiJavascript /> },
+    { name: "Angular", icon: <SiAngular /> },
+    { name: "Node.js", icon: <SiNodedotjs /> },
+    { name: "Express", icon: <SiExpress /> },
+    { name: "Hono", icon: <SiHono /> },
 ];
 
-/**
- * The main component for the user's profile edit page.
- * It allows users to edit their profile information, manage content cards,
- * and customize the layout of their public profile.
- */
 const EditPage: React.FC = () => {
-  // #region State Management
-  // Holds all user data. Null until fetched.
-  const [user, setUser] = useState<User | null>(null);
-  
-  // State for controlling the visibility of various modals
-  const [isSocialModalOpen, setSocialModalOpen] = useState(false);
-  const [isTechStackModalOpen, setTechStackModalOpen] = useState(false);
-  const [isProjectModalOpen, setProjectModalOpen] = useState(false);
-  const [isGithubModalOpen, setGithubModalOpen] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
+    const [isSocialModalOpen, setSocialModalOpen] = useState(false);
+    const [isTechStackModalOpen, setTechStackModalOpen] = useState(false);
+    const [isProjectModalOpen, setProjectModalOpen] = useState(false);
+    const [isGithubModalOpen, setGithubModalOpen] = useState(false);
+    const imageUploadRef = useRef<HTMLInputElement>(null);
 
-  // Ref for the hidden file input to trigger image uploads
-  const imageUploadRef = useRef<HTMLInputElement>(null);
+    const [cards, setCards] = useState([
+        { id: "about" },
+        { id: "techstack" },
+        { id: "projects" },
+        { id: "github" },
+    ]);
+    const [techSearch, setTechSearch] = useState("");
+    const [githubUsername, setGithubUsername] = useState("");
 
-  // State for the draggable cards that represent sections of the user's profile
-  const [cards, setCards] = useState([
-    { id: "about", content: "About" },
-    { id: "techstack", content: "Tech Stack" },
-    { id: "projects", content: "Projects" },
-    { id: "github", content: "GitHub" },
-  ]);
-  // State for the tech stack search functionality
-  const [techSearch, setTechSearch] = useState("");
-  // State for the GitHub username input
-  const [githubUsername, setGithubUsername] = useState("");
-  // #endregion
-
-  // #region Data Fetching and Initialization
-  useEffect(() => {
-    // This mocks fetching user data. In a real application, this would be an API call.
-    const mockUser = getUserByUsername("bob");
-    if (mockUser) {
-      setUser({
-        ...mockUser,
-        headings: {
-          about: "About",
-          techstack: "Tech Stack",
-          projects: "Projects",
-          ...(mockUser.headings || {}),
-        },
-      });
-      setGithubUsername(mockUser?.socials?.github || "");
-    }
-  }, []);
-  // #endregion
-
-  // #region Event Handlers
-  /**
-   * Handles the end of a drag-and-drop operation to reorder the cards.
-   * @param {DropResult} result - The object containing information about the drag operation.
-   */
-  const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-    if (!destination) return; // Dropped outside the list
-
-    const items = Array.from(cards);
-    const [reorderedItem] = items.splice(source.index, 1);
-    items.splice(destination.index, 0, reorderedItem);
-
-    setCards(items); // Update the card order in state
-  };
-
-  /**
-   * Adds or removes a technology from the user's tech stack.
-   * @param tech - The technology object to toggle.
-   */
-  const handleTechToggle = (tech: { name: string; icon: React.ReactNode }) => {
-    if (!user) return;
-    const techName = tech.name;
-    const currentTechStack = user.techStack || [];
-    if (currentTechStack.includes(techName)) {
-      setUser({ ...user, techStack: currentTechStack.filter((t) => t !== techName) });
-    } else {
-      setUser({ ...user, techStack: [...currentTechStack, techName] });
-    }
-  };
-  
-  /**
-   * Updates a user's social media link.
-   * @param name - The name of the social media platform (e.g., 'twitter').
-   * @param href - The new URL for the profile.
-   */
-  const handleSocialChange = (name: string, href: string) => {
-    if (!user) return;
-    setUser({ ...user, socials: { ...user.socials, [name.toLowerCase()]: href } });
-  };
-  
-  /**
-   * Saves the GitHub username to the user's state.
-   */
-  const handleSetGithubUsername = () => {
-    setGithubModalOpen(false);
-  };
-  
-  /**
-   * A generic handler to update a top-level field in the user's profile.
-   * @param field - The key of the user property to update.
-   * @param value - The new value.
-   */
-  const handleProfileUpdate = (field: keyof User, value: string) => {
-    if (!user) return;
-    setUser({ ...user, [field]: value });
-  };
-
-  /**
-   * Updates the heading for a specific card section.
-   * @param field - The key of the heading to update (e.g., 'about', 'projects').
-   * @param value - The new heading text.
-   */
-  const handleHeadingUpdate = (field: string, value: string) => {
-    if (!user) return;
-    setUser({ ...user, headings: { ...user.headings, [field]: value } });
-  };
-  
-  /**
-   * Adds the "About" card to the page if it's currently not present.
-   */
-  const handleAddAbout = () => {
-    if (user && !user.about) {
-      setUser({ ...user, about: "Tell everyone about yourself." });
-    }
-  };
-
-  // --- Section Delete Handlers ---
-  const handleDeleteAbout = () => user && setUser({ ...user, about: "" });
-  const handleDeleteTechStack = () => user && setUser({ ...user, techStack: [] });
-  const handleDeleteProjects = () => user && setUser({ ...user, projects: [] });
-  const handleDeleteGithub = () => {
-    setGithubUsername("");
-  };
-  // --------------------------------
-
-  /**
-   * Handles the image file selection and updates the user's profile image.
-   * @param e - The file input change event.
-   */
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0] && user) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setUser({ ...user, image: event.target.result as string });
+    useEffect(() => {
+        const mockUser = getUserByUsername("bob");
+        if (mockUser) {
+            setUser({
+                ...mockUser,
+                headings: {
+                    about: "About",
+                    techstack: "Tech Stack",
+                    projects: "Projects",
+                    ...(mockUser.headings || {}),
+                },
+            });
+            setGithubUsername(mockUser?.socials?.github || "");
         }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
+    }, []);
 
-  // Filters the list of all technologies based on the user's search input.
-  const filteredTechs = allTechs.filter((tech) =>
-    tech.name.toLowerCase().includes(techSearch.toLowerCase())
-  );
-  // #endregion
+    const onDragEnd = (result: DropResult) => {
+        const { source, destination } = result;
+        if (!destination) return;
 
-  const geistSans = { className: "font-sans" };
+        const items = Array.from(cards);
+        const [reorderedItem] = items.splice(source.index, 1);
+        items.splice(destination.index, 0, reorderedItem);
 
-  // Display a loading spinner if user data hasn't been loaded yet.
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="w-10 h-10 border-2 border-blue-400 border-dashed rounded-full animate-spin"></div>
-      </div>
+        setCards(items);
+    };
+
+    const handleTechToggle = (tech: { name: string; icon: React.ReactNode }) => {
+        if (!user) return;
+        const techName = tech.name;
+        const currentTechStack = user.techStack || [];
+        if (currentTechStack.includes(techName)) {
+            setUser({ ...user, techStack: currentTechStack.filter((t) => t !== techName) });
+        } else {
+            setUser({ ...user, techStack: [...currentTechStack, techName] });
+        }
+    };
+
+    const handleSocialChange = (name: string, href: string) => {
+        if (!user) return;
+        setUser({ ...user, socials: { ...user.socials, [name.toLowerCase()]: href } });
+    };
+
+    const handleSetGithubUsername = () => {
+        setGithubModalOpen(false);
+    };
+
+    const handleProfileUpdate = (field: keyof User, value: string) => {
+        if (!user) return;
+        setUser({ ...user, [field]: value });
+    };
+
+    const handleHeadingUpdate = (field: string, value: string) => {
+        if (!user) return;
+        setUser({ ...user, headings: { ...user.headings, [field]: value } });
+    };
+
+    const handleAddAbout = () => {
+        if (user) {
+            setUser({ ...user, about: user.about || "Tell everyone about yourself." });
+        }
+    };
+
+    const handleDeleteAbout = () => user && setUser({ ...user, about: "" });
+    const handleDeleteTechStack = () => user && setUser({ ...user, techStack: [] });
+    const handleDeleteProjects = () => user && setUser({ ...user, projects: [] });
+    const handleDeleteGithub = () => {
+        setGithubUsername("");
+    };
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0] && user) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (event.target?.result) {
+                    setUser({ ...user, image: event.target.result as string });
+                }
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    };
+
+    const filteredTechs = allTechs.filter((tech) =>
+        tech.name.toLowerCase().includes(techSearch.toLowerCase())
     );
-  }
 
-  const mockProjects = user.projects || [];
-
-  // #region Card Rendering Logic
-  /**
-   * Renders the content for a specific card based on its ID.
-   * Returns null if the card has no content, effectively hiding it.
-   * @param cardId - The unique identifier for the card (e.g., 'about', 'projects').
-   * @returns The JSX element for the card content or null.
-   */
-  const renderCardContent = (cardId: string) => {
-    // The structure for each card includes an editable heading and a delete button.
-    switch (cardId) {
-      case "about":
-        if (!user.about) return null;
+    if (!user) {
         return (
-          <div className="w-full p-6 ">
-            <div className="flex items-start justify-between gap-2">
-              <InlineEdit
-                value={user.headings?.about || "About"}
-                onSave={(value) => handleHeadingUpdate("about", value)}
-                className="text-2xl font-bold text-gray-900 mb-4"
-                placeholder="About section title"
-                showCursor={true}
-              />
-              <button onClick={handleDeleteAbout} className="p-1 rounded-full hover:bg-gray-200 cursor-pointer" title="Delete Section">
-                <FaTrash size={16} className="text-gray-500 hover:text-red-500" />
-              </button>
+            <div className="min-h-screen flex items-center justify-center bg-black">
+                <div className="w-10 h-10 border-2 border-blue-500 border-dashed rounded-full animate-spin"></div>
             </div>
-            <InlineEdit as="textarea" value={user.about || ""} onSave={(value) => handleProfileUpdate("about", value)} className="text-lg text-gray-700 mb-6 w-full" placeholder="Tell everyone about yourself" />
-          </div>
         );
-      case "techstack":
-        if (!user.techStack || user.techStack.length === 0) return null;
-        return (
-          <div className="w-full p-6">
-            <div className="flex items-start justify-between gap-2">
-              <InlineEdit
-                value={user.headings?.techstack || "Tech Stack"}
-                onSave={(value) => handleHeadingUpdate("techstack", value)}
-                className="text-2xl font-bold text-gray-900 mb-4"
-                placeholder="Tech stack section title"
-                showCursor={true}
-              />
-              <button onClick={handleDeleteTechStack} className="p-1 rounded-full hover:bg-gray-200 cursor-pointer" title="Delete Section">
-                <FaTrash size={16} className="text-gray-500 hover:text-red-500" />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-3 mb-8">
-              {user.techStack.map((tech) => ( <span key={tech} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"> {tech} </span> ))}
-            </div>
-          </div>
-        );
-      case "projects":
-        if (!mockProjects || mockProjects.length === 0) return null;
-        return (
-                    <div className="p-6">
-                       <div className="flex items-start justify-between gap-2">
-                          <InlineEdit value={user.headings?.projects || "Projects"} onSave={(value) => handleHeadingUpdate("projects", value)} className="text-2xl font-bold text-gray-900 mb-4" placeholder="Projects section title" showCursor={true}/>
-                          <button onClick={handleDeleteProjects} className="p-1 rounded-full hover:bg-gray-200 cursor-pointer" title="Delete Section">
-                              <FaTrash size={16} className="text-gray-500 hover:text-red-500" />
-                          </button>
-                      </div>
-                      <div className="grid grid-cols-1 gap-6">
-                        {mockProjects.map((project) => (
-                          <div key={project.url} tabIndex={0} className="relative group transition-transform duration-300 ease-in-out hover:-rotate-2 focus:-rotate-2 rounded-2xl overflow-hidden">
-                            <div className="relative bg-white rounded-2xl p-6 border border-gray-200 w-full h-full">
-                              <a href={project.url} target="_blank" rel="noreferrer" className="text-xl font-bold text-black hover:underline">{project.title}</a>
-                              <p className="text-gray-700 mt-1 mb-2">{project.description}</p>
-                              <div className="flex flex-wrap gap-2 mt-2">
-                                {project.tech.map((t) => ( <span key={t} className="bg-blue-100 text-blue-400 px-2 py-0.5 rounded text-xs font-medium">{t}</span> ))}
-                              </div>
-                            </div>
-                            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300"></div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                case "github":
-        if (!githubUsername) return null;
-        return (
-          <GithubCard
-            githubUsername={githubUsername}
-            onDelete={handleDeleteGithub}
-          />
-        );
-      default:
-        return null;
     }
-  };
-            // #endregion
-          
-            // #region Main Component JSX
-            return (
-              <div className={`${geistSans.className} min-h-screen bg-gray-50 p-8 sm:p-12 md:p-16 text-gray-800`}>
-                <div className="max-w-7xl mx-auto pb-24">
-                  <div className="lg:flex lg:gap-8">
-                    {/* --- Sidebar --- */}
-                    <div className="lg:w-1/3 lg:fixed lg:top-16 lg:h-screen lg:overflow-y-auto">
-                      
-                      {/* Save and Back buttons are fixed at the top of the sidebar */}
-                      <div className="absolute top-5 md:top-0 flex items-center gap-4">
-                        <Link href={`/dashboard`} className="p-2 rounded-full text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors" title="Back to dashboard">
-                          <FaArrowLeft size={22} />
-                        </Link>
-                        <button onClick={() => { /* Implement save logic */ }} className="p-2 cursor-pointer rounded-full text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors" title="Save changes">
-                          <FaSave size={22} />
-                        </button>
-                      </div>
-          
-                      <div className="flex flex-col md:mt-16 mt-20 items-start mb-10 md:mb-0 space-y-4">
-                        
-                        {/* Hidden file input for image upload */}
-                        <input type="file" ref={imageUploadRef} onChange={handleImageUpload} accept="image/*" className="hidden"/>
-                        
-                        {/* Profile Image with Upload Placeholder */}
-                        <div className="relative w-[7rem] h-[7rem] sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-gray-200 cursor-pointer flex items-center justify-center" onClick={() => imageUploadRef.current?.click()}>
-                          {user.image ? (
-                            <Image src={user.image} alt={user.name} fill className="object-cover" />
-                          ) : (
-                            <div className="text-center text-gray-500 flex flex-col items-center">
-                              <LuUpload size={32} />
-                              <span className="mt-2 text-sm font-medium">Add Photo</span>
-                            </div>
-                          )}
+
+    const mockProjects = user.projects || [];
+
+    const renderCardContent = (cardId: string) => {
+        switch (cardId) {
+            case "about":
+                if (!user.about) return null;
+                return (
+                    <div className="w-full h-full glass-card rounded-3xl p-8 flex flex-col justify-center relative group min-h-[250px]">
+                        <div className="absolute top-4 right-4 z-20 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                            <button onClick={handleDeleteAbout} className="p-2 rounded-xl bg-white/5 hover:bg-red-500 text-white/40 hover:text-white transition-all cursor-pointer">
+                                <FaTrash size={12} />
+                            </button>
                         </div>
-                        
-                        {/* User Name and Profession */}
-                        <div>
-                          <InlineEdit value={user.name} onSave={(value) => handleProfileUpdate("name", value)} className="text-4xl font-extrabold text-gray-900" placeholder="Your Name" showCursor={true} />
-                          <InlineEdit value={user.profession} onSave={(value) => handleProfileUpdate("profession", value)} className="text-xl text-gray-600" placeholder="Your Profession" showCursor={true} />
+                        <div className="flex items-center gap-3 mb-4 text-blue-400 font-semibold uppercase tracking-wider text-xs">
+                            <FaUserAlt size={12} />
+                            <InlineEdit
+                                value={user.headings?.about || "About"}
+                                onSave={(value) => handleHeadingUpdate("about", value)}
+                                className="font-semibold uppercase tracking-wider text-xs"
+                                placeholder="Personal"
+                            />
                         </div>
-                        
-                        {/* Displayed Social Links */}
-                        <div className="flex items-center space-x-4 pt-2">
-                                              {user.socials?.github && <button onClick={() => setSocialModalOpen(true)} className="text-gray-700 hover:text-black"><FaGithub size={22} /></button>}
-                                              {user.socials?.twitter && <a href={`https://twitter.com/${user.socials.twitter}`} target="_blank" rel="noreferrer" className="text-blue-400 hover:text-blue-700"><FaTwitter size={22} /></a>}                            {user.socials?.linkedin && <a href={`https://www.linkedin.com/in/${user.socials.linkedin}`} target="_blank" rel="noreferrer" className="text-blue-700 hover:text-blue-900"><FaLinkedin size={22} /></a>}
+                        <div className="flex-1">
+                            <InlineEdit as="textarea" value={user.about || ""} onSave={(value) => handleProfileUpdate("about", value)} className="text-2xl font-medium leading-normal text-white/90" placeholder="Tell everyone about yourself" />
                         </div>
-                        
-                        {/* User Description */}
-                        <InlineEdit as="textarea" value={user.description || ""} onSave={(value) => handleProfileUpdate("description", value)} className="mt-4 text-gray-700 leading-relaxed text-base max-w-sm" placeholder="Add a short description about yourself" showCursor={true}/>
-                      </div>
                     </div>
-          
-                    <div className="hidden lg:block lg:w-1/3"></div>
-          
-                    {/* --- Main Content Area (Draggable Cards) --- */}
-                    <div className="lg:w-2/3">
-                      <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="cards">
-                          {(provided) => (
-                            <div ref={provided.innerRef} {...provided.droppableProps} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                              {cards.map((card, index) => {
-                                const cardContent = renderCardContent(card.id);
-                                if (!cardContent) {
-                                  // Render a placeholder to maintain DND indices if card is hidden
-                                  return <div key={card.id} style={{ display: "none" }} />;
-                                }
-                                return (
-                                  <Draggable key={card.id} draggableId={card.id} index={index}>
-                                    {(provided) => (
-                                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={`${card.id === 'github' ? 'md:col-span-2' : 'md:col-span-1'} flex items-center gap-2 outline-none`}>
-                                        <div className="w-full">
-                                          {cardContent}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </Draggable>
-                                );
-                              })}
-                              {provided.placeholder}
-                            </div>
-                          )}
-                        </Droppable>
-                      </DragDropContext>
+                );
+            case "techstack":
+                if (!user.techStack || user.techStack.length === 0) return null;
+                return (
+                    <div className="w-full h-full glass-card rounded-3xl p-6 flex flex-col relative group min-h-[200px]">
+                        <div className="absolute top-4 right-4 z-20 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                            <button onClick={handleDeleteTechStack} className="p-2 rounded-xl bg-white/5 hover:bg-red-500 text-white/40 hover:text-white transition-all cursor-pointer">
+                                <FaTrash size={12} />
+                            </button>
+                        </div>
+                        <div className="flex items-center gap-2 mb-6 text-white/60 text-sm font-medium">
+                            <FaCode className="text-white/40" />
+                            <InlineEdit
+                                value={user.headings?.techstack || "Tech Stack"}
+                                onSave={(value) => handleHeadingUpdate("techstack", value)}
+                                className="text-sm font-medium"
+                                placeholder="Tech Stack"
+                            />
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {user.techStack.map((tech) => (
+                                <span key={tech} className="px-3 py-1.5 glass rounded-lg text-xs font-semibold text-white/80 border-white/5 h-fit whitespace-nowrap"> {tech} </span>
+                            ))}
+                        </div>
                     </div>
-                  </div>
-                  
+                );
+            case "projects":
+                if (!mockProjects || mockProjects.length === 0) return null;
+                return (
+                    <div className="w-full h-full glass-card rounded-3xl p-8 flex flex-col relative group">
+                        <div className="absolute top-4 right-4 z-20 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                            <button onClick={handleDeleteProjects} className="p-2 rounded-xl bg-white/5 hover:bg-red-500 text-white/40 hover:text-white transition-all cursor-pointer">
+                                <FaTrash size={12} />
+                            </button>
+                        </div>
+                        <div className="flex items-center justify-between mb-8">
+                            <div className="flex items-center gap-2 text-white/60 text-sm font-medium">
+                                <FaChartLine className="text-white/40" />
+                                <InlineEdit value={user.headings?.projects || "Featured Projects"} onSave={(value) => handleHeadingUpdate("projects", value)} className="text-sm font-medium" placeholder="Featured Projects" />
+                            </div>
+                            <span className="text-xs bg-white/10 px-2 py-1 rounded text-white/40">{mockProjects.length} Projects</span>
+                        </div>
+                        <div className="space-y-4 pr-2 -mr-2">
+                            {mockProjects.map((project) => (
+                                <div key={project.url} className="p-4 rounded-2xl bg-white/5 group/item transition-all border border-white/5 relative">
+                                    <h4 className="font-bold text-lg mb-1 uppercase tracking-tight text-white">{project.title}</h4>
+                                    <p className="text-sm text-white/50">{project.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+            case "github":
+                if (!githubUsername) return null;
+                return (
+                    <div className="w-full overflow-hidden rounded-3xl">
+                        <GithubCard
+                            githubUsername={githubUsername}
+                            onDelete={handleDeleteGithub}
+                        />
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <DashboardLayout>
+            <div className="w-full relative min-h-screen">
+                <div className="flex flex-col lg:flex-row gap-12 pt-24 lg:pt-0">
+
+                    {/* --- FIXED Identity Sidebar --- */}
+                    {/* On Desktop: fixed positioning relative to content container */}
+                    {/* On Mobile: relative flow */}
+                    <div className="lg:w-[32%] w-full h-fit">
+                        <div className="lg:fixed lg:top-12 lg:w-[calc((min(72rem,100vw-20rem-6rem)*0.33))] group/profile-card overflow-hidden relative shadow-2xl z-40 rounded-[2.5rem] min-h-[600px] flex flex-col justify-end">
+                            {/* Full Card Background Image */}
+                            {user.image && (
+                                <div className="absolute inset-0 z-0">
+                                    <Image src={user.image} alt={user.name} fill className="object-cover transition-transform duration-700 group-hover/profile-card:scale-110" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                                </div>
+                            )}
+
+                            {/* Upload Overlay */}
+                            <input type="file" ref={imageUploadRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+                            <div
+                                className="absolute inset-0 z-10 opacity-0 group-hover/profile-card:opacity-100 transition-opacity flex items-center justify-center bg-black/40 cursor-pointer"
+                                onClick={() => imageUploadRef.current?.click()}
+                            >
+                                <div className="flex flex-col items-center gap-3">
+                                    <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center text-white">
+                                        <LuUpload size={24} />
+                                    </div>
+                                    <span className="text-white font-black uppercase tracking-widest text-xs">Change Cover Photo</span>
+                                </div>
+                            </div>
+
+                            {/* Content Over Background */}
+                            <div className="glass-card w-full h-full relative z-20 p-10 flex flex-col justify-end border-white/10 !bg-transparent !backdrop-blur-none">
+                                <div className="w-full text-left">
+                                    <InlineEdit value={user.name} onSave={(value) => handleProfileUpdate("name", value)} className="text-5xl font-bold tracking-tight mb-2 text-white w-full text-left drop-shadow-lg" placeholder="Your Name" showCursor={true} />
+                                    <InlineEdit value={user.profession} onSave={(value) => handleProfileUpdate("profession", value)} className="text-xl text-white/80 font-medium mb-6 w-full text-left" placeholder="Your Profession" showCursor={true} />
+
+                                    <div className="flex gap-4 mb-8">
+                                        {user.socials?.github && <div className="w-12 h-12 glass rounded-xl flex items-center justify-center text-white/40"><FaGithub size={20} /></div>}
+                                        {user.socials?.twitter && <div className="w-12 h-12 glass rounded-xl flex items-center justify-center text-white/40"><FaTwitter size={20} /></div>}
+                                        {user.socials?.linkedin && <div className="w-12 h-12 glass rounded-xl flex items-center justify-center text-white/40"><FaLinkedin size={20} /></div>}
+                                    </div>
+
+                                    <div className="pt-8 border-t border-white/20 w-full">
+                                        <InlineEdit as="textarea" value={user.description || ""} onSave={(value) => handleProfileUpdate("description", value)} className="text-white/60 leading-relaxed text-lg w-full block text-left" placeholder="Add a short description" showCursor={true} />
+                                    </div>
+
+                                    <div className="mt-6 flex items-center gap-1 text-[10px] uppercase tracking-[0.2em] font-black text-blue-400">
+                                        <span>devbio.co/</span>
+                                        <InlineEdit
+                                            value={user.username || ""}
+                                            onSave={(value) => handleProfileUpdate("username", value)}
+                                            className="text-blue-400 font-black"
+                                            placeholder="username"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* --- Scrolling Bento Area --- */}
+                    <main className="lg:w-[68%] w-full pb-40 lg:pl-4">
+                        <div className="mb-10 flex items-center justify-between">
+                            <div>
+                                {/* <h2 className="text-3xl font-black text-white tracking-tighter leading-none uppercase italic">Designer</h2> */}
+                                <p className="text-white/30 hidden md:block text-[10px] font-black uppercase tracking-[0.3em] mt-3">Drag components to reorder</p>
+                            </div>
+                            <div className="flex gap-2">
+                                <button onClick={handleAddAbout} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-all cursor-pointer" title="Add About"><FaInfoCircle /></button>
+                                <button onClick={() => setTechStackModalOpen(true)} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-all cursor-pointer" title="Add Tech"><FaCode /></button>
+                                <button onClick={() => setProjectModalOpen(true)} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-all cursor-pointer" title="Add Projects"><FaProjectDiagram /></button>
+                                <button onClick={() => setGithubModalOpen(true)} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-all cursor-pointer" title="Add GitHub"><FaGithub /></button>
+                            </div>
+                        </div>
+
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <Droppable droppableId="cards">
+                                {(provided) => (
+                                    <div ref={provided.innerRef} {...provided.droppableProps} className="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[400px]">
+                                        {cards.map((card, index) => {
+                                            const cardContent = renderCardContent(card.id);
+                                            if (!cardContent) {
+                                                return <div key={card.id} style={{ display: "none" }} />;
+                                            }
+                                            return (
+                                                <Draggable key={card.id} draggableId={card.id} index={index}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            className={`${(card.id === 'github' || card.id === 'projects') ? 'md:col-span-2' : 'md:col-span-1'} w-full transition-all ${snapshot.isDragging ? 'z-50' : 'z-0'}`}
+                                                        >
+                                                            <motion.div
+                                                                layout
+                                                                className="h-full w-full"
+                                                            >
+                                                                {cardContent}
+                                                            </motion.div>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            );
+                                        })}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
+                    </main>
                 </div>
+            </div>
 
-      {/* --- Bottom Action Bar --- */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-blue-400 backdrop-blur-sm z-50 flex items-center justify-center gap-x-4 sm:gap-x-6 border border-gray-200 rounded-full px-4">
-        <button onClick={() => setSocialModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add Social Links">
-          <FaLink size={22} />
-        </button>
-        <button onClick={handleAddAbout} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add About Section">
-          <FaInfoCircle size={22} />
-        </button>
-        <button onClick={() => setTechStackModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add Tech Stack">
-          <FaCode size={22} />
-        </button>
-        <button onClick={() => setProjectModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add Projects">
-          <FaProjectDiagram size={22} />
-        </button>
-        <button onClick={() => setGithubModalOpen(true)} className="bg-blue-400  text-white rounded-full p-4 transition-colors cursor-pointer" title="Add GitHub Contributions">
-          <FaGithub size={22} />
-        </button>
-      </div>
+            {/* --- Fixed Global Action Bar --- */}
+            <div className="fixed top-0 lg:top-auto lg:bottom-0 left-0 right-0 z-[100] p-4 lg:p-10 pointer-events-none">
+                <div className="max-w-7xl mx-auto flex justify-end items-start lg:items-end pointer-events-auto">
+                    <div className="flex gap-3 w-full md:w-auto">
+                        <Link href="/dashboard" className="flex-1 md:flex-none">
+                            <button className="w-full md:px-10 py-5 glass rounded-2xl text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2 border-white/10 cursor-pointer shadow-2xl backdrop-blur-2xl">
+                                <FaArrowLeft size={14} /> Back
+                            </button>
+                        </Link>
+                        <button className="flex-1 md:px-10 py-5 bg-white text-black rounded-2xl font-black hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-2xl cursor-pointer">
+                            <FaSave size={14} /> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-      {/* --- Modals --- */}
-     
-      {isSocialModalOpen && (
-        <SocialModal socials={[{ name: "Twitter", icon: <FaTwitter />, href: user.socials?.twitter || "" }, { name: "GitHub", icon: <FaGithub />, href: user.socials?.github || "" }, { name: "LinkedIn", icon: <FaLinkedin />, href: user.socials?.linkedin || "" }]} handleSocialChange={handleSocialChange} setSocialModalOpen={setSocialModalOpen}/>
-      )}
-      {isTechStackModalOpen && (
-        <TechStackModal techStack={allTechs.filter((tech) => user.techStack?.includes(tech.name)) || []} techSearch={techSearch} setTechSearch={setTechSearch} filteredTechs={filteredTechs} handleTechToggle={handleTechToggle} setTechModalOpen={setTechStackModalOpen} />
-      )}
-      {isProjectModalOpen && user.projects && (
-        <ProjectModal projects={user.projects} onClose={() => setProjectModalOpen(false)} onSave={(newProjects) => { setUser((prevUser) => (prevUser ? { ...prevUser, projects: newProjects } : null)); setProjectModalOpen(false); }}/>
-      )}
-      {isGithubModalOpen && (
-        <GitHubModal githubUsername={githubUsername} setGithubUsername={setGithubUsername} setGithubModalOpen={setGithubModalOpen} handleSetGithubUsername={handleSetGithubUsername} />
-      )}
-    </div>
-  );
+            {/* --- Modals --- */}
+            <AnimatePresence>
+                {isSocialModalOpen && (
+                    <SocialModal socials={[{ name: "Twitter", icon: <FaTwitter />, href: user.socials?.twitter || "" }, { name: "GitHub", icon: <FaGithub />, href: user.socials?.github || "" }, { name: "LinkedIn", icon: <FaLinkedin />, href: user.socials?.linkedin || "" }]} handleSocialChange={handleSocialChange} setSocialModalOpen={setSocialModalOpen} />
+                )}
+                {isTechStackModalOpen && (
+                    <TechStackModal techStack={allTechs.filter((tech) => user.techStack?.includes(tech.name)) || []} techSearch={techSearch} setTechSearch={setTechSearch} filteredTechs={filteredTechs} handleTechToggle={handleTechToggle} setTechModalOpen={setTechStackModalOpen} />
+                )}
+                {isProjectModalOpen && (
+                    <ProjectModal projects={user.projects || []} onClose={() => setProjectModalOpen(false)} onSave={(newProjects) => { setUser((prevUser) => (prevUser ? { ...prevUser, projects: newProjects } : null)); setProjectModalOpen(false); }} />
+                )}
+                {isGithubModalOpen && (
+                    <GitHubModal githubUsername={githubUsername} setGithubUsername={setGithubUsername} setGithubModalOpen={setGithubModalOpen} handleSetGithubUsername={handleSetGithubUsername} />
+                )}
+            </AnimatePresence>
+        </DashboardLayout>
+    );
 };
-// #endregion
 
 export default EditPage;

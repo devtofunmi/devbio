@@ -1,24 +1,18 @@
-import React  from "react";
+import React from "react";
 import Sidebar from "./Sidebar";
-
-const geistSans = { className: "font-sans" };
-const geistMono = { className: "font-mono" };
+import { BackgroundBeams } from "../BackgroundBeams";
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} font-sans min-h-screen bg-white flex`}
-    >
-      <Sidebar
-      />
-      <main
-        className="flex-1 p-5 w-full md:pb-20 pb-16 lg:ml-80"
-      >
-        
-        {children}
+    <div className="min-h-screen bg-black text-white flex overflow-hidden">
+      <BackgroundBeams />
+      <Sidebar />
+      <main className="flex-1 w-full relative z-10 overflow-y-auto lg:ml-80">
+        <div className="max-w-6xl mx-auto p-6 md:p-12 md:pb-32">
+          {children}
+        </div>
       </main>
     </div>
   );
