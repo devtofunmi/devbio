@@ -11,7 +11,7 @@ const ThemesPage: React.FC = () => {
                     <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-3">
                         Visual <span className="text-gradient">Themes</span>
                     </h1>
-                    <p className="text-white/40 text-base font-light italic">Customize your profile's appearance and design.</p>
+                    <p className="text-white/40 text-base font-light italic">Customize your profile&apos;s appearance and design.</p>
                 </div>
                 <ThemeSettings />
             </div>
@@ -24,7 +24,7 @@ const ThemesPage: React.FC = () => {
                         <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-3">
                             Visual <span className="text-gradient">Themes</span>
                         </h1>
-                        <p className="text-white/40 text-base font-light italic">Customize your profile's appearance and design.</p>
+                        <p className="text-white/40 text-base font-light italic">Customize your profile&apos;s appearance and design.</p>
                     </div>
 
                     {/* Scrollable Content */}

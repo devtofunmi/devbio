@@ -18,7 +18,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
       <div className="min-h-screen flex items-center justify-center bg-black text-white">
         <div className="glass-card p-12 rounded-3xl text-center">
           <h1 className="text-4xl font-bold text-red-500 mb-6">404 - User Not Found</h1>
-          <a href="/" className="px-6 py-3 bg-white text-black rounded-full font-semibold hover:scale-105 transition">Go back home</a>
+          <Link href="/" className="px-6 py-3 bg-white text-black rounded-full font-semibold hover:scale-105 transition">Go back home</Link>
         </div>
       </div>
     );

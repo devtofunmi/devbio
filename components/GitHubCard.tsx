@@ -47,7 +47,7 @@ const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
         console.log(`[GitHubCard] Raw API response:`, data);
 
         // Transform the API data to our expected format
-        const totalContributions = data.contributions.flat().map((day: any) => ({
+        const totalContributions = data.contributions.flat().map((day: { date: string; contributionCount: number; contributionLevel: string }) => ({
           date: day.date,
           count: day.contributionCount,
           level: mapContributionLevel(day.contributionLevel, day.contributionCount)
@@ -64,7 +64,7 @@ const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
         console.log(`[GitHubCard] Last 5 days:`, recentDays.slice(-5));
 
         // Count how many days have contributions
-        const daysWithContributions = recentDays.filter((d: any) => d.count > 0).length;
+        const daysWithContributions = recentDays.filter((d: ContributionDay) => d.count > 0).length;
         console.log(`[GitHubCard] Days with contributions: ${daysWithContributions}/${recentDays.length}`);
 
         setContributions(recentDays);

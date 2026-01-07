@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FiEye, FiEyeOff, FiAlertTriangle, FiShield } from 'react-icons/fi';
 import DeleteAccountModal from './DeleteAccountModal';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 
 const AccountSettings = () => {
     const [showNewPassword, setShowNewPassword] = useState(false);

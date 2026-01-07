@@ -11,7 +11,6 @@ import {
     FaProjectDiagram,
     FaInfoCircle,
     FaTrash,
-    FaLink,
     FaUserAlt,
     FaChartLine,
 } from "react-icons/fa";
@@ -41,7 +40,7 @@ import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import ProjectModal from "../../components/dashboard/edit/ProjectModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import InlineEdit from "../../components/dashboard/edit/InlineEdit";
-import GithubCard from "../../components/dashboard/edit/GitHubCard";
+import GithubCard from "../../components/GitHubCard";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
 const allTechs = [
@@ -115,10 +114,6 @@ const EditPage: React.FC = () => {
     const handleSocialChange = (name: string, href: string) => {
         if (!user) return;
         setUser({ ...user, socials: { ...user.socials, [name.toLowerCase()]: href } });
-    };
-
-    const handleSetGithubUsername = () => {
-        setGithubModalOpen(false);
     };
 
     const handleProfileUpdate = (field: keyof User, value: string) => {
@@ -404,7 +399,14 @@ const EditPage: React.FC = () => {
                     <ProjectModal projects={user.projects || []} onClose={() => setProjectModalOpen(false)} onSave={(newProjects) => { setUser((prevUser) => (prevUser ? { ...prevUser, projects: newProjects } : null)); setProjectModalOpen(false); }} />
                 )}
                 {isGithubModalOpen && (
-                    <GitHubModal githubUsername={githubUsername} setGithubUsername={setGithubUsername} setGithubModalOpen={setGithubModalOpen} handleSetGithubUsername={handleSetGithubUsername} />
+                    <GitHubModal
+                        githubUsername={githubUsername}
+                        onSave={(username) => {
+                            setGithubUsername(username);
+                            setGithubModalOpen(false);
+                        }}
+                        onClose={() => setGithubModalOpen(false)}
+                    />
                 )}
             </AnimatePresence>
         </DashboardLayout>

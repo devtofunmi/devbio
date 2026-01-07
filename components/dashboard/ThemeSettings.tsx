@@ -41,7 +41,7 @@ const ThemeSettings = () => {
         <section className="mb-20 md:mb-0">
             <div className="mb-10 text-center md:text-left">
                 <h3 className="text-2xl font-black text-white tracking-tighter">Visual Interface</h3>
-                <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Select your profile's core signature</p>
+                <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Select your profile&apos;s core signature</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -10,7 +10,6 @@ import SocialModal from "../../components/dashboard/edit/SocialModal";
 import {
   FaPlus,
   FaSave,
-  FaImage,
   FaTwitter,
   FaGithub,
   FaLinkedin,
@@ -29,6 +28,30 @@ import { SiNextdotjs, SiTailwindcss, SiTypescript, SiGraphql, SiSwift, SiRust } 
 import Link from 'next/link';
 import Image from 'next/image';
 
+type Project = {
+  title: string;
+  description: string;
+  url: string;
+  tech: string[];
+  image?: string;
+};
+
+type Tech = {
+  name: string;
+  icon: React.ReactNode;
+};
+
+const ALL_TECHS = [
+  { name: 'React', icon: <FaReact /> },
+  { name: 'Next.js', icon: <SiNextdotjs /> },
+  { name: 'TypeScript', icon: <SiTypescript /> },
+  { name: 'Node.js', icon: <FaNodeJs /> },
+  { name: 'Tailwind CSS', icon: <SiTailwindcss /> },
+  { name: 'GraphQL', icon: <SiGraphql /> },
+  { name: 'Swift', icon: <SiSwift /> },
+  { name: 'Rust', icon: <SiRust /> },
+];
+
 const DashboardPage: React.FC = () => {
   const [name, setName] = useState("Jay");
   const [profession, setProfession] = useState("Fullstack Engineer");
@@ -46,7 +69,7 @@ const DashboardPage: React.FC = () => {
   const [socialModalOpen, setSocialModalOpen] = useState(false);
 
   // Data States
-  const [projects, setProjects] = useState([
+  const [projects, setProjects] = useState<Project[]>([
     {
       title: "Project Delta",
       description: "A high-performance analytics dashboard built with Next.js and Framer Motion.",
@@ -55,7 +78,7 @@ const DashboardPage: React.FC = () => {
     }
   ]);
 
-  const [techStack, setTechStack] = useState([
+  const [techStack, setTechStack] = useState<Tech[]>([
     { name: 'React', icon: <FaReact /> },
     { name: 'TypeScript', icon: <SiTypescript /> },
     { name: 'Next.js', icon: <SiNextdotjs /> },
@@ -72,22 +95,13 @@ const DashboardPage: React.FC = () => {
 
   const [techSearch, setTechSearch] = useState("");
 
-  const ALL_TECHS = [
-    { name: 'React', icon: <FaReact /> },
-    { name: 'Next.js', icon: <SiNextdotjs /> },
-    { name: 'TypeScript', icon: <SiTypescript /> },
-    { name: 'Node.js', icon: <FaNodeJs /> },
-    { name: 'Tailwind CSS', icon: <SiTailwindcss /> },
-    { name: 'GraphQL', icon: <SiGraphql /> },
-    { name: 'Swift', icon: <SiSwift /> },
-    { name: 'Rust', icon: <SiRust /> },
-  ];
+
 
   const filteredTechs = useMemo(() => {
     return ALL_TECHS.filter(t => t.name.toLowerCase().includes(techSearch.toLowerCase()));
   }, [techSearch]);
 
-  const handleTechToggle = (tech: any) => {
+  const handleTechToggle = (tech: { name: string; icon: React.ReactNode }) => {
     setTechStack(prev =>
       prev.some(t => t.name === tech.name)
         ? prev.filter(t => t.name !== tech.name)
@@ -246,7 +260,8 @@ const DashboardPage: React.FC = () => {
                 <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
                   {socials.filter(s => s.href).map((social, i) => (
                     <div key={i} className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
-                      {React.cloneElement(social.icon as React.ReactElement<any>, { size: 20, className: "text-white/40 group-hover:text-blue-400 transition-colors" })}
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {React.cloneElement(social.icon as any, { size: 20, className: "text-white/40 group-hover:text-blue-400 transition-colors" })}
                     </div>
                   ))}
                   <button
@@ -305,7 +320,7 @@ const DashboardPage: React.FC = () => {
                 </button>
               </div>
               <div className="flex flex-wrap gap-3">
-                {techStack.map((tech: any) => (
+                {techStack.map((tech) => (
                   <span key={tech.name} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
                     {tech.name}
                   </span>
@@ -413,7 +428,7 @@ const DashboardPage: React.FC = () => {
                     <div className="flex justify-between items-start mb-6">
                       <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg">
                         <Image
-                          src={(project as any).image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"}
+                          src={project.image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"}
                           alt={project.title}
                           fill
                           className="object-cover"

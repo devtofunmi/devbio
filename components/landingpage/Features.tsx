@@ -2,7 +2,18 @@ import React from 'react';
 import { FaGithub, FaChartBar, FaCode, FaPalette, FaGlobe, FaRocket, FaLink, FaProjectDiagram } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
-const FeatureBlock = ({
+interface FeatureBlockProps {
+  badge: string;
+  title: string;
+  accentTitle: string;
+  description: string;
+  icon: React.ElementType;
+  accentColor: string;
+  isReversed: boolean;
+  children: React.ReactNode;
+}
+
+const FeatureBlock: React.FC<FeatureBlockProps> = ({
   badge,
   title,
   accentTitle,
@@ -11,7 +22,7 @@ const FeatureBlock = ({
   accentColor,
   isReversed,
   children
-}: any) => (
+}) => (
   <div className="py-24 md:py-32 relative overflow-hidden">
     {/* Ambient Glow */}
     <div className={`absolute top-1/2 -translate-y-1/2 ${isReversed ? '-left-1/4' : '-right-1/4'} w-1/2 h-full opacity-10 blur-[120px] rounded-full pointer-events-none`} style={{ background: accentColor }} />

@@ -3,7 +3,7 @@ import React from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { motion } from "framer-motion";
 import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
-import { BackgroundBeams } from "../components/BackgroundBeams";
+// import { BackgroundBeams } from "../components/BackgroundBeams";
 
 const Signup: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);

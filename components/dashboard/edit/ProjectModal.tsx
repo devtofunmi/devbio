@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaTimes, FaPlus, FaRocket } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 type Project = {
   title: string;

@@ -1,9 +1,18 @@
 import React from 'react';
-import { FaCode, FaUsers, FaGavel, FaGithub, FaBug, FaLightbulb } from 'react-icons/fa';
+import { FaCode, FaUsers, FaGavel, FaBug, FaLightbulb } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { BackgroundBeams } from '../BackgroundBeams';
 
-const ContributionCard = ({ icon: Icon, title, description, link, linkText, delay = 0 }: any) => (
+interface ContributionCardProps {
+    icon: React.ElementType;
+    title: string;
+    description: string;
+    link: string;
+    linkText: string;
+    delay?: number;
+}
+
+const ContributionCard: React.FC<ContributionCardProps> = ({ icon: Icon, title, description, link, linkText, delay = 0 }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +49,7 @@ const Contribute: React.FC = () => {
                         <span className="text-gradient">Future.</span>
                     </motion.h1>
                     <p className="text-2xl text-white/50 font-light max-w-2xl mx-auto">
-                        DevBio is open-source and community-driven. Help us build the ultimate platform for the world's best engineer.
+                        DevBio is open-source and community-driven. Help us build the ultimate platform for the world&apos;s best engineer.
                     </p>
                 </div>
 

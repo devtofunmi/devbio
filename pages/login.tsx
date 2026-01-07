@@ -3,7 +3,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
 import Link from 'next/link';
 import { motion } from "framer-motion";
-import { BackgroundBeams } from "../components/BackgroundBeams";
+// import { BackgroundBeams } from "../components/BackgroundBeams";
 
 const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -109,7 +109,7 @@ const LoginPage: React.FC = () => {
               </button>
 
               <p className="text-center text-sm text-white/40 pt-4">
-                Don't have an account? <Link href="/signup" className="text-blue-400 font-bold hover:underline">Sign up</Link>
+                Don&apos;t have an account? <Link href="/signup" className="text-blue-400 font-bold hover:underline">Sign up</Link>
               </p>
             </form>
           </div>

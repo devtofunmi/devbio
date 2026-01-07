@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { FiHome, FiBarChart2, FiSettings, FiLogOut, FiPlusCircle, FiZap } from 'react-icons/fi';
-import { motion, AnimatePresence } from 'framer-motion';
+import { FiHome, FiBarChart2, FiSettings, FiLogOut, FiZap } from 'react-icons/fi';
+// import { motion, AnimatePresence } from 'framer-motion';
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
-  const [showTooltip, setShowTooltip] = useState(false);
+  // const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   const menuItems = [
@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
-        setShowTooltip(false);
+        // setShowTooltip(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
