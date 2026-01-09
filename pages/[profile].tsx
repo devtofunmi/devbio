@@ -1,45 +1,125 @@
 import React from "react";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
-import { FaGithub, FaTwitter, FaLinkedin, FaExternalLinkAlt, FaCode, FaInfoCircle } from "react-icons/fa";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { getUserByUsername, User } from "../lib/mockUsers";
+import { supabase } from "../lib/supabaseClient";
 import { BackgroundBeams } from "../components/BackgroundBeams";
 import GitHubCard from "../components/GitHubCard";
 import Link from "next/link";
 
-type Props = {
-  user: User;
+type SocialLink = {
+  name: string;
+  href: string;
 };
 
-const ProfilePage: React.FC<Props> = ({ user }) => {
+type TechItem = {
+  name: string;
+};
+
+type Project = {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  image_url: string;
+  tech_tags: string[];
+};
+
+type UserProfile = {
+  id: string;
+  username: string;
+  full_name: string;
+  profession: string;
+  bio: string;
+  about_me: string;
+  avatar_url: string;
+  github_username: string;
+  social_links: SocialLink[];
+  tech_stack: TechItem[];
+  is_available: boolean;
+};
+
+type Props = {
+  user: UserProfile | null;
+  projects: Project[];
+};
+
+const SOCIAL_ICONS: Record<string, React.ReactNode> = {
+  'Twitter': <FaTwitter />,
+  'GitHub': <FaGithub />,
+  'LinkedIn': <FaLinkedin />,
+  'YouTube': <FaYoutube />,
+};
+
+const SOCIAL_BASE_URLS: Record<string, string> = {
+  'Twitter': 'https://twitter.com/',
+  'GitHub': 'https://github.com/',
+  'LinkedIn': 'https://linkedin.com/in/',
+  'YouTube': 'https://youtube.com/@',
+};
+
+const formatSocialHref = (name: string, href: string) => {
+  if (!href) return '';
+  if (href.startsWith('http')) return href;
+
+  const baseUrl = SOCIAL_BASE_URLS[name];
+  if (baseUrl) {
+    const cleanValue = href.startsWith('@') ? href.substring(1) : href;
+    return `${baseUrl}${cleanValue}`;
+  }
+
+  return `https://${href}`;
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const usernameParam = Array.isArray(context.params?.profile)
+    ? context.params?.profile[0]
+    : context.params?.profile;
+
+  if (!usernameParam) {
+    return { props: { user: null, projects: [] } };
+  }
+
+  //  Fetch Profile
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('username', usernameParam.toLowerCase())
+    .single();
+
+  if (profileError || !profile) {
+    console.error('Profile not found:', usernameParam);
+    return { props: { user: null, projects: [] } };
+  }
+
+  //  Fetch Projects
+  const { data: projects, error: projectsError } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('created_at', { ascending: false });
+
+  return {
+    props: {
+      user: profile,
+      projects: projects || [],
+    },
+  };
+};
+
+const ProfilePage: React.FC<Props> = ({ user, projects }) => {
+
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="min-h-screen p-3 flex items-center justify-center bg-black text-white">
         <div className="glass-card p-12 rounded-3xl text-center">
-          <h1 className="text-4xl font-bold text-red-500 mb-6">404 - User Not Found</h1>
-          <Link href="/" className="px-6 py-3 bg-white text-black rounded-full font-semibold hover:scale-105 transition">Go back home</Link>
+          <h1 className="text-4xl font-bold text-red-500 mb-6 font-black tracking-tighter">404 - User Not Found</h1>
+          <Link href="/" className="px-4 py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all">Go back home</Link>
         </div>
       </div>
     );
   }
-
-  const mockProjects = [
-    {
-      title: "Prepkitty",
-      description: "AI-driven interview coach with real-time feedback.",
-      url: "https://www.prepkitty.co",
-      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-      tech: ["Next.js", "AI", "TypeScript"]
-    },
-    {
-      title: "Chat Flow",
-      description: "Natural Language Interface for Building Flowcharts.",
-      url: "https://chatt-flow.vercel.app/",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
-      tech: ["React", "SDK", "Node.js"]
-    }
-  ];
 
   return (
     <div className="min-h-screen text-white selection:bg-blue-500/30">
@@ -72,25 +152,27 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
               {/* Avatar Container */}
               <div className="relative shrink-0">
                 <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 shadow-2xl relative">
-                  {user.image && (
+                  {user.avatar_url && (
                     <Image
-                      src={user.image}
-                      alt={user.name}
+                      src={user.avatar_url}
+                      alt={user.full_name}
                       fill
                       className="object-cover"
                     />
                   )}
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-green-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl border-4 border-black">
-                  <span className="w-3 h-3 rounded-full bg-white animate-pulse" />
-                </div>
+                {user.is_available && (
+                  <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-green-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl border-4 border-black group-hover:scale-110 transition-transform">
+                    <span className="w-3 h-3 rounded-full bg-white animate-pulse" />
+                  </div>
+                )}
               </div>
 
               {/* Info Section */}
               <div className="flex-1 space-y-6 w-full overflow-hidden">
                 <div className="flex flex-col gap-2">
                   <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white block leading-[1.1]">
-                    {user.name}
+                    {user.full_name}
                   </h1>
                   <div className="flex flex-col lg:flex-row lg:items-center gap-3">
                     <p className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight">
@@ -106,27 +188,28 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
 
                 <div className="max-w-2xl mx-auto lg:mx-0">
                   <p className="text-base md:text-xl text-white/50 leading-relaxed font-light">
-                    {user.description}
+                    {user.bio}
                   </p>
                 </div>
 
                 {/* Social Links */}
                 <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
-                  {user.socials?.github && (
-                    <a href={`https://github.com/${user.socials.github}`} target="_blank" rel="noreferrer" className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
-                      <FaGithub size={20} className="text-white/40 group-hover:text-blue-400 transition-colors" />
-                    </a>
-                  )}
-                  {user.socials?.twitter && (
-                    <a href={`https://twitter.com/${user.socials.twitter}`} target="_blank" rel="noreferrer" className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
-                      <FaTwitter size={20} className="text-white/40 group-hover:text-blue-400 transition-colors" />
-                    </a>
-                  )}
-                  {user.socials?.linkedin && (
-                    <a href={`https://linkedin.com/in/${user.socials.linkedin}`} target="_blank" rel="noreferrer" className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
-                      <FaLinkedin size={20} className="text-white/40 group-hover:text-blue-400 transition-colors" />
-                    </a>
-                  )}
+                  {(user.social_links as SocialLink[])?.map((social) => (
+                    social.href && (
+                      <a
+                        key={social.name}
+                        href={formatSocialHref(social.name, social.href)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group"
+                        title={social.name}
+                      >
+                        <div className="text-white/40 group-hover:text-blue-400 transition-colors">
+                          {SOCIAL_ICONS[social.name] || <FaExternalLinkAlt size={20} />}
+                        </div>
+                      </a>
+                    )
+                  ))}
                 </div>
               </div>
             </div>
@@ -143,9 +226,9 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
             className="md:col-span-8 flex flex-col gap-8"
           >
             {/* GitHub DNA */}
-            <div className="glass-card rounded-[2rem] border-white/5 shadow-2xl overflow-hidden h-fit flex items-center justify-center">
+            <div className="glass-card rounded-[2rem] border-white/5 shadow-2xl overflow-hidden h-fit flex items-center justify-center min-h-[220px]">
               <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
-                <GitHubCard githubUsername={user.socials?.github || user.username} size={48} />
+                <GitHubCard githubUsername={user.github_username || user.username} size={48} />
               </div>
             </div>
 
@@ -160,11 +243,14 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                 </div>
               </div>
               <div className="flex flex-wrap gap-3">
-                {["React", "TypeScript", "Next.js", "Tailwind", "Node.js"].map((tech) => (
-                  <span key={tech} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
-                    {tech}
+                {(user.tech_stack as TechItem[])?.map((tech) => (
+                  <span key={tech.name} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
+                    {tech.name}
                   </span>
                 ))}
+                {(!user.tech_stack || user.tech_stack.length === 0) && (
+                  <p className="text-white/10 text-xs font-black uppercase tracking-widest">Mastering the craft...</p>
+                )}
               </div>
             </div>
           </motion.div>
@@ -186,8 +272,8 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                   <h4 className="text-xl font-black text-white tracking-tight">About Me</h4>
                 </div>
               </div>
-              <p className="text-sm text-white/40 leading-relaxed font-light min-h-[120px]">
-                {user.about}
+              <p className="text-sm text-white/40 leading-relaxed font-light min-h-[120px] whitespace-pre-wrap">
+                {user.about_me || "Writing the next chapter of my story..."}
               </p>
             </div>
 
@@ -196,8 +282,8 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
               <div className="flex flex-col">
                 <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
                 <span className="text-sm font-black flex items-center gap-3 text-white">
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)] animate-pulse" />
-                  Available for hire
+                  <span className={`w-2.5 h-2.5 rounded-full ${user.is_available ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]' : 'bg-red-500'} animate-pulse`} />
+                  {user.is_available ? 'Available for hire' : 'Focused on current role'}
                 </span>
               </div>
             </div>
@@ -218,27 +304,33 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {mockProjects.map((project, i) => (
-                <div key={i} className="glass-card rounded-[2rem] p-6 border-white/5 group hover:border-blue-500/30 transition-all">
+              {projects.map((project, i) => (
+                <div key={project.id || i} className="glass-card rounded-[2rem] p-6 border-white/5 group hover:border-blue-500/30 transition-all flex flex-col h-full">
                   <div className="flex justify-between items-start mb-6">
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg bg-white/[0.03] flex items-center justify-center">
+                      {project.image_url ? (
+                        <Image
+                          src={project.image_url}
+                          alt={project.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <FaCode size={24} className="text-white/10" />
+                      )}
                     </div>
-                    <Link href={project.url} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
-                      <FaExternalLinkAlt size={14} />
-                    </Link>
+                    {project.url && (
+                      <a href={project.url} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
+                        <FaExternalLinkAlt size={14} />
+                      </a>
+                    )}
                   </div>
 
                   <h4 className="text-xl font-bold text-white mb-2 tracking-tight">{project.title}</h4>
                   <p className="text-white/40 font-light mb-6 text-sm leading-relaxed min-h-[40px]">{project.description}</p>
 
                   <div className="flex flex-wrap gap-2 mt-auto">
-                    {project.tech.map(t => (
+                    {project.tech_tags?.map(t => (
                       <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg border border-white/5">
                         {t}
                       </span>
@@ -246,6 +338,11 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                   </div>
                 </div>
               ))}
+              {projects.length === 0 && (
+                <div className="col-span-full py-20 glass rounded-[2rem] border border-dashed border-white/5 flex flex-col items-center justify-center gap-4">
+                  <p className="text-white/10 text-xs font-black uppercase tracking-widest">Building something amazing...</p>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>
@@ -263,16 +360,6 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const profile = Array.isArray(context.params?.profile)
-    ? context.params?.profile[0]
-    : context.params?.profile;
-  const user = getUserByUsername(profile as string) || null;
-  return {
-    props: {
-      user,
-    },
-  };
-};
+
 
 export default ProfilePage;
