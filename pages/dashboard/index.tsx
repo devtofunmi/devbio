@@ -152,50 +152,25 @@ const DashboardPage: React.FC = () => {
     fetchData();
   }, [user]);
 
-  const handleSaveAll = async () => {
+  // Auto-save function for profile fields
+  const autoSaveProfile = async (updates: any) => {
     if (!user) return;
     setSaving(true);
     try {
-      // Update Profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user.id,
-          full_name: name,
-          profession,
-          bio: bio,
-          about_me: aboutMe,
-          username,
-          github_username: githubUsername,
-          avatar_url: avatarUrl,
-          is_available: isAvailable,
-          social_links: socials.map(s => ({ name: s.name, href: s.href })), // Store only data, not components
-          tech_stack: techStack.map(t => ({ name: t.name })), // Store only data
-          updated_at: new Date().toISOString(),
-        });
-
-      if (profileError) throw profileError;
-      toast.success('Profile updated successfully!');
-    } catch (error: any) {
-      toast.error(`Error saving: ${error.message}`);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // Auto-save function for modals
-  const autoSaveProfile = async (updates: any) => {
-    if (!user) return;
-    try {
-      await supabase.from('profiles').upsert({
+      const { error } = await supabase.from('profiles').upsert({
         id: user.id,
         ...updates,
         updated_at: new Date().toISOString(),
       });
+      if (error) throw error;
     } catch (err) {
       console.error("Auto-save failed", err);
+      toast.error("Cloud sync failed");
+    } finally {
+      setTimeout(() => setSaving(false), 500); // Small delay for visual feedback
     }
   };
+
 
   // Modal States
   const [projectModalOpen, setProjectModalOpen] = useState(false);
@@ -204,21 +179,9 @@ const DashboardPage: React.FC = () => {
   const [socialModalOpen, setSocialModalOpen] = useState(false);
 
   // Data States
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      title: "Project Delta",
-      description: "A high-performance analytics dashboard built with Next.js and Framer Motion.",
-      url: "#",
-      tech: ["Next.js", "Framer Motion", "Tailwind"]
-    }
-  ]);
+  const [projects, setProjects] = useState<Project[]>([]);
 
-  const [techStack, setTechStack] = useState<Tech[]>([
-    { name: 'React', icon: <FaReact /> },
-    { name: 'TypeScript', icon: <SiTypescript /> },
-    { name: 'Next.js', icon: <SiNextdotjs /> },
-    { name: 'Node.js', icon: <FaNodeJs /> },
-  ]);
+  const [techStack, setTechStack] = useState<Tech[]>([]);
 
   // Initialized as empty strings so they don't show unless added
   const [socials, setSocials] = useState([
@@ -298,40 +261,33 @@ const DashboardPage: React.FC = () => {
         />
 
         {/* Floating Top Bar - Tool Style */}
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-12 z-[100] w-[90%] md:w-auto">
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-12 z-[100] w-[92%] md:w-auto">
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="glass backdrop-blur-xl bg-black/60 p-2 rounded-[2rem] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-2"
+            className="glass backdrop-blur-xl bg-black/60 p-2 rounded-[2rem] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center justify-between md:justify-start gap-2 w-full md:w-auto"
           >
-            <div className={`flex items-center gap-2 px-6 py-3 border-r border-white/10 pr-6 ${saving ? 'opacity-100' : 'opacity-50'}`}>
+            <div className={`flex items-center gap-2 px-4 md:px-6 py-3 border-r border-white/10 pr-4 md:pr-6 shrink-0 ${saving ? 'opacity-100' : 'opacity-50'}`}>
               <div className={`w-2 h-2 rounded-full ${saving ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`} />
               <span className="text-[10px] font-black uppercase tracking-widest text-white/40">{saving ? 'Syncing...' : 'Live Sync'}</span>
             </div>
 
-            <div className="flex items-center gap-1 md:gap-2 px-2">
+            <div className="flex items-center gap-1 md:gap-2 px-2 flex-1 justify-end md:justify-start">
               <Link href="/dashboard/themes">
-                <button className="p-3 glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Custom Theme">
+                <button className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Custom Theme">
                   <FaPalette size={16} />
                 </button>
               </Link>
               <button
                 onClick={() => setSocialModalOpen(true)}
-                className="p-3 glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5"
+                className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5"
                 title="Share & Socials"
               >
                 <FaShareAlt size={16} />
               </button>
             </div>
 
-            <button
-              onClick={handleSaveAll}
-              disabled={saving}
-              className="bg-blue-600 cursor-pointer text-white px-8 py-3 rounded-[1.5rem] font-black text-sm hover:bg-blue-500 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-500/20 flex items-center gap-3 disabled:opacity-70 disabled:cursor-wait"
-            >
-              <FaSave />
-              <span className="hidden md:block">{saving ? 'Saving...' : 'Publish'}</span>
-            </button>
+
           </motion.div>
         </div>
 
@@ -385,7 +341,7 @@ const DashboardPage: React.FC = () => {
                 <div className="flex flex-col gap-2">
                   <InlineEdit
                     value={name}
-                    onSave={setName}
+                    onSave={(val) => { setName(val); autoSaveProfile({ full_name: val }); }}
                     as="textarea"
                     className="text-4xl md:text-7xl font-black tracking-tighter text-white block leading-[1.1]"
                     placeholder="Your Name"
@@ -393,7 +349,7 @@ const DashboardPage: React.FC = () => {
                   <div className="flex flex-col lg:flex-row lg:items-center gap-3">
                     <InlineEdit
                       value={profession}
-                      onSave={setProfession}
+                      onSave={(val) => { setProfession(val); autoSaveProfile({ profession: val }); }}
                       as="textarea"
                       className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight"
                       placeholder="Your Profession"
@@ -403,7 +359,7 @@ const DashboardPage: React.FC = () => {
                       <span>devbio.co/</span>
                       <InlineEdit
                         value={username}
-                        onSave={setUsername}
+                        onSave={(val) => { setUsername(val); autoSaveProfile({ username: val }); }}
                         className="text-white hover:text-blue-400 transition-colors"
                         placeholder="username"
                       />
@@ -414,7 +370,7 @@ const DashboardPage: React.FC = () => {
                 <div className="max-w-2xl mx-auto lg:mx-0">
                   <InlineEdit
                     value={bio}
-                    onSave={setBio}
+                    onSave={(val) => { setBio(val); autoSaveProfile({ bio: val }); }}
                     as="textarea"
                     className="text-base md:text-xl text-white/50 leading-relaxed font-light"
                     placeholder="Add a high-impact headline/bio..."
@@ -515,40 +471,23 @@ const DashboardPage: React.FC = () => {
                 </div>
               </div>
               <div className="relative group/about-edit">
-                {!aboutMe ? (
-                  <div
-                    onClick={() => { }} // InlineEdit parent handles the click
-                    className="py-10 border border-dashed border-white/10 rounded-3xl flex items-center justify-center cursor-pointer hover:bg-white/[0.02] transition-colors"
-                  >
-                    <p className="text-white/10 text-xs font-black uppercase tracking-[0.2em]">Tell your story here...</p>
-                  </div>
-                ) : null}
-                <div className={!aboutMe ? 'hidden' : 'block'}>
-                  <InlineEdit
-                    value={aboutMe}
-                    onSave={setAboutMe}
-                    as="textarea"
-                    className="text-sm text-white/40 leading-relaxed font-light min-h-[120px]"
-                    placeholder="Tell your story here..."
-                  />
-                </div>
-                {!aboutMe && (
-                  <div className="absolute inset-0 opacity-0">
-                    <InlineEdit
-                      value={aboutMe}
-                      onSave={setAboutMe}
-                      as="textarea"
-                      className="w-full h-full"
-                      placeholder="Tell your story here..."
-                    />
-                  </div>
-                )}
+                <InlineEdit
+                  value={aboutMe}
+                  onSave={(val) => { setAboutMe(val); autoSaveProfile({ about_me: val }); }}
+                  as="textarea"
+                  className={`text-sm text-white/40 leading-relaxed font-light min-h-[120px] p-4 rounded-3xl transition-all ${!aboutMe ? 'border border-dashed border-white/10 hover:bg-white/[0.02] flex items-center justify-center text-center' : ''}`}
+                  placeholder="Tell your story here..."
+                />
               </div>
             </div>
 
             {/* Status Card */}
             <div
-              onClick={() => setIsAvailable(!isAvailable)}
+              onClick={() => {
+                const newVal = !isAvailable;
+                setIsAvailable(newVal);
+                autoSaveProfile({ is_available: newVal });
+              }}
               className="glass-card rounded-[1.5rem] p-8 border-white/5 flex items-center justify-between group cursor-pointer hover:border-blue-500/30 transition-all active:scale-[0.98]"
             >
               <div className="flex flex-col">
