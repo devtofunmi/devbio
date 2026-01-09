@@ -4,7 +4,6 @@ import { GetServerSideProps } from "next";
 import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
-import { BackgroundBeams } from "../components/BackgroundBeams";
 import GitHubCard from "../components/GitHubCard";
 import Link from "next/link";
 
@@ -112,9 +111,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   const currentThemeBg = THEME_CONFIG[user.theme || 'onyx'] || 'bg-black';
 
   return (
-    <div className={`min-h-screen ${currentThemeBg} text-white selection:bg-blue-500/30 transition-colors duration-700`}>
-      {user.beams_enabled !== false && <BackgroundBeams />}
-
+    <div className={`relative min-h-screen ${currentThemeBg} text-white selection:bg-blue-500/30 transition-colors duration-700`}>
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-16">
         {/* Hero Section: Profile Identity */}
         <div className="mb-10 md:mb-16">

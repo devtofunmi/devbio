@@ -9,7 +9,6 @@ import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import SocialModal from "../../components/dashboard/edit/SocialModal";
 import {
   FaPlus,
-  FaSave,
   FaTwitter,
   FaGithub,
   FaLinkedin,
@@ -55,31 +54,57 @@ const ALL_TECHS = [
   { name: 'Rust', icon: <SiRust /> },
 ];
 
-const SOCIAL_ICONS: Record<string, React.ReactNode> = {
-  'Twitter': <FaTwitter />,
-  'GitHub': <FaGithub />,
-  'LinkedIn': <FaLinkedin />,
-  'YouTube': <FaYoutube />,
+const THEME_CONFIG: Record<string, string> = {
+  'onyx': 'bg-black',
+  'ghost': 'bg-[#080808]',
+  'midnight': 'bg-[#020617]',
+  'forest': 'bg-[#051f1b]',
+  'dracula': 'bg-[#130912]',
+  'cobalt': 'bg-[#040a1d]',
+  'carbon': 'bg-[#141414]',
+  'nord': 'bg-[#1a202c]',
+  'ember': 'bg-[#17110e]',
+  'dim': 'bg-[#15151a]',
+  'alabaster': 'bg-[#1e293b]',
 };
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Data States (initialized with defaults or empty)
+  // Data States
   const [profileId, setProfileId] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [profession, setProfession] = useState("");
-  const [bio, setBio] = useState(""); // Hero Bio
-  const [aboutMe, setAboutMe] = useState(""); // About Me Card
+  const [bio, setBio] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
   const [username, setUsername] = useState("");
   const [githubUsername, setGithubUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(true);
+  const [theme, setTheme] = useState('onyx');
+
 
   // Loading State
   const [fetching, setFetching] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  // Content States
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [techStack, setTechStack] = useState<Tech[]>([]);
+  const [socials, setSocials] = useState([
+    { name: 'Twitter', icon: <FaTwitter />, href: '' },
+    { name: 'GitHub', icon: <FaGithub />, href: '' },
+    { name: 'LinkedIn', icon: <FaLinkedin />, href: '' },
+    { name: 'YouTube', icon: <FaYoutube />, href: '' },
+  ]);
+
+  // Modal States
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const [techModalOpen, setTechModalOpen] = useState(false);
+  const [githubModalOpen, setGithubModalOpen] = useState(false);
+  const [socialModalOpen, setSocialModalOpen] = useState(false);
+  const [techSearch, setTechSearch] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -87,7 +112,6 @@ const DashboardPage: React.FC = () => {
     const fetchData = async () => {
       setFetching(true);
       try {
-        // Fetch Profile
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('*')
@@ -106,6 +130,7 @@ const DashboardPage: React.FC = () => {
           setGithubUsername(profile.github_username || "");
           setAvatarUrl(profile.avatar_url || "");
           setIsAvailable(profile.is_available ?? true);
+          setTheme(profile.theme || 'onyx');
 
           if (profile.tech_stack) {
             const dbTechs = profile.tech_stack as any[];
@@ -125,24 +150,16 @@ const DashboardPage: React.FC = () => {
           }
         }
 
-        // Fetch Projects
         const { data: userProjects, error: projectsError } = await supabase
           .from('projects')
           .select('*')
           .eq('user_id', user.id);
 
         if (projectsError) throw projectsError;
-
         if (userProjects) {
-          setProjects(userProjects.map(p => ({
-            ...p,
-            tech: p.tech_tags || [],
-            image: p.image_url
-          })));
+          setProjects(userProjects.map(p => ({ ...p, tech: p.tech_tags || [], image: p.image_url })));
         }
-
       } catch (error: any) {
-        console.error('Error fetching data:', error.message);
         toast.error('Failed to load profile data.');
       } finally {
         setFetching(false);
@@ -152,7 +169,6 @@ const DashboardPage: React.FC = () => {
     fetchData();
   }, [user]);
 
-  // Auto-save function for profile fields
   const autoSaveProfile = async (updates: any) => {
     if (!user) return;
     setSaving(true);
@@ -164,36 +180,11 @@ const DashboardPage: React.FC = () => {
       });
       if (error) throw error;
     } catch (err) {
-      console.error("Auto-save failed", err);
       toast.error("Cloud sync failed");
     } finally {
-      setTimeout(() => setSaving(false), 500); // Small delay for visual feedback
+      setTimeout(() => setSaving(false), 500);
     }
   };
-
-
-  // Modal States
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
-  const [techModalOpen, setTechModalOpen] = useState(false);
-  const [githubModalOpen, setGithubModalOpen] = useState(false);
-  const [socialModalOpen, setSocialModalOpen] = useState(false);
-
-  // Data States
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  const [techStack, setTechStack] = useState<Tech[]>([]);
-
-  // Initialized as empty strings so they don't show unless added
-  const [socials, setSocials] = useState([
-    { name: 'Twitter', icon: <FaTwitter />, href: '' },
-    { name: 'GitHub', icon: <FaGithub />, href: '' },
-    { name: 'LinkedIn', icon: <FaLinkedin />, href: '' },
-    { name: 'YouTube', icon: <FaYoutube />, href: '' },
-  ]);
-
-  const [techSearch, setTechSearch] = useState("");
-
-
 
   const filteredTechs = useMemo(() => {
     return ALL_TECHS.filter(t => t.name.toLowerCase().includes(techSearch.toLowerCase()));
@@ -214,58 +205,42 @@ const DashboardPage: React.FC = () => {
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && user) {
-      // Optimistic Update
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarUrl(reader.result as string);
-      };
+      reader.onloadend = () => setAvatarUrl(reader.result as string);
       reader.readAsDataURL(file);
 
-      // Upload to Supabase
       try {
         const fileExt = file.name.split('.').pop();
         const fileName = `${user.id}-${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('images')
-          .upload(filePath, file);
-
+        const { error: uploadError } = await supabase.storage.from('images').upload(fileName, file);
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('images')
-          .getPublicUrl(filePath);
-
+        const { data: { publicUrl } } = supabase.storage.from('images').getPublicUrl(fileName);
         setAvatarUrl(publicUrl);
-        // Auto-save the new avatar URL to profile immediately
         await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
         toast.success('Avatar updated!');
       } catch (error: any) {
         toast.error('Error uploading image');
-        console.error(error);
       }
     }
   };
 
+  if (fetching) return <div className="min-h-screen bg-black flex items-center justify-center"><div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" /></div>;
+
+  const isLight = false;
+
   return (
     <DashboardLayout>
-      <div className="relative pt-12">
-        {/* Global HIDDEN File Input */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-          className="hidden"
-          accept="image/*"
-        />
+      <div className={`relative pt-12 min-h-screen ${THEME_CONFIG[theme] || 'bg-black'} text-white transition-colors duration-700 pb-20`}>
 
-        {/* Floating Top Bar - Tool Style */}
+        <input type="file" ref={fileInputRef} onChange={handleImageChange} className="hidden" accept="image/*" />
+
+        {/* Floating Top Bar */}
         <div className="fixed top-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-12 z-[100] w-[92%] md:w-auto">
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="glass backdrop-blur-xl bg-black/60 p-2 rounded-[2rem] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center justify-between md:justify-start gap-2 w-full md:w-auto"
+            className="glass backdrop-blur-xl bg-black/60 p-2 rounded-[2rem] border-white/10 flex items-center justify-between md:justify-start gap-2 w-full md:w-auto"
           >
             <div className={`flex items-center gap-2 px-4 md:px-6 py-3 border-r border-white/10 pr-4 md:pr-6 shrink-0 ${saving ? 'opacity-100' : 'opacity-50'}`}>
               <div className={`w-2 h-2 rounded-full ${saving ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`} />
@@ -278,315 +253,178 @@ const DashboardPage: React.FC = () => {
                   <FaPalette size={16} />
                 </button>
               </Link>
-              <button
-                onClick={() => setSocialModalOpen(true)}
-                className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5"
-                title="Share & Socials"
-              >
+              <button onClick={() => setSocialModalOpen(true)} className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Share & Socials">
                 <FaShareAlt size={16} />
               </button>
             </div>
-
-
           </motion.div>
         </div>
 
-        {/* Hero Section: Profile Identity */}
-        <div className="mb-10 md:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-white/5"
-          >
-            {/* High-End Background Effect */}
-            <div className="absolute inset-0 z-0 text-center">
-              <Image
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80"
-                alt="Cover"
-                fill
-                className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[2s] opacity-40 blur-sm"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent" />
-
-              {/* Ambient Glows */}
-              <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-500/10 blur-[150px] rounded-full" />
-              <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-purple-500/10 blur-[120px] rounded-full" />
-            </div>
-
-            <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
-              {/* Avatar Container */}
-              <div className="relative group/avatar shrink-0">
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 shadow-2xl relative cursor-pointer"
-                >
-                  <Image
-                    src={avatarUrl}
-                    alt="Avatar"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
-                    <FaCamera className="text-white text-3xl mb-2" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white">Upload Brand</span>
-                  </div>
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl border-4 border-black">
-                  <FaMagic size={18} className="animate-pulse" />
-                </div>
+        {/* Main Content Area */}
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-10 md:mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border ${isLight ? 'border-slate-300' : 'border-white/5'}`}
+            >
+              <div className="absolute inset-0 z-0">
+                <Image
+                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80"
+                  alt="Profile Aura"
+                  fill
+                  className="object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s] opacity-20 blur-sm"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
               </div>
 
-              {/* Info Section */}
-              <div className="flex-1 space-y-6 w-full overflow-hidden">
-                <div className="flex flex-col gap-2">
-                  <InlineEdit
-                    value={name}
-                    onSave={(val) => { setName(val); autoSaveProfile({ full_name: val }); }}
-                    as="textarea"
-                    className="text-4xl md:text-7xl font-black tracking-tighter text-white block leading-[1.1]"
-                    placeholder="Your Name"
-                  />
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+              <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
+                <div className="relative group/avatar shrink-0">
+                  <div onClick={() => fileInputRef.current?.click()} className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 ${isLight ? 'border-slate-300' : 'border-white/10'} relative cursor-pointer`}>
+                    <Image src={avatarUrl || "https://avatars.githubusercontent.com/u/1?v=4"} alt="Avatar" fill className="object-cover" />
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
+                      <FaCamera className="text-white text-3xl mb-2" />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-white">Upload Brand</span>
+                    </div>
+                  </div>
+                  <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white border-4 border-black">
+                    <FaMagic size={18} className="animate-pulse" />
+                  </div>
+                </div>
+
+                <div className="flex-1 space-y-6 w-full overflow-hidden">
+                  <div className="flex flex-col gap-2">
                     <InlineEdit
-                      value={profession}
-                      onSave={(val) => { setProfession(val); autoSaveProfile({ profession: val }); }}
-                      as="textarea"
-                      className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight"
-                      placeholder="Your Profession"
+                      value={name}
+                      onSave={(val) => { setName(val); autoSaveProfile({ full_name: val }); }}
+                      className="text-4xl md:text-7xl font-black tracking-tighter text-white block leading-[1.1]"
+                      placeholder="Your Name"
                     />
-                    <span className="hidden lg:block w-1.5 h-1.5 rounded-full bg-white/20" />
-                    <div className="flex items-center justify-center lg:justify-start gap-1.5 text-white/40 font-mono text-xs md:text-sm">
-                      <span>devbio.co/</span>
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-3">
                       <InlineEdit
-                        value={username}
-                        onSave={(val) => { setUsername(val); autoSaveProfile({ username: val }); }}
-                        className="text-white hover:text-blue-400 transition-colors"
-                        placeholder="username"
+                        value={profession}
+                        onSave={(val) => { setProfession(val); autoSaveProfile({ profession: val }); }}
+                        className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight"
+                        placeholder="Your Profession"
                       />
+                      <span className="hidden lg:block w-1.5 h-1.5 rounded-full bg-white/20" />
+                      <div className="flex items-center justify-center lg:justify-start gap-1.5 text-white/40 font-mono text-xs md:text-sm">
+                        <span>devbio.co/</span>
+                        <InlineEdit
+                          value={username}
+                          onSave={(val) => { setUsername(val); autoSaveProfile({ username: val }); }}
+                          className={`text-white hover:text-blue-400 transition-colors ${isLight ? 'text-slate-900' : ''}`}
+                          placeholder="username"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="max-w-2xl mx-auto lg:mx-0">
-                  <InlineEdit
-                    value={bio}
-                    onSave={(val) => { setBio(val); autoSaveProfile({ bio: val }); }}
-                    as="textarea"
-                    className="text-base md:text-xl text-white/50 leading-relaxed font-light"
-                    placeholder="Add a high-impact headline/bio..."
-                  />
-                </div>
+                  <div className="max-w-2xl mx-auto lg:mx-0">
+                    <InlineEdit
+                      value={bio}
+                      onSave={(val) => { setBio(val); autoSaveProfile({ bio: val }); }}
+                      as="textarea"
+                      className={`text-base md:text-xl ${isLight ? 'text-slate-900/50' : 'text-white/50'} leading-relaxed font-light`}
+                      placeholder="Add a high-impact headline/bio..."
+                    />
+                  </div>
 
-                {/* Social Links - Filtered to only show if added */}
-                <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
-                  {socials.filter(s => s.href).map((social, i) => (
-                    <div key={i} className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {React.cloneElement(social.icon as any, { size: 20, className: "text-white/40 group-hover:text-blue-400 transition-colors" })}
-                    </div>
+                  <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
+                    {socials.filter(s => s.href).map((social, i) => (
+                      <div key={i} className={`glass rounded-2xl p-4 flex items-center justify-center border ${isLight ? 'border-slate-300' : 'border-white/5'} hover:border-blue-500/30 transition-all cursor-pointer group`}>
+                        {React.cloneElement(social.icon as any, { size: 20, className: `${isLight ? 'text-black/40' : 'text-white/40'} group-hover:text-blue-400 transition-colors` })}
+                      </div>
+                    ))}
+                    <button onClick={() => setSocialModalOpen(true)} className={`glass rounded-2xl px-6 py-4 flex items-center justify-center gap-2 border-dashed ${isLight ? 'border-black/10 text-black/20 hover:text-black' : 'border-white/10 text-white/20 hover:text-white'} transition-all`}>
+                      <FaPlus size={12} />
+                      <span className="text-[10px] font-black uppercase tracking-widest">Connect Identity</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-8 flex flex-col gap-8">
+              <div className={`glass-card rounded-[2rem] border ${isLight ? 'border-slate-300' : 'border-white/5'} overflow-hidden group h-fit flex items-center justify-center relative`}>
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-20 flex items-center justify-center backdrop-blur-[2px]">
+                  <button onClick={() => setGithubModalOpen(true)} className="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:scale-110 transition-all">Sync GitHub DNA</button>
+                </div>
+                <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
+                  <GithubCard githubUsername={githubUsername} size={48} />
+                </div>
+              </div>
+
+              <div className={`glass-card rounded-[2rem] p-10 border ${isLight ? 'border-slate-300' : 'border-white/5'} group`}>
+                <div className="flex justify-between items-center mb-8">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400"><FaCode size={18} /></div>
+                    <h4 className={`text-2xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight leading-none`}>Tech Stack</h4>
+                  </div>
+                  <button onClick={() => setTechModalOpen(true)} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-white/20 hover:text-white transition-all"><FaPlus size={14} /></button>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {techStack.map(tech => (
+                    <span key={tech.name} className={`px-6 py-3 glass rounded-2xl text-sm font-bold ${isLight ? 'text-black/40' : 'text-white/40'} hover:text-blue-400 ${isLight ? 'border-black/5' : 'border-white/5'} cursor-pointer transition-all hover:scale-110`}>{tech.name}</span>
                   ))}
-                  <button
-                    onClick={() => setSocialModalOpen(true)}
-                    className={`glass rounded-2xl flex items-center justify-center gap-2 border-dashed border-white/10 hover:border-white/30 transition-all text-white/20 hover:text-white ${socials.filter(s => s.href).length === 0 ? 'px-8 py-4 bg-white/5 border-white/20 text-white/40' : 'px-6 py-4'}`}
-                  >
-                    <FaPlus size={12} />
-                    <span className="text-[10px] font-black uppercase tracking-widest">{socials.filter(s => s.href).length === 0 ? 'Connect Your Identity' : 'Add More'}</span>
-                  </button>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        </div>
+            </motion.div>
 
-        {/* Bento Grid: Main Dashboard */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
-
-          {/* Left Column: GitHub & Tech Stack */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-8 flex flex-col gap-8"
-          >
-            {/* GitHub Insights */}
-            <div className="glass-card rounded-[2rem] border-white/5 shadow-2xl overflow-hidden group h-fit flex items-center justify-center relative">
-              {/* Hover Edit Action */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-20 flex items-center justify-center backdrop-blur-[2px]">
-                <button
-                  onClick={() => setGithubModalOpen(true)}
-                  className="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:scale-110 active:scale-95 transition-all shadow-2xl"
-                >
-                  Sync GitHub DNA
-                </button>
-              </div>
-              <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
-                <GithubCard githubUsername={githubUsername} size={48} onDelete={() => { }} />
-              </div>
-            </div>
-
-            {/* Tech Stack Chips */}
-            <div className="glass-card rounded-[2rem] p-10 border-white/5 group">
-              <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400">
-                    <FaCode size={18} />
-                  </div>
-                  <h4 className="text-2xl font-black text-white tracking-tight leading-none">Tech Stack</h4>
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="md:col-span-4 space-y-8">
+              <div className={`glass-card rounded-[2rem] p-10 border ${isLight ? 'border-slate-300' : 'border-white/5'} group bg-white/[0.01]`}>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400"><FaInfoCircle size={18} /></div>
+                  <h4 className={`text-xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight`}>About Me</h4>
                 </div>
-                <button
-                  onClick={() => setTechModalOpen(true)}
-                  className="w-10 h-10 rounded-xl glass flex items-center justify-center text-white/20 hover:text-white transition-all active:scale-90"
-                >
-                  <FaPlus size={14} />
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {techStack.map((tech) => (
-                  <span key={tech.name} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
-                    {tech.name}
-                  </span>
-                ))}
-                {techStack.length === 0 && (
-                  <p className="text-white/10 text-xs font-medium uppercase tracking-widest py-4">No stack selected</p>
-                )}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Column: About & Status */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-4 space-y-8"
-          >
-            {/* About Me Card */}
-            <div className="glass-card rounded-[2rem] p-10 border-white/5 group bg-white/[0.01]">
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400">
-                    <FaInfoCircle size={18} />
-                  </div>
-                  <h4 className="text-xl font-black text-white tracking-tight">About Me</h4>
-                </div>
-              </div>
-              <div className="relative group/about-edit">
                 <InlineEdit
                   value={aboutMe}
                   onSave={(val) => { setAboutMe(val); autoSaveProfile({ about_me: val }); }}
                   as="textarea"
-                  className={`text-sm text-white/40 leading-relaxed font-light min-h-[120px] p-4 rounded-3xl transition-all ${!aboutMe ? 'border border-dashed border-white/10 hover:bg-white/[0.02] flex items-center justify-center text-center' : ''}`}
-                  placeholder="Tell your story here..."
+                  className={`text-sm ${isLight ? 'text-black/40' : 'text-white/40'} leading-relaxed font-light min-h-[120px]`}
+                  placeholder="Tell your story..."
                 />
               </div>
-            </div>
 
-            {/* Status Card */}
-            <div
-              onClick={() => {
-                const newVal = !isAvailable;
-                setIsAvailable(newVal);
-                autoSaveProfile({ is_available: newVal });
-              }}
-              className="glass-card rounded-[1.5rem] p-8 border-white/5 flex items-center justify-between group cursor-pointer hover:border-blue-500/30 transition-all active:scale-[0.98]"
-            >
-              <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
-                <span className="text-sm font-black flex items-center gap-3 text-white">
-                  <span className={`w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]' : 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]'} ${isAvailable ? 'animate-pulse' : ''}`} />
-                  {isAvailable ? 'Available for hire' : 'Focusing on projects'}
-                </span>
-              </div>
-              <div className="w-10 h-10 glass rounded-2xl flex items-center justify-center text-white/20 group-hover:text-blue-400 group-hover:scale-110 transition-all">
+              <div onClick={() => { const v = !isAvailable; setIsAvailable(v); autoSaveProfile({ is_available: v }); }} className={`glass-card rounded-[1.5rem] p-8 border ${isLight ? 'border-slate-300' : 'border-white/5'} flex items-center justify-between group cursor-pointer hover:border-blue-500/30 transition-all`}>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Status</span>
+                  <span className={`text-sm font-black flex items-center gap-3 ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                    <span className={`w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'} ${isAvailable ? 'animate-pulse' : ''}`} />
+                    {isAvailable ? 'Available' : 'Focused'}
+                  </span>
+                </div>
                 <div className={`w-10 h-5 rounded-full relative transition-colors ${isAvailable ? 'bg-blue-600' : 'bg-white/10'}`}>
                   <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${isAvailable ? 'left-[22px]' : 'left-1'}`} />
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Projects Showcase - Full Width */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-12"
-          >
-            <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
-              <div className="text-center md:text-left">
-                <h3 className="text-4xl font-black text-white tracking-tighter mb-2">Featured Projects</h3>
-                <p className="text-white/30 font-light">Showcase your best builds to the world.</p>
-              </div>
-              <button
-                onClick={() => setProjectModalOpen(true)}
-                className="w-fit md:w-auto bg-white text-black px-8 py-4 rounded-3xl font-black flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5"
-              >
-                <FaPlus size={14} /> <span>New Project</span>
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
-              {projects.length > 0 ? (
-                projects.map((project, i) => (
-                  <div key={i} className="glass-card rounded-[2rem] p-6 border-white/5 group hover:border-blue-500/30 transition-all text-left">
-                    <div className="flex justify-between items-start mb-6">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg">
-                        <Image
-                          src={project.image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="flex gap-2">
-                        <Link href={project.url} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
-                          <FaExternalLinkAlt size={14} />
-                        </Link>
-                        <button
-                          onClick={() => setProjectModalOpen(true)}
-                          className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10"
-                        >
-                          <FaPlus size={14} className="rotate-45" /> {/* Edit/Close icon concept, using Plus rotated looks like close or edit... actually let's just use text 'Edit' or similar, but icon is better. Let's use FaPalette or Edit icon if available, or just make the whole card clickable for edit? The user might want explicit edit button. Restoring 'Edit Details ->' at bottom might be cleaner but let's stick to the profile design which has top right action. I'll add an edit button next to external link. */}
-                        </button>
-                      </div>
-                    </div>
-
-                    <h4 className="text-xl font-bold text-white mb-2 tracking-tight">{project.title}</h4>
-                    <p className="text-white/40 font-light mb-6 text-sm leading-relaxed min-h-[40px] line-clamp-2">{project.description}</p>
-
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {project.tech.map(t => (
-                        <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg border border-white/5">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="mt-6 pt-4 border-t border-white/5 flex justify-end">
-                      <button
-                        onClick={() => setProjectModalOpen(true)}
-                        className="text-[10px] font-black uppercase tracking-widest text-white/20 hover:text-white transition-colors"
-                      >
-                        Edit Details →
-                      </button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div
-                  onClick={() => setProjectModalOpen(true)}
-                  className="md:col-span-12 py-24 glass rounded-[2.5rem] border border-dashed border-white/10 flex flex-col items-center justify-center gap-6 group cursor-pointer hover:bg-white/[0.02] transition-all"
-                >
-                  <div className="w-20 h-20 glass rounded-[2rem] flex items-center justify-center text-white/10 group-hover:text-blue-500 group-hover:scale-110 transition-all">
-                    <FaPlus size={30} />
-                  </div>
-                  <div className="text-center">
-                    <h4 className="text-xl font-black text-white/40 uppercase tracking-widest mb-1">No Projects Found</h4>
-                    <p className="text-sm text-white/20 font-medium">Click here to showcase your first build</p>
-                  </div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-12">
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
+                <div className="text-center md:text-left">
+                  <h3 className={`text-4xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tighter mb-2`}>Featured Projects</h3>
+                  <p className="text-white/30 font-light">Showcase your best builds.</p>
                 </div>
-              )}
-            </div>
-          </motion.div>
+                <button onClick={() => setProjectModalOpen(true)} className="bg-white text-black px-8 py-4 rounded-3xl font-black flex items-center gap-3 hover:scale-105 transition-all whitespace-nowrap"><FaPlus size={14} /> <span>New Project</span></button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((p, i) => (
+                  <div key={i} className={`glass-card rounded-[2rem] p-6 border ${isLight ? 'border-slate-300' : 'border-white/5'} group hover:border-blue-500/30 transition-all`}>
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5"><Image src={p.image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"} alt={p.title} fill className="object-cover" /></div>
+                      <Link href={p.url} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors"><FaExternalLinkAlt size={14} /></Link>
+                    </div>
+                    <h4 className={`text-xl font-bold ${isLight ? 'text-slate-900' : 'text-white'} mb-2 tracking-tight`}>{p.title}</h4>
+                    <p className={`${isLight ? 'text-black/40' : 'text-white/40'} font-light mb-6 text-sm leading-relaxed line-clamp-2`}>{p.description}</p>
+                    <div className="flex flex-wrap gap-2">{p.tech.map(t => <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg">{t}</span>)}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
@@ -595,10 +433,7 @@ const DashboardPage: React.FC = () => {
           <ProjectModal
             projects={projects}
             onClose={() => setProjectModalOpen(false)}
-            onSave={(newProjects) => {
-              setProjects(newProjects);
-              setProjectModalOpen(false);
-            }}
+            onSave={(newProjects) => { setProjects(newProjects); setProjectModalOpen(false); }}
           />
         )}
         {techModalOpen && (

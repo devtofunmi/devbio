@@ -22,7 +22,7 @@ const themes = [
 const ThemeSettings = () => {
     const { user } = useAuth();
     const [selectedTheme, setSelectedTheme] = useState('onyx');
-    const [beamsEnabled, setBeamsEnabled] = useState(true);
+    // const [beamsEnabled, setBeamsEnabled] = useState(true); // Removed
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const ThemeSettings = () => {
 
             if (data && !error) {
                 if (data.theme) setSelectedTheme(data.theme);
-                if (data.beams_enabled !== null) setBeamsEnabled(data.beams_enabled);
+                // if (data.beams_enabled !== null) setBeamsEnabled(data.beams_enabled); // Removed
             }
         };
 
@@ -69,6 +69,7 @@ const ThemeSettings = () => {
         autoSaveSettings({ theme: themeId });
     };
 
+    /* // Removed toggleBeams
     const toggleBeams = () => {
         const newState = !beamsEnabled;
         setBeamsEnabled(newState);
@@ -76,6 +77,7 @@ const ThemeSettings = () => {
         // Still dispatch event for local parity if needed
         window.dispatchEvent(new Event('background-beams-toggle'));
     };
+    */
 
     return (
         <section className="mb-20 md:mb-0 relative">
@@ -134,20 +136,7 @@ const ThemeSettings = () => {
                 ))}
             </div>
 
-            <div className="mt-16 p-8 glass rounded-[2rem] border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer" onClick={toggleBeams}>
-                <div>
-                    <h4 className="text-lg font-bold text-white tracking-tight">Custom Background Beams</h4>
-                    <p className="text-white/30 text-sm font-light">Toggle animated mesh gradients for maximum impact.</p>
-                </div>
-                <div
-                    className={`w-14 h-8 rounded-full flex items-center p-1 transition-all duration-300 ${beamsEnabled ? 'bg-blue-500' : 'bg-white/10'}`}
-                >
-                    <motion.div
-                        animate={{ x: beamsEnabled ? 24 : 0 }}
-                        className="w-6 h-6 bg-white rounded-full"
-                    />
-                </div>
-            </div>
+            {/* Beams toggle removed */}
         </section>
     )
 }

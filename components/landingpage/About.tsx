@@ -1,13 +1,10 @@
 import React from 'react';
 import { FaGithub, FaTwitter, FaArrowRight } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { BackgroundBeams } from '../BackgroundBeams';
 
 const About = () => {
     return (
-        <div className="bg-black min-h-screen relative overflow-hidden">
-            <BackgroundBeams />
-
+        <section id="about" className="relative py-24 overflow-hidden bg-black">
             <div className="max-w-7xl mx-auto px-6 py-32 relative z-10">
                 {/* Hero Section */}
                 <div className="flex flex-col lg:flex-row gap-16 items-center mb-32">
@@ -99,7 +96,7 @@ const About = () => {
                     </motion.div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
 

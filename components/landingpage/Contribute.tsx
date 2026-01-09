@@ -1,7 +1,6 @@
 import React from 'react';
 import { FaCode, FaUsers, FaGavel, FaBug, FaLightbulb } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { BackgroundBeams } from '../BackgroundBeams';
 
 interface ContributionCardProps {
     icon: React.ElementType;
@@ -35,9 +34,7 @@ const ContributionCard: React.FC<ContributionCardProps> = ({ icon: Icon, title, 
 
 const Contribute: React.FC = () => {
     return (
-        <div className="bg-black min-h-screen relative overflow-hidden">
-            <BackgroundBeams />
-
+        <section id="contribute" className="relative py-24 overflow-hidden bg-black min-h-screen">
             <div className="max-w-7xl mx-auto px-6 py-32 relative z-10">
                 <div className="text-center mb-24">
                     <motion.h1
@@ -97,7 +94,7 @@ const Contribute: React.FC = () => {
                     />
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 
