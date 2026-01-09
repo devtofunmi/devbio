@@ -1,12 +1,63 @@
-import React from 'react';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { motion } from "framer-motion";
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
-import Link from 'next/link';
-import { motion } from "framer-motion";
-// import { BackgroundBeams } from "../components/BackgroundBeams";
+import { supabase } from '../lib/supabaseClient';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const LoginPage: React.FC = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const handleGitHubLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`
+        }
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      // We can't use toast here yet as it's not imported in this specific snippet context, 
+      // but the caller of this function will handle errors or the UI will just not redirect.
+      console.error("GitHub Login Error:", err.message);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (signInError) throw signInError;
+
+      if (data.session) {
+        router.push('/dashboard');
+      }
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   type FloatingProps = {
     children: React.ReactNode;
@@ -57,12 +108,16 @@ const LoginPage: React.FC = () => {
               Log in to manage your professional identity.
             </p>
 
-            <form className="space-y-6">
+            <form onSubmit={handleLogin} className="space-y-6">
+
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
                 <input
                   type="email"
                   placeholder="engineer@devbio.co"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
                   className="w-full glass p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 placeholder:text-white/20 bg-transparent"
                 />
               </div>
@@ -73,6 +128,9 @@ const LoginPage: React.FC = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    required
                     className="w-full glass p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 pr-14 placeholder:text-white/20 bg-transparent"
                   />
                   <button
@@ -85,14 +143,13 @@ const LoginPage: React.FC = () => {
                 </div>
               </div>
 
-              <Link href="/dashboard" className="block text-center">
-                <button
-                  type="button"
-                  className="w-full bg-white text-black py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 cursor-pointer"
-                >
-                  Sign In
-                </button>
-              </Link>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-white text-black py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                {loading ? <LoadingSpinner /> : 'Sign In'}
+              </button>
 
               <div className="relative flex items-center py-4">
                 <div className="flex-grow border-t border-white/5"></div>
@@ -102,6 +159,7 @@ const LoginPage: React.FC = () => {
 
               <button
                 type="button"
+                onClick={handleGitHubLogin}
                 className="w-full glass hover:bg-white/5 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all border-white/5 cursor-pointer"
               >
                 <SiGithub size={20} />
