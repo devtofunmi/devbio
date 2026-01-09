@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import { motion, AnimatePresence } from "framer-motion";
 import InlineEdit from "../../components/dashboard/edit/InlineEdit";
@@ -24,6 +24,9 @@ import {
   FaCamera,
   FaCode
 } from "react-icons/fa";
+import { supabase } from '../../lib/supabaseClient';
+import { useAuth } from '../../lib/AuthContext';
+import { toast } from 'react-toastify';
 import { SiNextdotjs, SiTailwindcss, SiTypescript, SiGraphql, SiSwift, SiRust } from "react-icons/si";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -52,15 +55,147 @@ const ALL_TECHS = [
   { name: 'Rust', icon: <SiRust /> },
 ];
 
+const SOCIAL_ICONS: Record<string, React.ReactNode> = {
+  'Twitter': <FaTwitter />,
+  'GitHub': <FaGithub />,
+  'LinkedIn': <FaLinkedin />,
+  'YouTube': <FaYoutube />,
+};
+
 const DashboardPage: React.FC = () => {
-  const [name, setName] = useState("Jay");
-  const [profession, setProfession] = useState("Fullstack Engineer");
-  const [description, setDescription] = useState("Building digital products, brands, and experiences. Focus on React, Node, and everything in between.");
-  const [username, setUsername] = useState("jay");
-  const [githubUsername, setGithubUsername] = useState("jay");
-  const [avatarUrl, setAvatarUrl] = useState("https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg");
-  const [isAvailable, setIsAvailable] = useState(true);
+  const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Data States (initialized with defaults or empty)
+  const [profileId, setProfileId] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [profession, setProfession] = useState("");
+  const [bio, setBio] = useState(""); // Hero Bio
+  const [aboutMe, setAboutMe] = useState(""); // About Me Card
+  const [username, setUsername] = useState("");
+  const [githubUsername, setGithubUsername] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [isAvailable, setIsAvailable] = useState(true);
+
+  // Loading State
+  const [fetching, setFetching] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchData = async () => {
+      setFetching(true);
+      try {
+        // Fetch Profile
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        if (profile) {
+          setProfileId(profile.id);
+          setName(profile.full_name || "");
+          setProfession(profile.profession || "");
+          setBio(profile.bio || "");
+          setAboutMe(profile.about_me || "");
+          setUsername(profile.username || "");
+          setGithubUsername(profile.github_username || "");
+          setAvatarUrl(profile.avatar_url || "");
+          setIsAvailable(profile.is_available ?? true);
+
+          if (profile.tech_stack) {
+            const dbTechs = profile.tech_stack as any[];
+            const rehydrated = dbTechs.map(t => {
+              const matched = ALL_TECHS.find(at => at.name === t.name);
+              return matched ? matched : t;
+            });
+            setTechStack(rehydrated);
+          }
+
+          if (profile.social_links) {
+            const dbSocials = profile.social_links as any[];
+            setSocials(prev => prev.map(s => {
+              const dbMatch = dbSocials.find(dbs => dbs.name === s.name);
+              return dbMatch ? { ...s, href: dbMatch.href } : s;
+            }));
+          }
+        }
+
+        // Fetch Projects
+        const { data: userProjects, error: projectsError } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('user_id', user.id);
+
+        if (projectsError) throw projectsError;
+
+        if (userProjects) {
+          setProjects(userProjects.map(p => ({
+            ...p,
+            tech: p.tech_tags || [],
+            image: p.image_url
+          })));
+        }
+
+      } catch (error: any) {
+        console.error('Error fetching data:', error.message);
+        toast.error('Failed to load profile data.');
+      } finally {
+        setFetching(false);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  const handleSaveAll = async () => {
+    if (!user) return;
+    setSaving(true);
+    try {
+      // Update Profile
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          full_name: name,
+          profession,
+          bio: bio,
+          about_me: aboutMe,
+          username,
+          github_username: githubUsername,
+          avatar_url: avatarUrl,
+          is_available: isAvailable,
+          social_links: socials.map(s => ({ name: s.name, href: s.href })), // Store only data, not components
+          tech_stack: techStack.map(t => ({ name: t.name })), // Store only data
+          updated_at: new Date().toISOString(),
+        });
+
+      if (profileError) throw profileError;
+      toast.success('Profile updated successfully!');
+    } catch (error: any) {
+      toast.error(`Error saving: ${error.message}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Auto-save function for modals
+  const autoSaveProfile = async (updates: any) => {
+    if (!user) return;
+    try {
+      await supabase.from('profiles').upsert({
+        id: user.id,
+        ...updates,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("Auto-save failed", err);
+    }
+  };
 
   // Modal States
   const [projectModalOpen, setProjectModalOpen] = useState(false);
@@ -113,14 +248,40 @@ const DashboardPage: React.FC = () => {
     setSocials(prev => prev.map(s => s.name === name ? { ...s, href } : s));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (file && user) {
+      // Optimistic Update
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarUrl(reader.result as string);
       };
       reader.readAsDataURL(file);
+
+      // Upload to Supabase
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('images')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('images')
+          .getPublicUrl(filePath);
+
+        setAvatarUrl(publicUrl);
+        // Auto-save the new avatar URL to profile immediately
+        await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
+        toast.success('Avatar updated!');
+      } catch (error: any) {
+        toast.error('Error uploading image');
+        console.error(error);
+      }
     }
   };
 
@@ -143,9 +304,9 @@ const DashboardPage: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             className="glass backdrop-blur-xl bg-black/60 p-2 rounded-[2rem] border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-2"
           >
-            <div className="flex items-center gap-2 px-6 py-3 border-r border-white/10 pr-6">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Live Sync</span>
+            <div className={`flex items-center gap-2 px-6 py-3 border-r border-white/10 pr-6 ${saving ? 'opacity-100' : 'opacity-50'}`}>
+              <div className={`w-2 h-2 rounded-full ${saving ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`} />
+              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">{saving ? 'Syncing...' : 'Live Sync'}</span>
             </div>
 
             <div className="flex items-center gap-1 md:gap-2 px-2">
@@ -163,9 +324,13 @@ const DashboardPage: React.FC = () => {
               </button>
             </div>
 
-            <button className="bg-blue-600 cursor-pointer text-white px-8 py-3 rounded-[1.5rem] font-black text-sm hover:bg-blue-500 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-500/20 flex items-center gap-3">
+            <button
+              onClick={handleSaveAll}
+              disabled={saving}
+              className="bg-blue-600 cursor-pointer text-white px-8 py-3 rounded-[1.5rem] font-black text-sm hover:bg-blue-500 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-blue-500/20 flex items-center gap-3 disabled:opacity-70 disabled:cursor-wait"
+            >
               <FaSave />
-              <span className="hidden md:block">Publish</span>
+              <span className="hidden md:block">{saving ? 'Saving...' : 'Publish'}</span>
             </button>
           </motion.div>
         </div>
@@ -248,11 +413,11 @@ const DashboardPage: React.FC = () => {
 
                 <div className="max-w-2xl mx-auto lg:mx-0">
                   <InlineEdit
-                    value={description}
-                    onSave={setDescription}
+                    value={bio}
+                    onSave={setBio}
                     as="textarea"
                     className="text-base md:text-xl text-white/50 leading-relaxed font-light"
-                    placeholder="Add a high-impact bio..."
+                    placeholder="Add a high-impact headline/bio..."
                   />
                 </div>
 
@@ -350,7 +515,7 @@ const DashboardPage: React.FC = () => {
                 </div>
               </div>
               <div className="relative group/about-edit">
-                {!description ? (
+                {!aboutMe ? (
                   <div
                     onClick={() => { }} // InlineEdit parent handles the click
                     className="py-10 border border-dashed border-white/10 rounded-3xl flex items-center justify-center cursor-pointer hover:bg-white/[0.02] transition-colors"
@@ -358,20 +523,20 @@ const DashboardPage: React.FC = () => {
                     <p className="text-white/10 text-xs font-black uppercase tracking-[0.2em]">Tell your story here...</p>
                   </div>
                 ) : null}
-                <div className={!description ? 'hidden' : 'block'}>
+                <div className={!aboutMe ? 'hidden' : 'block'}>
                   <InlineEdit
-                    value={description}
-                    onSave={setDescription}
+                    value={aboutMe}
+                    onSave={setAboutMe}
                     as="textarea"
                     className="text-sm text-white/40 leading-relaxed font-light min-h-[120px]"
                     placeholder="Tell your story here..."
                   />
                 </div>
-                {!description && (
+                {!aboutMe && (
                   <div className="absolute inset-0 opacity-0">
                     <InlineEdit
-                      value={description}
-                      onSave={setDescription}
+                      value={aboutMe}
+                      onSave={setAboutMe}
                       as="textarea"
                       className="w-full h-full"
                       placeholder="Tell your story here..."
@@ -504,16 +669,24 @@ const DashboardPage: React.FC = () => {
             setTechSearch={setTechSearch}
             filteredTechs={filteredTechs}
             handleTechToggle={handleTechToggle}
-            setTechModalOpen={setTechModalOpen}
+            setTechModalOpen={async (open) => {
+              if (!open) {
+                await autoSaveProfile({ tech_stack: techStack.map(t => ({ name: t.name })) });
+                toast.success("Tech stack updated!");
+              }
+              setTechModalOpen(open as any);
+            }}
           />
         )}
         {githubModalOpen && (
           <GitHubModal
             githubUsername={githubUsername}
             onClose={() => setGithubModalOpen(false)}
-            onSave={(newUsername) => {
+            onSave={async (newUsername) => {
               setGithubUsername(newUsername);
+              await autoSaveProfile({ github_username: newUsername });
               setGithubModalOpen(false);
+              toast.success("GitHub identity synced!");
             }}
           />
         )}
@@ -521,7 +694,13 @@ const DashboardPage: React.FC = () => {
           <SocialModal
             socials={socials}
             handleSocialChange={handleSocialChange}
-            setSocialModalOpen={setSocialModalOpen}
+            setSocialModalOpen={async (open) => {
+              if (!open) {
+                await autoSaveProfile({ social_links: socials.map(s => ({ name: s.name, href: s.href })) });
+                toast.success("Social links updated!");
+              }
+              setSocialModalOpen(open as any);
+            }}
           />
         )}
       </AnimatePresence>
