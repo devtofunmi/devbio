@@ -16,14 +16,89 @@ type ProjectModalProps = {
   onSave: (projects: Project[]) => void;
 };
 
-import Portal from "../../Portal";
+import { supabase } from '../../../lib/supabaseClient';
+import { toast } from 'react-toastify';
+import { useAuth } from '../../../lib/AuthContext';
+import { FaCamera, FaSpinner } from "react-icons/fa"; 
+import Portal from "@/components/Portal";
 
 const ProjectModal: React.FC<ProjectModalProps> = ({
   projects,
   onClose,
   onSave,
 }) => {
+  const { user } = useAuth();
   const [editedProjects, setEditedProjects] = useState<Project[]>(projects);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const handleLogoUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setUploadingIndex(index);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `project-${user.id}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
+
+      handleProjectChange(index, "image", publicUrl);
+      toast.success("Logo uploaded!");
+    } catch (error: any) {
+      toast.error("Upload failed: " + error.message);
+    } finally {
+      setUploadingIndex(null);
+    }
+  };
+
+  const handleSaveProjects = async () => {
+    if (!user) return;
+    setSaving(true);
+    try {
+      
+
+      const { error: deleteError } = await supabase
+        .from('projects')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (deleteError) throw deleteError;
+
+      // 2. Insert new list
+      const projectsToInsert = editedProjects.map(p => ({
+        user_id: user.id,
+        title: p.title,
+        description: p.description,
+        url: p.url,
+        image_url: p.image,
+        tech_tags: p.tech
+      }));
+
+      // Only insert if there are projects
+      if (projectsToInsert.length > 0) {
+        const { error: insertError } = await supabase.from('projects').insert(projectsToInsert);
+        if (insertError) throw insertError;
+      }
+
+      onSave(editedProjects); // Update parent state
+      toast.success("Projects saved successfully!");
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Failed to save projects");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleProjectChange = (
     index: number,
@@ -122,13 +197,24 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                       placeholder="Live URL"
                       className="w-full p-4 glass rounded-xl focus:outline-none border-white/5 text-blue-400 font-medium text-sm truncate"
                     />
-                    <input
-                      type="text"
-                      value={project.image || ""}
-                      onChange={(e) => handleProjectChange(index, "image", e.target.value)}
-                      placeholder="Image URL (e.g. Unsplash)"
-                      className="w-full p-4 glass rounded-xl focus:outline-none border-white/5 text-white/40 font-medium text-sm truncate"
-                    />
+                    <div className="relative group/image">
+                      <div className="flex items-center gap-2 w-full p-4 glass rounded-xl border-white/5 text-white/40 font-medium text-sm overflow-hidden">
+                        {project.image ? (
+                          <img src={project.image} alt="Logo" className="w-6 h-6 rounded object-cover" />
+                        ) : (
+                          <FaCamera className="text-white/20" />
+                        )}
+                        <span className="truncate flex-1">{project.image ? 'Logo uploaded' : 'Upload Logo'}</span>
+                        {uploadingIndex === index && <FaSpinner className="animate-spin text-blue-500" />}
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleLogoUpload(index, e)}
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        disabled={uploadingIndex === index}
+                      />
+                    </div>
                   </div>
                   <input
                     type="text"
@@ -156,10 +242,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               <FaPlus size={14} /> Add Project
             </button>
             <button
-              onClick={() => onSave(editedProjects)}
-              className="flex-1 py-5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2"
+              onClick={handleSaveProjects}
+              disabled={saving}
+              className="flex-1 py-5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-wait"
             >
-              <FaRocket size={14} /> Save Projects
+              {saving ? <FaSpinner className="animate-spin" /> : <FaRocket size={14} />}
+              {saving ? "Saving..." : "Save Projects"}
             </button>
           </div>
         </motion.div>
