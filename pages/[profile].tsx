@@ -72,44 +72,7 @@ const formatSocialHref = (name: string, href: string) => {
   return `https://${href}`;
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const usernameParam = Array.isArray(context.params?.profile)
-    ? context.params?.profile[0]
-    : context.params?.profile;
-
-  if (!usernameParam) {
-    return { props: { user: null, projects: [] } };
-  }
-
-  //  Fetch Profile
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('username', usernameParam.toLowerCase())
-    .single();
-
-  if (profileError || !profile) {
-    console.error('Profile not found:', usernameParam);
-    return { props: { user: null, projects: [] } };
-  }
-
-  //  Fetch Projects
-  const { data: projects, error: projectsError } = await supabase
-    .from('projects')
-    .select('*')
-    .eq('user_id', profile.id)
-    .order('created_at', { ascending: false });
-
-  return {
-    props: {
-      user: profile,
-      projects: projects || [],
-    },
-  };
-};
-
 const ProfilePage: React.FC<Props> = ({ user, projects }) => {
-
   if (!user) {
     return (
       <div className="min-h-screen p-3 flex items-center justify-center bg-black text-white">
@@ -120,6 +83,16 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
       </div>
     );
   }
+
+  const hasGitHub = !!user.github_username;
+  const hasTech = user.tech_stack && user.tech_stack.length > 0;
+  const hasAboutMe = !!user.about_me;
+  const hasProjects = projects && projects.length > 0;
+  const hasLeftColumn = hasGitHub || hasTech;
+
+  // Layout logic: if one side is missing, the other takes up more space
+  const leftColClass = !hasAboutMe ? "md:col-span-12" : "md:col-span-8";
+  const rightColClass = !hasLeftColumn ? "md:col-span-12" : "md:col-span-4";
 
   return (
     <div className="min-h-screen text-white selection:bg-blue-500/30">
@@ -142,8 +115,6 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                 className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[2s] opacity-40 blur-sm"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent" />
-
-              {/* Ambient Glows */}
               <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-500/10 blur-[150px] rounded-full" />
               <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-purple-500/10 blur-[120px] rounded-full" />
             </div>
@@ -151,7 +122,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
               {/* Avatar Container */}
               <div className="relative shrink-0">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 shadow-2xl relative">
+                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 shadow-2xl relative bg-white/5">
                   {user.avatar_url && (
                     <Image
                       src={user.avatar_url}
@@ -219,63 +190,65 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
           {/* Left Column: GitHub & Tech Stack */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-8 flex flex-col gap-8"
-          >
-            {/* GitHub DNA */}
-            <div className="glass-card rounded-[2rem] border-white/5 shadow-2xl overflow-hidden h-fit flex items-center justify-center min-h-[220px]">
-              <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
-                <GitHubCard githubUsername={user.github_username || user.username} size={48} />
-              </div>
-            </div>
-
-            {/* Tech Stack */}
-            <div className="glass-card rounded-[2rem] p-10 border-white/5">
-              <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400">
-                    <FaCode size={18} />
+          {hasLeftColumn && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className={`${leftColClass} flex flex-col gap-8`}
+            >
+              {hasGitHub && (
+                <div className="glass-card rounded-[2rem] border-white/5 shadow-2xl overflow-hidden h-fit flex items-center justify-center min-h-[220px]">
+                  <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
+                    <GitHubCard githubUsername={user.github_username} size={48} />
                   </div>
-                  <h4 className="text-2xl font-black text-white tracking-tight leading-none">Tech Stack</h4>
                 </div>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {(user.tech_stack as TechItem[])?.map((tech) => (
-                  <span key={tech.name} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
-                    {tech.name}
-                  </span>
-                ))}
-                {(!user.tech_stack || user.tech_stack.length === 0) && (
-                  <p className="text-white/10 text-xs font-black uppercase tracking-widest">Mastering the craft...</p>
-                )}
-              </div>
-            </div>
-          </motion.div>
+              )}
+
+              {hasTech && (
+                <div className="glass-card rounded-[2rem] p-10 border-white/5">
+                  <div className="flex justify-between items-center mb-8">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400">
+                        <FaCode size={18} />
+                      </div>
+                      <h4 className="text-2xl font-black text-white tracking-tight leading-none">Tech Stack</h4>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    {(user.tech_stack as TechItem[]).map((tech) => (
+                      <span key={tech.name} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
+                        {tech.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
 
           {/* Right Column: About & Status */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-4 space-y-8"
+            className={`${rightColClass} space-y-8`}
           >
-            {/* About Me */}
-            <div className="glass-card rounded-[2rem] p-10 border-white/5 bg-white/[0.01]">
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400">
-                    <FaInfoCircle size={18} />
+            {hasAboutMe && (
+              <div className="glass-card rounded-[2rem] p-10 border-white/5 bg-white/[0.01]">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400">
+                      <FaInfoCircle size={18} />
+                    </div>
+                    <h4 className="text-xl font-black text-white tracking-tight">About Me</h4>
                   </div>
-                  <h4 className="text-xl font-black text-white tracking-tight">About Me</h4>
                 </div>
+                <p className="text-sm text-white/40 leading-relaxed font-light min-h-[120px] whitespace-pre-wrap">
+                  {user.about_me}
+                </p>
               </div>
-              <p className="text-sm text-white/40 leading-relaxed font-light min-h-[120px] whitespace-pre-wrap">
-                {user.about_me || "Writing the next chapter of my story..."}
-              </p>
-            </div>
+            )}
 
             {/* Status Card */}
             <div className="glass-card rounded-[1.5rem] p-8 border-white/5 flex items-center justify-between group">
@@ -290,61 +263,58 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           </motion.div>
 
           {/* Projects Showcase - Full Width */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="md:col-span-12"
-          >
-            <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
-              <div className="text-center md:text-left">
-                <h3 className="text-4xl font-black text-white tracking-tighter mb-2">Featured Projects</h3>
-                <p className="text-white/30 font-light">Showcase of best builds and creations.</p>
+          {hasProjects && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="md:col-span-12"
+            >
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
+                <div className="text-center md:text-left">
+                  <h3 className="text-4xl font-black text-white tracking-tighter mb-2">Featured Projects</h3>
+                  <p className="text-white/30 font-light">Showcase of best builds and creations.</p>
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project, i) => (
-                <div key={project.id || i} className="glass-card rounded-[2rem] p-6 border-white/5 group hover:border-blue-500/30 transition-all flex flex-col h-full">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg bg-white/[0.03] flex items-center justify-center">
-                      {project.image_url ? (
-                        <Image
-                          src={project.image_url}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <FaCode size={24} className="text-white/10" />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((project, i) => (
+                  <div key={project.id || i} className="glass-card rounded-[2rem] p-6 border-white/5 group hover:border-blue-500/30 transition-all flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg bg-white/[0.03] flex items-center justify-center">
+                        {project.image_url ? (
+                          <Image
+                            src={project.image_url}
+                            alt={project.title}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <FaCode size={24} className="text-white/10" />
+                        )}
+                      </div>
+                      {project.url && (
+                        <a href={project.url} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
+                          <FaExternalLinkAlt size={14} />
+                        </a>
                       )}
                     </div>
-                    {project.url && (
-                      <a href={project.url} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
-                        <FaExternalLinkAlt size={14} />
-                      </a>
-                    )}
-                  </div>
 
-                  <h4 className="text-xl font-bold text-white mb-2 tracking-tight">{project.title}</h4>
-                  <p className="text-white/40 font-light mb-6 text-sm leading-relaxed min-h-[40px]">{project.description}</p>
+                    <h4 className="text-xl font-bold text-white mb-2 tracking-tight">{project.title}</h4>
+                    <p className="text-white/40 font-light mb-6 text-sm leading-relaxed min-h-[40px]">{project.description}</p>
 
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {project.tech_tags?.map(t => (
-                      <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg border border-white/5">
-                        {t}
-                      </span>
-                    ))}
+                    <div className="flex flex-wrap gap-2 mt-auto">
+                      {project.tech_tags?.map(t => (
+                        <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg border border-white/5">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-              {projects.length === 0 && (
-                <div className="col-span-full py-20 glass rounded-[2rem] border border-dashed border-white/5 flex flex-col items-center justify-center gap-4">
-                  <p className="text-white/10 text-xs font-black uppercase tracking-widest">Building something amazing...</p>
-                </div>
-              )}
-            </div>
-          </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
 
         <motion.footer
@@ -360,6 +330,40 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   );
 };
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const usernameParam = Array.isArray(context.params?.profile)
+    ? context.params?.profile[0]
+    : context.params?.profile;
 
+  if (!usernameParam) {
+    return { props: { user: null, projects: [] } };
+  }
+
+  //  Fetch Profile
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('username', usernameParam.toLowerCase())
+    .single();
+
+  if (profileError || !profile) {
+    console.error('Profile not found:', usernameParam);
+    return { props: { user: null, projects: [] } };
+  }
+
+  //  Fetch Projects
+  const { data: projects, error: projectsError } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('user_id', profile.id)
+    .order('created_at', { ascending: false });
+
+  return {
+    props: {
+      user: profile,
+      projects: projects || [],
+    },
+  };
+};
 
 export default ProfilePage;
