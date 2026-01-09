@@ -1,47 +1,95 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiCheck } from 'react-icons/fi';
+import { FiCheck, FiLoader } from 'react-icons/fi';
+import { supabase } from '../../lib/supabaseClient';
+import { useAuth } from '../../lib/AuthContext';
+import { toast } from 'react-toastify';
 
 const themes = [
     { id: 'onyx', name: 'Onyx Dark', preview: 'bg-black border border-white/10' },
-    { id: 'alabaster', name: 'Alabaster', preview: 'bg-white shadow-inner border border-gray-200' },
-    { id: 'carbon', name: 'Carbon', preview: 'bg-gray-900 border border-white/5' },
-    { id: 'monokai', name: 'Monokai', preview: 'bg-[#272822] border border-[#f8f8f2]/10' },
-    { id: 'dracula', name: 'Dracula', preview: 'bg-[#282a36] border border-[#bd93f9]/20' },
-    { id: 'nord', name: 'Nord', preview: 'bg-[#2e3440] border border-[#88c0d0]/20' },
-    { id: 'oceanic', name: 'Oceanic', preview: 'bg-slate-900 border border-blue-500/20' },
-    { id: 'ember', name: 'Ember', preview: 'bg-stone-900 border border-orange-500/20' },
-    { id: 'ghost', name: 'Ghost', preview: 'bg-zinc-950 border border-zinc-800' },
-    { id: 'midnight', name: 'Midnight', preview: 'bg-slate-950 border border-slate-800' },
-    { id: 'forest', name: 'Deep Forest', preview: 'bg-emerald-950 border border-emerald-900/30' },
-    { id: 'cobalt', name: 'Cobalt', preview: 'bg-blue-950 border border-blue-900/40' },
+    { id: 'ghost', name: 'Ghost', preview: 'bg-zinc-950 border border-zinc-900' },
+    { id: 'midnight', name: 'Midnight Royal', preview: 'bg-[#020617] border border-blue-900/30' },
+    { id: 'forest', name: 'Deep Forest', preview: 'bg-[#051f1b] border border-emerald-900/30' },
+    { id: 'dracula', name: 'Velvet Plum', preview: 'bg-[#130912] border border-purple-900/30' },
+    { id: 'cobalt', name: 'Royal Blue', preview: 'bg-[#040a1d] border border-blue-800/20' },
+    { id: 'carbon', name: 'Titanium Grey', preview: 'bg-[#141414] border border-white/5' },
+    { id: 'nord', name: 'Nordic Slate', preview: 'bg-[#1a202c] border border-slate-700/20' },
+    { id: 'ember', name: 'Terracotta', preview: 'bg-[#17110e] border border-orange-900/20' },
+    { id: 'alabaster', name: 'Slate Deep', preview: 'bg-[#1e293b] border border-slate-700' },
+    { id: 'dim', name: 'Platinum Dim', preview: 'bg-[#15151a] border border-white/5' },
 ];
 
 const ThemeSettings = () => {
+    const { user } = useAuth();
     const [selectedTheme, setSelectedTheme] = useState('onyx');
     const [beamsEnabled, setBeamsEnabled] = useState(true);
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        // Mock persistence or global state trigger
-        const savedBeams = localStorage.getItem('background-beams-enabled');
-        if (savedBeams !== null) {
-            setBeamsEnabled(savedBeams === 'true');
+        const fetchThemeSettings = async () => {
+            if (!user) return;
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('theme, beams_enabled')
+                .eq('id', user.id)
+                .single();
+
+            if (data && !error) {
+                if (data.theme) setSelectedTheme(data.theme);
+                if (data.beams_enabled !== null) setBeamsEnabled(data.beams_enabled);
+            }
+        };
+
+        fetchThemeSettings();
+    }, [user]);
+
+    const autoSaveSettings = async (updates: any) => {
+        if (!user) return;
+        setSaving(true);
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .update({
+                    ...updates,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', user.id);
+
+            if (error) throw error;
+        } catch (err) {
+            console.error("Failed to save theme settings", err);
+            toast.error("Failed to sync theme to cloud");
+        } finally {
+            setTimeout(() => setSaving(false), 800);
         }
-    }, []);
+    };
+
+    const handleThemeSelect = (themeId: string) => {
+        setSelectedTheme(themeId);
+        autoSaveSettings({ theme: themeId });
+    };
 
     const toggleBeams = () => {
         const newState = !beamsEnabled;
         setBeamsEnabled(newState);
-        localStorage.setItem('background-beams-enabled', newState.toString());
-        // Trigger a custom event for BackgroundBeams to listen to
+        autoSaveSettings({ beams_enabled: newState });
+        // Still dispatch event for local parity if needed
         window.dispatchEvent(new Event('background-beams-toggle'));
     };
 
     return (
-        <section className="mb-20 md:mb-0">
-            <div className="mb-10 text-center md:text-left">
-                <h3 className="text-2xl font-black text-white tracking-tighter">Visual Interface</h3>
-                <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Select your profile&apos;s core signature</p>
+        <section className="mb-20 md:mb-0 relative">
+            <div className="mb-10 flex items-end justify-between">
+                <div className="text-center md:text-left">
+                    <h3 className="text-2xl font-black text-white tracking-tighter">Visual Interface</h3>
+                    <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Select your profile&apos;s core signature</p>
+                </div>
+                {saving && (
+                    <div className="flex items-center gap-2 text-yellow-500 font-bold text-xs uppercase tracking-widest animate-pulse">
+                        <FiLoader className="animate-spin" />
+                        <span>Syncing...</span>
+                    </div>
+                )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -51,11 +99,11 @@ const ThemeSettings = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: index * 0.05 }}
                         key={theme.id}
-                        onClick={() => setSelectedTheme(theme.id)}
+                        onClick={() => handleThemeSelect(theme.id)}
                         className="group relative flex flex-col cursor-pointer"
                     >
                         <div className={`w-full h-48 rounded-[2rem] mb-4 relative overflow-hidden transition-all duration-500 border-2 ${selectedTheme === theme.id
-                            ? 'border-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.2)]'
+                            ? 'border-blue-500'
                             : 'border-transparent group-hover:border-white/10'
                             } ${theme.preview}`}>
 
@@ -70,7 +118,7 @@ const ThemeSettings = () => {
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.5 }}
                                         animate={{ opacity: 1, scale: 1 }}
-                                        className="absolute top-4 right-4 w-8 h-8 bg-blue-500 rounded-xl flex items-center justify-center text-white shadow-xl"
+                                        className="absolute top-4 right-4 w-8 h-8 bg-blue-500 rounded-xl flex items-center justify-center text-white"
                                     >
                                         <FiCheck size={16} />
                                     </motion.div>
@@ -96,7 +144,7 @@ const ThemeSettings = () => {
                 >
                     <motion.div
                         animate={{ x: beamsEnabled ? 24 : 0 }}
-                        className="w-6 h-6 bg-white rounded-full shadow-md"
+                        className="w-6 h-6 bg-white rounded-full"
                     />
                 </div>
             </div>
