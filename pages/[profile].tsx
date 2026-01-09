@@ -38,6 +38,8 @@ type UserProfile = {
   social_links: SocialLink[];
   tech_stack: TechItem[];
   is_available: boolean;
+  theme?: string;
+  beams_enabled?: boolean;
 };
 
 type Props = {
@@ -57,6 +59,20 @@ const SOCIAL_BASE_URLS: Record<string, string> = {
   'GitHub': 'https://github.com/',
   'LinkedIn': 'https://linkedin.com/in/',
   'YouTube': 'https://youtube.com/@',
+};
+
+const THEME_CONFIG: Record<string, string> = {
+  'onyx': 'bg-black',
+  'ghost': 'bg-[#080808]',
+  'midnight': 'bg-[#020617]',
+  'forest': 'bg-[#051f1b]',
+  'dracula': 'bg-[#130912]',
+  'cobalt': 'bg-[#040a1d]',
+  'carbon': 'bg-[#141414]',
+  'nord': 'bg-[#1a202c]',
+  'ember': 'bg-[#17110e]',
+  'dim': 'bg-[#15151a]',
+  'alabaster': 'bg-[#1e293b]',
 };
 
 const formatSocialHref = (name: string, href: string) => {
@@ -93,10 +109,11 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   // Layout logic: if one side is missing, the other takes up more space
   const leftColClass = !hasAboutMe ? "md:col-span-12" : "md:col-span-8";
   const rightColClass = !hasLeftColumn ? "md:col-span-12" : "md:col-span-4";
+  const currentThemeBg = THEME_CONFIG[user.theme || 'onyx'] || 'bg-black';
 
   return (
-    <div className="min-h-screen text-white selection:bg-blue-500/30">
-      <BackgroundBeams />
+    <div className={`min-h-screen ${currentThemeBg} text-white selection:bg-blue-500/30 transition-colors duration-700`}>
+      {user.beams_enabled !== false && <BackgroundBeams />}
 
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-16">
         {/* Hero Section: Profile Identity */}
@@ -104,7 +121,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-white/5"
+            className="relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-white/10"
           >
             {/* High-End Background Effect */}
             <div className="absolute inset-0 z-0">
@@ -122,7 +139,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
               {/* Avatar Container */}
               <div className="relative shrink-0">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 shadow-2xl relative bg-white/5">
+                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 relative bg-white/5">
                   {user.avatar_url && (
                     <Image
                       src={user.avatar_url}
@@ -133,7 +150,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                   )}
                 </div>
                 {user.is_available && (
-                  <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-green-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl border-4 border-black group-hover:scale-110 transition-transform">
+                  <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-green-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white border-4 border-black group-hover:scale-110 transition-transform">
                     <span className="w-3 h-3 rounded-full bg-white animate-pulse" />
                   </div>
                 )}
@@ -172,7 +189,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                         href={formatSocialHref(social.name, social.href)}
                         target="_blank"
                         rel="noreferrer"
-                        className="glass rounded-2xl p-4 flex items-center justify-center border-white/5 hover:border-white/10 transition-all cursor-pointer group"
+                        className="glass rounded-2xl p-4 flex items-center justify-center border border-white/10 hover:border-blue-500/30 transition-all cursor-pointer group"
                         title={social.name}
                       >
                         <div className="text-white/40 group-hover:text-blue-400 transition-colors">
@@ -198,7 +215,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               className={`${leftColClass} flex flex-col gap-8`}
             >
               {hasGitHub && (
-                <div className="glass-card rounded-[2rem] border-white/5 shadow-2xl overflow-hidden h-fit flex items-center justify-center min-h-[220px]">
+                <div className="glass-card rounded-[2rem] border border-white/10 overflow-hidden h-fit flex items-center justify-center min-h-[220px]">
                   <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
                     <GitHubCard githubUsername={user.github_username} size={48} />
                   </div>
@@ -206,7 +223,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               )}
 
               {hasTech && (
-                <div className="glass-card rounded-[2rem] p-10 border-white/5">
+                <div className="glass-card rounded-[2rem] p-10 border border-white/10">
                   <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400">
@@ -235,7 +252,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             className={`${rightColClass} space-y-8`}
           >
             {hasAboutMe && (
-              <div className="glass-card rounded-[2rem] p-10 border-white/5 bg-white/[0.01]">
+              <div className="glass-card rounded-[2rem] p-10 border border-white/10 bg-white/[0.01]">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400">
@@ -251,11 +268,11 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             )}
 
             {/* Status Card */}
-            <div className="glass-card rounded-[1.5rem] p-8 border-white/5 flex items-center justify-between group">
+            <div className="glass-card rounded-[1.5rem] p-8 border border-white/10 flex items-center justify-between group">
               <div className="flex flex-col">
                 <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
                 <span className="text-sm font-black flex items-center gap-3 text-white">
-                  <span className={`w-2.5 h-2.5 rounded-full ${user.is_available ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]' : 'bg-red-500'} animate-pulse`} />
+                  <span className={`w-2.5 h-2.5 rounded-full ${user.is_available ? 'bg-green-500' : 'bg-red-500'} animate-pulse`} />
                   {user.is_available ? 'Available for hire' : 'Focused on current role'}
                 </span>
               </div>
@@ -279,9 +296,9 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {projects.map((project, i) => (
-                  <div key={project.id || i} className="glass-card rounded-[2rem] p-6 border-white/5 group hover:border-blue-500/30 transition-all flex flex-col h-full">
+                  <div key={project.id || i} className="glass-card rounded-[2rem] p-6 border border-white/10 group hover:border-blue-500/30 transition-all flex flex-col h-full">
                     <div className="flex justify-between items-start mb-6">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 shadow-lg bg-white/[0.03] flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/[0.03] flex items-center justify-center">
                         {project.image_url ? (
                           <Image
                             src={project.image_url}
