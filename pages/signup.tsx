@@ -1,12 +1,80 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { motion } from "framer-motion";
 import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
-// import { BackgroundBeams } from "../components/BackgroundBeams";
+import { supabase } from '../lib/supabaseClient';
+import { toast } from 'react-toastify';
+import SuccessModal from '../components/SuccessModal';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Signup: React.FC = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleGitHubLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`
+        }
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      toast.error(err.message || "Failed to initiate GitHub login");
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            username: formData.username,
+          },
+        },
+      });
+
+      if (signUpError) throw signUpError;
+
+      if (data.user) {
+        if (data.session) {
+          setShowSuccessModal(true);
+        } else {
+          toast.success('Please check your email to confirm your account!');
+        }
+      }
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccessModal(false);
+    router.push('/dashboard');
+  };
 
   type FloatingProps = {
     children: React.ReactNode;
@@ -42,9 +110,11 @@ const Signup: React.FC = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black text-white relative overflow-hidden">
+      <SuccessModal isOpen={showSuccessModal} onClose={handleSuccessClose} />
       <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto px-6 relative z-10">
         {/* Left Side: Signup Form */}
         <motion.div
+
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex-1 p-6 md:p-16 lg:w-1/2 flex flex-col justify-center min-h-screen"
@@ -57,14 +127,19 @@ const Signup: React.FC = () => {
               Create your DevBio and showcase your engineering DNA.
             </p>
 
-            <form className="space-y-6">
+            <form onSubmit={handleSignup} className="space-y-6">
+
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-1">Username</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 font-bold">devbio.co/</span>
                   <input
                     type="text"
+                    name="username"
                     placeholder="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
                     className="w-full glass p-4 pl-24 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 placeholder:text-white/20 bg-transparent"
                   />
                 </div>
@@ -74,7 +149,11 @@ const Signup: React.FC = () => {
                 <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
                 <input
                   type="email"
+                  name="email"
                   placeholder="engineer@devbio.co"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
                   className="w-full glass p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 placeholder:text-white/20 bg-transparent"
                 />
               </div>
@@ -84,7 +163,12 @@ const Signup: React.FC = () => {
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
                     placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    minLength={6}
                     className="w-full glass p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 pr-14 placeholder:text-white/20 bg-transparent"
                   />
                   <button
@@ -99,9 +183,10 @@ const Signup: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-white text-black py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 cursor-pointer"
+                disabled={loading}
+                className="w-full bg-white text-black py-4 rounded-2xl font-bold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-white/5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                Create My Profile
+                {loading ? <LoadingSpinner /> : 'Create My Profile'}
               </button>
 
               <div className="relative flex items-center py-4">
@@ -112,6 +197,7 @@ const Signup: React.FC = () => {
 
               <button
                 type="button"
+                onClick={handleGitHubLogin}
                 className="w-full glass hover:bg-white/5 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all border-white/5 cursor-pointer"
               >
                 <SiGithub size={20} />
