@@ -14,6 +14,10 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onSave, as = 'input', cl
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
 
+  React.useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
+
   const handleSave = () => {
     onSave(currentValue);
     setIsEditing(false);
