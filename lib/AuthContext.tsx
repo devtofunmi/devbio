@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from './supabaseClient';
+import React, { createContext, useContext, useEffect } from 'react';
+import { User, Session, SupabaseClient } from '@supabase/supabase-js';
+import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 
 interface AuthContextType {
@@ -8,38 +8,27 @@ interface AuthContextType {
     session: Session | null;
     loading: boolean;
     signOut: () => Promise<void>;
+    supabase: SupabaseClient;
 }
 
+// @ts-ignore - Default context with null/dummy values to satisfy type checker initially
 const AuthContext = createContext<AuthContextType>({
     user: null,
     session: null,
     loading: true,
     signOut: async () => { },
+    supabase: null as any,
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
-    const [session, setSession] = useState<Session | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { session, isLoading: loading, supabaseClient: supabase } = useSessionContext();
+    const user = useUser();
     const router = useRouter();
 
     useEffect(() => {
-        // Check active session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
-
-        // Listen for changes
         const {
             data: { subscription },
-        } = supabase.auth.onAuthStateChange(async (event, session) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-
-            // Optional: Auto-redirect on specific events
+        } = supabase.auth.onAuthStateChange(async (event: string) => {
             if (event === 'SIGNED_IN') {
                 const redirect = router.query.redirect as string;
                 if (redirect) router.push(redirect);
@@ -47,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
 
         return () => subscription.unsubscribe();
-    }, [router]);
+    }, [router, supabase]);
 
     const signOut = async () => {
         await supabase.auth.signOut();
@@ -55,7 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, session, loading, signOut }}>
+        <AuthContext.Provider value={{ user, session, loading, signOut, supabase }}>
             {children}
         </AuthContext.Provider>
     );
