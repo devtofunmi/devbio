@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiCheck, FiLoader } from 'react-icons/fi';
 import { supabase } from '../../lib/supabaseClient';
@@ -17,12 +18,25 @@ const themes = [
     { id: 'ember', name: 'Terracotta', preview: 'bg-[#17110e] border border-orange-900/20' },
     { id: 'alabaster', name: 'Slate Deep', preview: 'bg-[#1e293b] border border-slate-700' },
     { id: 'dim', name: 'Platinum Dim', preview: 'bg-[#15151a] border border-white/5' },
+    { id: 'matrix', name: 'Midnight Mesh', preview: 'https://images.unsplash.com/photo-1550684848-86a5d8727436?w=800&q=80' },
+    { id: 'circuit', name: 'Dark Nebula', preview: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=800&q=80' },
+    { id: 'terminal', name: 'Cosmic Dusk', preview: 'https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=800&q=80' },
+    { id: 'workspace', name: 'Abstract Flow', preview: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&q=80' },
+    { id: 'nodes', name: 'Deep Gradient', preview: 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=800&q=80' },
+    { id: 'glass', name: 'Frosted Glass', preview: 'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?w=800&q=80' },
+    { id: 'velvet', name: 'Indigo Velvet', preview: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&q=80' },
+    { id: 'aurora', name: 'Dark Aurora', preview: 'https://images.unsplash.com/photo-1536431311719-398b6704d4cc?w=800&q=80' },
+    { id: 'silence', name: 'Silent Mist', preview: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80' },
+    { id: 'prism', name: 'Crystal Prism', preview: 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=800&q=80' },
+    { id: 'cloud', name: 'Silver Luster', preview: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=800&q=80' },
+    { id: 'smoke', name: 'Dark Ethereal', preview: 'https://images.unsplash.com/photo-1541450805268-4822a3a774ca?w=800&q=80' },
+    { id: 'mesh', name: 'Cyber Silk', preview: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80' },
+    { id: 'flow', name: 'Liquid Metal', preview: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80' },
 ];
 
 const ThemeSettings = () => {
     const { user } = useAuth();
     const [selectedTheme, setSelectedTheme] = useState('onyx');
-    // const [beamsEnabled, setBeamsEnabled] = useState(true); // Removed
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
@@ -30,13 +44,12 @@ const ThemeSettings = () => {
             if (!user) return;
             const { data, error } = await supabase
                 .from('profiles')
-                .select('theme, beams_enabled')
+                .select('theme ')
                 .eq('id', user.id)
                 .single();
 
             if (data && !error) {
                 if (data.theme) setSelectedTheme(data.theme);
-                // if (data.beams_enabled !== null) setBeamsEnabled(data.beams_enabled); // Removed
             }
         };
 
@@ -107,7 +120,16 @@ const ThemeSettings = () => {
                         <div className={`w-full h-48 rounded-[2rem] mb-4 relative overflow-hidden transition-all duration-500 border-2 ${selectedTheme === theme.id
                             ? 'border-blue-500'
                             : 'border-transparent group-hover:border-white/10'
-                            } ${theme.preview}`}>
+                            } ${!theme.preview.startsWith('http') ? theme.preview : ''}`}>
+
+                            {theme.preview.startsWith('http') && (
+                                <Image
+                                    src={theme.preview}
+                                    alt={theme.name}
+                                    fill
+                                    className="object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                                />
+                            )}
 
                             <div className="absolute inset-0 p-6 flex flex-col gap-3 justify-center">
                                 <div className="h-4 rounded-lg bg-white/5 w-3/4" />
@@ -136,7 +158,6 @@ const ThemeSettings = () => {
                 ))}
             </div>
 
-            {/* Beams toggle removed */}
         </section>
     )
 }
