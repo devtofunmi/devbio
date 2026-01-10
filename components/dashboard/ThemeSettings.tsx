@@ -53,9 +53,9 @@ const ThemeSettings = () => {
         };
 
         fetchThemeSettings();
-    }, [user]);
+    }, [user, supabase]);
 
-    const autoSaveSettings = async (updates: any) => {
+    const autoSaveSettings = async (updates: Record<string, unknown>) => {
         if (!user) return;
         setSaving(true);
         try {
