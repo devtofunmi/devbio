@@ -43,23 +43,25 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
                     className="relative w-full max-w-lg glass-card border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl my-auto flex flex-col max-h-[90vh]"
                 >
                     {/* Header - Fixed */}
-                    <div className="p-8 pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] shrink-0">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-blue-500">
-                                <FiShare2 size={24} />
+                    <div className="p-5 md:p-8 pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] shrink-0">
+                        <div className="flex items-center gap-3 md:gap-4">
+                            <div className="w-10 h-10 md:w-12 md:h-12 glass rounded-2xl flex items-center justify-center text-blue-500">
+                                <FiShare2 size={20} className="md:hidden" />
+                                <FiShare2 size={24} className="hidden md:block" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-black text-white tracking-tight uppercase">Share Profile</h3>
-                                <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-1">Spread your legacy</p>
+                                <h3 className="text-lg md:text-2xl font-black text-white tracking-tight uppercase">Share Profile</h3>
+                                <p className="text-white/40 text-[9px] md:text-xs font-bold uppercase tracking-widest mt-0.5 md:mt-1">Spread your legacy</p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/20 hover:text-white transition-all">
-                            <FiX size={20} />
+                        <button onClick={onClose} className="w-8 cursor-pointer h-8 md:w-10 md:h-10 glass rounded-xl flex items-center justify-center text-white/20 hover:text-white transition-all">
+                            <FiX size={16} className="md:hidden" />
+                            <FiX size={20} className="hidden md:block" />
                         </button>
                     </div>
 
                     {/* Content - Scrollable */}
-                    <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar flex-1">
+                    <div className="p-5 md:p-8 space-y-6 md:space-y-8 overflow-y-auto custom-scrollbar flex-1">
                         {/* QR Code Section */}
                         <div className="flex flex-col items-center justify-center">
                             <div className="relative group p-4 bg-white rounded-[2rem] overflow-hidden mb-4 shadow-2xl">
@@ -84,38 +86,38 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
                         <div className="space-y-4">
                             <div className="flex flex-col gap-2">
                                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 px-4">Profile URL</label>
-                                <div className="glass rounded-2xl p-2 flex items-center gap-2 border-white/5 bg-white/[0.01]">
-                                    <div className="flex-1 px-4 py-3 text-sm font-bold text-white/60 truncate">
+                                <div className="glass rounded-2xl p-1.5 md:p-2 flex items-center gap-2 border-white/5 bg-white/[0.01]">
+                                    <div className="flex-1 px-3 md:px-4 py-2.5 md:py-3 text-[12px] md:text-sm font-bold text-white/60 truncate">
                                         {shareUrl.replace('https://', '').replace('http://', '')}
                                     </div>
                                     <button
                                         onClick={handleCopy}
-                                        className={`px-6 py-3 rounded-xl flex items-center gap-2 transition-all font-black text-xs uppercase tracking-widest ${copied ? 'bg-green-500 text-white' : 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 hover:text-white border border-blue-500/10'}`}
+                                        className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl flex items-center gap-2 transition-all font-black text-[10px] md:text-xs uppercase tracking-widest ${copied ? 'bg-green-500 text-white' : 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 hover:text-white border border-blue-500/10'}`}
                                     >
-                                        {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
+                                        {copied ? <FiCheck size={12} /> : <FiCopy size={12} />}
                                         {copied ? 'Copied' : 'Copy'}
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-2 md:gap-3">
                                 <a
                                     href={shareUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center gap-3 py-4 glass rounded-[1.5rem] border-white/5 hover:bg-white/5 text-white/60 hover:text-white transition-all group"
+                                    className="flex items-center justify-center gap-2 md:gap-3 py-3 md:py-4 glass rounded-[1.2rem] md:rounded-[1.5rem] border-white/5 hover:bg-white/5 text-white/60 hover:text-white transition-all group"
                                 >
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Preview</span>
-                                    <FiExternalLink size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                    <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Preview</span>
+                                    <FiExternalLink size={12} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                 </a>
                                 <a
                                     href={twitterShareUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center gap-3 py-4 glass bg-[#1DA1F2]/10 border-[#1DA1F2]/20 rounded-[1.5rem] text-[#1DA1F2] hover:bg-[#1DA1F2] hover:text-white transition-all group shadow-lg shadow-[#1DA1F2]/10"
+                                    className="flex items-center justify-center gap-2 md:gap-3 py-3 md:py-4 glass bg-[#1DA1F2]/10 border-[#1DA1F2]/20 rounded-[1.2rem] md:rounded-[1.5rem] text-[#1DA1F2] hover:bg-[#1DA1F2] hover:text-white transition-all group shadow-lg shadow-[#1DA1F2]/10"
                                 >
-                                    <FaTwitter size={14} />
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Share on X</span>
+                                    <FaTwitter size={12} />
+                                    <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Share on X</span>
                                 </a>
                             </div>
                         </div>

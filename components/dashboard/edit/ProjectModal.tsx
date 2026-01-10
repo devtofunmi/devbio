@@ -19,7 +19,7 @@ type ProjectModalProps = {
 import { supabase } from '../../../lib/supabaseClient';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../lib/AuthContext';
-import { FaCamera, FaSpinner } from "react-icons/fa"; 
+import { FaCamera, FaSpinner } from "react-icons/fa";
 import Portal from "@/components/Portal";
 
 const ProjectModal: React.FC<ProjectModalProps> = ({
@@ -65,7 +65,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
     if (!user) return;
     setSaving(true);
     try {
-      
+
 
       const { error: deleteError } = await supabase
         .from('projects')
