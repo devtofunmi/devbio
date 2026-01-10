@@ -7,6 +7,7 @@ import ProjectModal from "../../components/dashboard/edit/ProjectModal";
 import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import SocialModal from "../../components/dashboard/edit/SocialModal";
+import ShareModal from "../../components/dashboard/ShareModal";
 import {
   FaPlus,
   FaTwitter,
@@ -118,6 +119,7 @@ const DashboardPage: React.FC = () => {
   const [techModalOpen, setTechModalOpen] = useState(false);
   const [githubModalOpen, setGithubModalOpen] = useState(false);
   const [socialModalOpen, setSocialModalOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const [techSearch, setTechSearch] = useState("");
 
   useEffect(() => {
@@ -282,7 +284,7 @@ const DashboardPage: React.FC = () => {
                   <FaPalette size={16} />
                 </button>
               </Link>
-              <button onClick={() => setSocialModalOpen(true)} className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Share & Socials">
+              <button onClick={() => setShareModalOpen(true)} className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Share Page">
                 <FaShareAlt size={16} />
               </button>
             </div>
@@ -504,6 +506,12 @@ const DashboardPage: React.FC = () => {
               }
               setSocialModalOpen(open as any);
             }}
+          />
+        )}
+        {shareModalOpen && (
+          <ShareModal
+            username={username}
+            onClose={() => setShareModalOpen(false)}
           />
         )}
       </AnimatePresence>
