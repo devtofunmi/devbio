@@ -93,13 +93,30 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black text-white relative overflow-hidden">
-      <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto px-6 relative z-10">
+
+      {/* Fixed Logo Navbar */}
+      <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/50 border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <Link href="/" className="inline-block group">
+            <div className="flex items-center gap-3 transition-all group-hover:scale-105">
+              <div className="relative w-10 h-10 flex items-center justify-center">
+                <div className="absolute inset-0 bg-blue-500 rounded-xl rotate-6 group-hover:rotate-0 transition-transform duration-300 shadow-lg shadow-blue-500/20" />
+                <div className="relative w-full h-full bg-black border border-white/10 rounded-xl flex items-center justify-center font-black text-blue-500 text-xs tracking-tighter">
+                  D/B
+                </div>
+              </div>
+              <span className="text-xl font-black text-white tracking-tight group-hover:text-blue-400 transition-colors">DevBio</span>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      <div className="flex mt-10 flex-col lg:flex-row w-full max-w-7xl mx-auto px-6 relative z-10">
         {/* Left Side: Login Form */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex-1 p-6 md:p-16 lg:w-1/2 flex flex-col justify-center min-h-screen"
-        >
+          className="flex-1 p-6 md:p-16 lg:w-1/2 flex flex-col justify-center min-h-screen">
           <div className="w-full mx-auto md:max-w-md lg:mx-0">
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
               Welcome Back.
