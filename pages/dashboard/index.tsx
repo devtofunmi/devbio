@@ -55,6 +55,12 @@ const ALL_TECHS = [
   { name: 'Rust', icon: <SiRust /> },
 ];
 
+const ensureAbsoluteUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `https://${url}`;
+};
+
 const THEME_CONFIG: Record<string, string> = {
   'onyx': 'bg-black',
   'ghost': 'bg-[#080808]',
@@ -446,7 +452,7 @@ const DashboardPage: React.FC = () => {
                   <div key={i} className={`glass-card rounded-[2rem] p-6 border ${isLight ? 'border-slate-300' : 'border-white/5'} group hover:border-blue-500/30 transition-all`}>
                     <div className="flex justify-between items-start mb-6">
                       <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5"><Image src={p.image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"} alt={p.title} fill className="object-cover" /></div>
-                      <Link href={p.url} className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors"><FaExternalLinkAlt size={14} /></Link>
+                      <a href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors"><FaExternalLinkAlt size={14} /></a>
                     </div>
                     <h4 className={`text-xl font-bold ${isLight ? 'text-slate-900' : 'text-white'} mb-2 tracking-tight`}>{p.title}</h4>
                     <p className={`${isLight ? 'text-black/40' : 'text-white/40'} font-light mb-6 text-sm leading-relaxed line-clamp-2`}>{p.description}</p>
