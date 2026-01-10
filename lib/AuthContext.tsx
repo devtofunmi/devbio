@@ -31,7 +31,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } = supabase.auth.onAuthStateChange(async (event: string) => {
             if (event === 'SIGNED_IN') {
                 const redirect = router.query.redirect as string;
-                if (redirect) router.push(redirect);
+                if (redirect) {
+                    router.push(redirect);
+                } else if (['/', '/login', '/signup'].includes(router.pathname)) {
+                    router.push('/dashboard?welcome=true');
+                }
             }
         });
 

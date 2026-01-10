@@ -77,7 +77,7 @@ const Signup: React.FC = () => {
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    router.push('/dashboard');
+    router.push('/dashboard?welcome=true');
   };
 
   type FloatingProps = {
