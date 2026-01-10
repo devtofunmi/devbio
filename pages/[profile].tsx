@@ -5,7 +5,11 @@ import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, 
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import GitHubCard from "../components/GitHubCard";
+import PublicShareModal from "../components/PublicShareModal";
 import Link from "next/link";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { FiShare2 } from "react-icons/fi";
 
 type SocialLink = {
   name: string;
@@ -102,6 +106,12 @@ const formatSocialHref = (name: string, href: string) => {
   return `https://${href}`;
 };
 
+const ensureAbsoluteUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `https://${url}`;
+};
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const usernameParam = Array.isArray(context.params?.profile)
     ? context.params?.profile[0]
@@ -139,6 +149,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const ProfilePage: React.FC<Props> = ({ user, projects }) => {
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+
   if (!user) {
     return (
       <div className="min-h-screen p-3 flex items-center justify-center bg-black text-white">
@@ -176,6 +188,37 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           <div className="absolute inset-0 bg-black/60" />
         </div>
       )}
+
+      {/* Floating Share Button - Premium Glassmorphism Neon Version */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5, y: 50 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-8 right-8 md:bottom-12 md:right-12 z-[100]"
+      >
+        <button
+          onClick={() => setShareModalOpen(true)}
+          className="group relative flex items-center cursor-pointer"
+        >
+          {/* Outer Neon Ring Glow */}
+          <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+          <div className="relative flex items-center justify-center glass rounded-full border-blue-500/20 group-hover:border-blue-500/50 p-2 md:p-3 shadow-2xl transition-all duration-500 backdrop-blur-3xl overflow-hidden">
+            {/* Animated Background Sweep */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+
+            {/* Neon Icon Core */}
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] group-hover:shadow-[0_0_35px_rgba(59,130,246,0.8)] transition-all group-hover:scale-105 relative z-10">
+              <FiShare2 size={24} className="group-hover:rotate-12 transition-transform" />
+            </div>
+
+            {/* Interactive Border */}
+            <div className="absolute inset-0 border border-blue-500/0 group-hover:border-blue-500/20 rounded-full m-[1px]" />
+          </div>
+        </button>
+      </motion.div>
+
       <main className="max-w-7xl mx-auto px-6 py-12 md:py-16 relative z-10">
         {/* Hero Section: Profile Identity */}
         <div className="mb-10 md:mb-16">
@@ -227,11 +270,6 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                     <p className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight">
                       {user.profession}
                     </p>
-                    <span className="hidden lg:block w-1.5 h-1.5 rounded-full bg-white/20" />
-                    <div className="flex items-center justify-center lg:justify-start gap-1.5 text-white/40 font-mono text-xs md:text-sm">
-                      <span>devbio.co/</span>
-                      <span className="text-white">{user.username}</span>
-                    </div>
                   </div>
                 </div>
 
@@ -372,7 +410,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                         )}
                       </div>
                       {project.url && (
-                        <a href={project.url} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
+                        <a href={ensureAbsoluteUrl(project.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
                           <FaExternalLinkAlt size={14} />
                         </a>
                       )}
@@ -404,6 +442,17 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           Built with <span className="text-white/40">DevBio.co</span>
         </motion.footer>
       </main>
+
+      <AnimatePresence>
+        {shareModalOpen && (
+          <PublicShareModal
+            username={user.username}
+            fullName={user.full_name}
+            avatarUrl={user.avatar_url}
+            onClose={() => setShareModalOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
