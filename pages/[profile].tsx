@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle } from "react-icons/fa";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import GitHubCard from "../components/GitHubCard";
@@ -243,14 +243,16 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
               {/* Avatar Container */}
               <div className="relative shrink-0">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 relative bg-white/5">
-                  {user.avatar_url && (
+                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 relative bg-white/5 flex items-center justify-center">
+                  {user.avatar_url ? (
                     <Image
                       src={user.avatar_url}
                       alt={user.full_name}
                       fill
                       className="object-cover"
                     />
+                  ) : (
+                    <FaUser className="text-white/10 text-5xl md:text-7xl" />
                   )}
                 </div>
                 {user.is_available && (
@@ -372,7 +374,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                 <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
                 <span className="text-sm font-black flex items-center gap-3 text-white">
                   <span className={`w-2.5 h-2.5 rounded-full ${user.is_available ? 'bg-green-500' : 'bg-red-500'} animate-pulse`} />
-                  {user.is_available ? 'Available for hire' : 'Focused on current role'}
+                  {user.is_available ? 'Available' : 'Focused'}
                 </span>
               </div>
             </div>
