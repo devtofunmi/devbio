@@ -2,14 +2,14 @@ import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { FiHome, FiBarChart2, FiSettings, FiLogOut, FiZap } from 'react-icons/fi';
+import { FiHome, FiBarChart2, FiSettings, FiLogOut, FiZap, FiUser } from 'react-icons/fi';
 import { useAuth } from '../../lib/AuthContext';
 // import { motion, AnimatePresence } from 'framer-motion';
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
   const { user, signOut, supabase } = useAuth();
-  const [profile, setProfile] = React.useState<{ full_name: string | null; avatar_url: string | null; username: string | null } | null>(null);
+  const [profile, setProfile] = React.useState<{ full_name: string | null; avatar_url: string | null; username: string | null; is_available: boolean | null } | null>(null);
   // const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -19,7 +19,7 @@ const Sidebar: React.FC = () => {
     const fetchProfile = async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('full_name, avatar_url, username')
+        .select('full_name, avatar_url, username, is_available')
         .eq('id', user.id)
         .single();
 
@@ -123,16 +123,20 @@ const Sidebar: React.FC = () => {
               <div className="glass p-3.5 rounded-[1.8rem] border-white/5 flex flex-col gap-3.5 hover:border-white/10 transition-all duration-500 overflow-hidden bg-white/[0.02]">
                 <div className="flex items-center gap-3 relative z-10">
                   <div className="relative shrink-0">
-                    <div className="w-11 h-11 rounded-xl overflow-hidden border border-white/10 group-hover:border-blue-500/50 transition-all duration-500 relative">
-                      <Image
-                        src={profile?.avatar_url || "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg"}
-                        alt="User Avatar"
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="w-11 h-11 rounded-xl overflow-hidden border border-white/10 group-hover:border-blue-500/50 transition-all duration-500 relative flex items-center justify-center bg-white/5">
+                      {profile?.avatar_url ? (
+                        <Image
+                          src={profile.avatar_url}
+                          alt="User Avatar"
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <FiUser className="text-white/20" size={20} />
+                      )}
                     </div>
                     {/* Active Status Indicator */}
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-[#121212] rounded-full" />
+                    <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 border-2 border-[#121212] rounded-full ${profile?.is_available ? 'bg-green-500' : 'bg-red-500'}`} />
                   </div>
 
                   <div className="flex-1 min-w-0">
