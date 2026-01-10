@@ -5,7 +5,7 @@ import {
     SiMongodb, SiPostgresql, SiRedis, SiFirebase, SiFlutter, SiSvelte, SiElixir,
     SiVuedotjs, SiAngular, SiDocker, SiPhp
 } from "react-icons/si";
-import { FaReact, FaNodeJs, FaAws, FaMicrosoft, FaCode } from "react-icons/fa";
+import { FaReact, FaNodeJs, FaAws, FaMicrosoft } from "react-icons/fa";
 
 export type Tech = {
     name: string;

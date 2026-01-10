@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FaTimes, FaPlus, FaRocket } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import NextImage from "next/image";
 
 type Project = {
   title: string;
@@ -53,8 +55,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
       handleProjectChange(index, "image", publicUrl);
       toast.success("Logo uploaded!");
-    } catch (error: any) {
-      toast.error("Upload failed: " + error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      toast.error("Upload failed: " + message);
     } finally {
       setUploadingIndex(null);
     }
@@ -91,7 +94,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
       onSave(editedProjects); // Update parent state
       toast.success("Projects saved successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       toast.error("Failed to save projects");
     } finally {
@@ -199,7 +202,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                     <div className="relative group/image">
                       <div className="flex items-center gap-2 w-full p-4 glass rounded-xl border-white/5 text-white/40 font-medium text-sm overflow-hidden">
                         {project.image ? (
-                          <img src={project.image} alt="Logo" className="w-6 h-6 rounded object-cover" />
+                          <NextImage src={project.image} alt="Logo" width={24} height={24} className="rounded object-cover" />
                         ) : (
                           <FaCamera className="text-white/20" />
                         )}

@@ -11,13 +11,13 @@ interface AuthContextType {
     supabase: SupabaseClient;
 }
 
-// @ts-ignore - Default context with null/dummy values to satisfy type checker initially
+
 const AuthContext = createContext<AuthContextType>({
     user: null,
     session: null,
     loading: true,
     signOut: async () => { },
-    supabase: null as any,
+    supabase: null as unknown as SupabaseClient,
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
