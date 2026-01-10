@@ -8,7 +8,8 @@ import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import SocialModal from "../../components/dashboard/edit/SocialModal";
 import ShareModal from "../../components/dashboard/ShareModal";
-// import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import WelcomeModal from "../../components/dashboard/WelcomeModal";
+import Portal from "../../components/Portal";
 import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
 import { ALL_TECHS, Tech } from '../../lib/constants';
@@ -25,9 +26,12 @@ import {
   FaInfoCircle,
   FaCamera,
   FaCode,
+  FaUser
 } from "react-icons/fa";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import Confetti from 'react-confetti';
 
 type Project = {
   title: string;
@@ -84,7 +88,7 @@ const DashboardPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [githubUsername, setGithubUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [isAvailable, setIsAvailable] = useState(true);
+  const [isAvailable, setIsAvailable] = useState(false);
   const [theme, setTheme] = useState('onyx');
 
 
@@ -109,6 +113,44 @@ const DashboardPage: React.FC = () => {
   const [socialModalOpen, setSocialModalOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [techSearch, setTechSearch] = useState("");
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const router = useRouter();
+
+  useEffect(() => {
+    // Handle window resize for confetti
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    if (typeof window !== 'undefined') {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+    }
+
+    // Check for welcome flag
+    if (router.query.welcome === 'true') {
+      setShowConfetti(true);
+      setShowWelcomeModal(true);
+      // Clean up the URL
+      const newPath = router.pathname;
+      router.replace(newPath, undefined, { shallow: true });
+
+      // Stop confetti after 5 seconds
+      const timer = setTimeout(() => setShowConfetti(false), 5000);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        clearTimeout(timer);
+      };
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
+  }, [router.query.welcome, router.pathname, router]);
 
   useEffect(() => {
     if (!user) return;
@@ -132,7 +174,7 @@ const DashboardPage: React.FC = () => {
           setUsername(profile.username || "");
           setGithubUsername(profile.github_username || "");
           setAvatarUrl(profile.avatar_url || "");
-          setIsAvailable(profile.is_available ?? true);
+          setIsAvailable(profile.is_available ?? false);
           setTheme(profile.theme || 'onyx');
 
           if (profile.tech_stack) {
@@ -247,6 +289,29 @@ const DashboardPage: React.FC = () => {
 
   return (
     <DashboardLayout>
+      {showConfetti && (
+        <Portal>
+          <div className="fixed inset-0 z-[1000] pointer-events-none">
+            <Confetti
+              width={windowSize.width}
+              height={windowSize.height}
+              recycle={true}
+              numberOfPieces={400}
+              gravity={0.15}
+              colors={['#3B82F6', '#60A5FA', '#93C5FD', '#FFFFFF', '#1E40AF']}
+            />
+          </div>
+        </Portal>
+      )}
+
+      <WelcomeModal
+        isOpen={showWelcomeModal}
+        onClose={() => {
+          setShowWelcomeModal(false);
+          setShowConfetti(false);
+        }}
+      />
+
       <div className={`relative pt-12 min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-white transition-colors duration-700 pb-20`}>
         {isImageBg && (
           <div className="absolute inset-0 z-0 pointer-events-none">
@@ -308,8 +373,12 @@ const DashboardPage: React.FC = () => {
 
               <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
                 <div className="relative group/avatar shrink-0">
-                  <div onClick={() => fileInputRef.current?.click()} className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 ${isLight ? 'border-slate-300' : 'border-white/10'} relative cursor-pointer`}>
-                    <Image src={avatarUrl || "https://avatars.githubusercontent.com/u/1?v=4"} alt="Avatar" fill className="object-cover" />
+                  <div onClick={() => fileInputRef.current?.click()} className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 ${isLight ? 'border-slate-300' : 'border-white/10'} relative cursor-pointer flex items-center justify-center bg-white/5`}>
+                    {avatarUrl ? (
+                      <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
+                    ) : (
+                      <FaUser className="text-white/10 text-5xl md:text-7xl" />
+                    )}
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
                       <FaCamera className="text-white text-3xl mb-2" />
                       <span className="text-[10px] font-black uppercase tracking-widest text-white">Upload Brand</span>
