@@ -16,7 +16,6 @@ type ProjectModalProps = {
   onSave: (projects: Project[]) => void;
 };
 
-import { supabase } from '../../../lib/supabaseClient';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../lib/AuthContext';
 import { FaCamera, FaSpinner } from "react-icons/fa";
@@ -27,7 +26,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const { user } = useAuth();
+  const { user, supabase } = useAuth();
   const [editedProjects, setEditedProjects] = useState<Project[]>(projects);
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);

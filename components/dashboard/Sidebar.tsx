@@ -4,12 +4,11 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { FiHome, FiBarChart2, FiSettings, FiLogOut, FiZap } from 'react-icons/fi';
 import { useAuth } from '../../lib/AuthContext';
-import { supabase } from '../../lib/supabaseClient';
 // import { motion, AnimatePresence } from 'framer-motion';
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const { user, signOut, supabase } = useAuth();
   const [profile, setProfile] = React.useState<{ full_name: string | null; avatar_url: string | null; username: string | null } | null>(null);
   // const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);

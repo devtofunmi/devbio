@@ -4,12 +4,14 @@ import { useRouter } from 'next/router';
 import { motion } from "framer-motion";
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
-import { supabase } from '../lib/supabaseClient';
+import { useAuth } from '../lib/AuthContext'; // Import useAuth
+// import { useSupabaseClient } from '@supabase/auth-helpers-react'; // Remove this
 import { toast } from 'react-toastify';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
+  const { supabase } = useAuth(); // Get supabase from context
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

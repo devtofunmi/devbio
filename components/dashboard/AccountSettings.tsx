@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { FiEye, FiEyeOff, FiAlertTriangle, FiShield, FiLoader } from 'react-icons/fi';
 import DeleteAccountModal from './DeleteAccountModal';
-import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 
 const AccountSettings = () => {
-    const { user, signOut } = useAuth();
+    const { user, signOut, supabase } = useAuth();
     const router = useRouter();
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);

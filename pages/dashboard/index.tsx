@@ -8,7 +8,7 @@ import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import SocialModal from "../../components/dashboard/edit/SocialModal";
 import ShareModal from "../../components/dashboard/ShareModal";
-import { supabase } from '../../lib/supabaseClient';
+// import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
 import { ALL_TECHS, Tech } from '../../lib/constants';
@@ -76,7 +76,7 @@ const THEME_CONFIG: Record<string, string> = {
 };
 
 const DashboardPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, supabase } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Data States

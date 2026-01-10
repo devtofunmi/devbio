@@ -4,13 +4,15 @@ import { useRouter } from 'next/router';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { motion } from "framer-motion";
 import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
-import { supabase } from '../lib/supabaseClient';
+import { useAuth } from '../lib/AuthContext';
+// import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { toast } from 'react-toastify';
 import SuccessModal from '../components/SuccessModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Signup: React.FC = () => {
   const router = useRouter();
+  const { supabase } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);

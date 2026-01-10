@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiCheck, FiLoader } from 'react-icons/fi';
-import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
 
@@ -35,7 +34,7 @@ const themes = [
 ];
 
 const ThemeSettings = () => {
-    const { user } = useAuth();
+    const { user, supabase } = useAuth();
     const [selectedTheme, setSelectedTheme] = useState('onyx');
     const [saving, setSaving] = useState(false);
 
