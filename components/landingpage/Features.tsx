@@ -124,12 +124,12 @@ const Features: React.FC = () => {
                 </div>
                 <div className="px-3 py-1 glass rounded-full text-[10px] text-white/40 font-bold uppercase tracking-widest">Live</div>
               </div>
-              <h4 className="text-lg font-bold text-white mb-1">Prepkitty</h4>
-              <p className="text-sm text-white/40">AI-driven interview coach with real-time feedback.</p>
+              <h4 className="text-lg font-bold text-white mb-1">SafeScore</h4>
+              <p className="text-sm text-white/40">Data-driven football prediction platform.</p>
             </div>
             <div className="p-6 glass rounded-2xl border-white/10 opacity-40">
-              <h4 className="text-lg font-bold text-white mb-1">Project Delta</h4>
-              <p className="text-sm text-white/40">Open-source distributed database system.</p>
+              <h4 className="text-lg font-bold text-white mb-1">Prepkitty</h4>
+              <p className="text-sm text-white/40">AI-driven interview coach with real-time feedback.</p>
             </div>
           </div>
         </FeatureBlock>
