@@ -27,20 +27,20 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
 
     return (
         <Portal>
-            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-6 overflow-y-auto custom-scrollbar">
+            <div className="fixed inset-0 z-[200] w-full h-screen flex items-center justify-center p-4 md:p-8 overflow-y-auto custom-scrollbar">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={onClose}
-                    className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                    className="absolute inset-0 bg-black/50 backdrop-blur-xl"
                 />
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    className="relative w-full max-w-lg glass-card border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl my-auto flex flex-col max-h-[90vh]"
+                    className="relative w-full max-w-lg glass-card border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl my-auto flex flex-col max-h-[95vh]"
                 >
                     {/* Header - Fixed */}
                     <div className="p-5 md:p-8 pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] shrink-0">
@@ -62,10 +62,9 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
 
                     {/* Content - Scrollable */}
                     <div className="p-5 md:p-8 space-y-6 md:space-y-8 overflow-y-auto custom-scrollbar flex-1">
-                        {/* QR Code Section */}
                         <div className="flex flex-col items-center justify-center">
-                            <div className="relative group p-4 bg-white rounded-[2rem] overflow-hidden mb-4 shadow-2xl">
-                                <div className="relative w-48 h-48 md:w-64 md:h-64">
+                            <div className="relative group p-3 bg-white rounded-xl overflow-hidden mb-3 shadow-xl">
+                                <div className="relative w-24 h-24 md:w-32 md:h-32">
                                     <Image
                                         src={qrCodeUrl}
                                         alt="Profile QR Code"
