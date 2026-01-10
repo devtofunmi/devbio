@@ -30,10 +30,11 @@ const LoginPage: React.FC = () => {
         }
       });
       if (error) throw error;
-    } catch (err: any) {
+    } catch (err: unknown) {
       // We can't use toast here yet as it's not imported in this specific snippet context, 
       // but the caller of this function will handle errors or the UI will just not redirect.
-      console.error("GitHub Login Error:", err.message);
+      const message = err instanceof Error ? err.message : "GitHub Login Error";
+      console.error("GitHub Login Error:", message);
     }
   };
 
@@ -53,8 +54,9 @@ const LoginPage: React.FC = () => {
       if (data.session) {
         router.push('/dashboard');
       }
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to sign in";
+      toast.error(message);
     } finally {
       setLoading(false);
     }

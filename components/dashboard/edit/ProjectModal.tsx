@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FaTimes, FaPlus, FaRocket } from "react-icons/fa";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import NextImage from "next/image";
 
 type Project = {

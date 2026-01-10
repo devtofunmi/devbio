@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck } from 'react-icons/fi';
 import { FaTwitter } from 'react-icons/fa';
 import { toast } from 'react-toastify';

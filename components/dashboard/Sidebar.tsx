@@ -29,7 +29,7 @@ const Sidebar: React.FC = () => {
     };
 
     fetchProfile();
-  }, [user]);
+  }, [user, supabase]);
 
   const menuItems = [
     { href: '/dashboard', label: 'Your Page', icon: FiHome },

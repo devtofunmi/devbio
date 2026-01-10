@@ -43,8 +43,9 @@ const AccountSettings = () => {
             toast.success("Security credentials updated!");
             setNewPassword('');
             setConfirmPassword('');
-        } catch (error: any) {
-            toast.error(error.message || "Failed to update password.");
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Failed to update password.";
+            toast.error(message);
         } finally {
             setLoading(false);
         }
@@ -64,8 +65,9 @@ const AccountSettings = () => {
             await signOut();
             toast.success("Identity scrubbed from the matrix.");
             router.push('/');
-        } catch (error: any) {
-            toast.error("Scrub operation failed: " + error.message);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Unknown error";
+            toast.error("Scrub operation failed: " + message);
             setIsDeleting(false);
         }
     };

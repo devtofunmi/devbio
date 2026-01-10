@@ -37,8 +37,9 @@ const Signup: React.FC = () => {
         }
       });
       if (error) throw error;
-    } catch (err: any) {
-      toast.error(err.message || "Failed to initiate GitHub login");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to initiate GitHub login";
+      toast.error(message);
     }
   };
 
@@ -66,8 +67,9 @@ const Signup: React.FC = () => {
           toast.success('Please check your email to confirm your account!');
         }
       }
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to sign up";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
