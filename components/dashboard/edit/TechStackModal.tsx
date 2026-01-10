@@ -1,11 +1,7 @@
-import React from "react";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
-
-type Tech = {
-  name: string;
-  icon: React.ReactNode;
-};
+import { ALL_TECHS, Tech } from "../../../lib/constants";
+import Portal from "../../Portal";
 
 type TechStackModalProps = {
   techStack: Tech[];
@@ -15,8 +11,6 @@ type TechStackModalProps = {
   handleTechToggle: (tech: Tech) => void;
   setTechModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-import Portal from "../../Portal";
 
 const TechStackModal: React.FC<TechStackModalProps> = ({
   techStack,
@@ -96,14 +90,25 @@ const TechStackModal: React.FC<TechStackModalProps> = ({
                   <div className={`w-10 h-10 rounded-xl glass flex items-center justify-center ${techStack.some(t => t.name === tech.name) ? 'text-blue-400' : 'text-white/20'}`}>
                     {tech.icon}
                   </div>
-                  <div className={`font-bold tracking-tight ${techStack.some(t => t.name === tech.name) ? 'text-white' : 'text-white/40'}`}>
-                    {tech.name}
+                  <div className="flex flex-col">
+                    <div className={`font-bold tracking-tight ${techStack.some(t => t.name === tech.name) ? 'text-white' : 'text-white/40'}`}>
+                      {tech.name}
+                    </div>
+                    {techSearch && tech.name === techSearch && !ALL_TECHS.some(t => t.name === tech.name) && (
+                      <span className="text-[8px] font-black uppercase tracking-[0.2em] text-blue-500 mt-0.5">Custom Identity</span>
+                    )}
                   </div>
                 </div>
-                {techStack.some(t => t.name === tech.name) && (
+                {techStack.some(t => t.name === tech.name) ? (
                   <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                   </div>
+                ) : (
+                  techSearch && tech.name === techSearch && !ALL_TECHS.some(t => t.name === tech.name) && (
+                    <div className="w-8 h-8 rounded-lg glass flex items-center justify-center text-blue-500 animate-pulse">
+                      <FaPlus size={10} />
+                    </div>
+                  )
                 )}
               </div>
             ))}
