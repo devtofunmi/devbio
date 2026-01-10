@@ -120,22 +120,24 @@ const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col justify-center">
-      <div
-        className="grid w-full gap-1"
-        style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
-      >
-        {columns.map((col, ci) => (
-          <div key={ci} className="flex flex-col gap-1">
-            {col.map((day, ri) => (
-              <div
-                key={`${ci}-${ri}`}
-                title={`${day.date}: ${day.count} contributions`}
-                className={`aspect-square w-full rounded-[2px] transition-all duration-500 hover:scale-150 hover:z-50 ${colorFor(day.level)} cursor-help`}
-              />
-            ))}
-          </div>
-        ))}
+    <div className="w-full h-full flex flex-col justify-center overflow-hidden">
+      <div className="w-full overflow-x-auto hide-scrollbar pb-2">
+        <div
+          className="grid gap-1 min-w-[600px] md:min-w-0"
+          style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
+        >
+          {columns.map((col, ci) => (
+            <div key={ci} className="flex flex-col gap-1">
+              {col.map((day, ri) => (
+                <div
+                  key={`${ci}-${ri}`}
+                  title={`${day.date}: ${day.count} contributions`}
+                  className={`aspect-square w-full rounded-[2px] transition-all duration-500 hover:scale-150 hover:z-50 ${colorFor(day.level)} cursor-help`}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
