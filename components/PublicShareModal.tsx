@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck } from 'react-icons/fi';
+import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck, FiUser } from 'react-icons/fi';
 import { FaTwitter, FaLinkedin, FaWhatsapp, FaFacebook } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
@@ -53,8 +53,12 @@ const PublicShareModal: React.FC<PublicShareModalProps> = ({ username, fullName,
                     {/* Header with User Info */}
                     <div className="p-6 md:p-8 pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] shrink-0">
                         <div className="flex items-center gap-4">
-                            <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden border-2 border-blue-500/30">
-                                <Image src={avatarUrl || "https://avatars.githubusercontent.com/u/1?v=4"} alt={fullName} fill className="object-cover" />
+                            <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden border-2 border-blue-500/30 flex items-center justify-center bg-white/5">
+                                {avatarUrl ? (
+                                    <Image src={avatarUrl} alt={fullName} fill className="object-cover" />
+                                ) : (
+                                    <FiUser className="text-white/20" size={24} />
+                                )}
                             </div>
                             <div>
                                 <h3 className="text-lg md:text-xl font-black text-white tracking-tight leading-none uppercase">{fullName}</h3>
