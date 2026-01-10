@@ -1,16 +1,16 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX } from 'react-icons/fi';
+import { FiX, FiLoader } from 'react-icons/fi';
+import Portal from "../Portal";
 
 interface DeleteAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  isDeleting?: boolean;
 }
 
-import Portal from "../Portal";
-
-const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({ isOpen, onClose, onConfirm, isDeleting }) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -39,16 +39,18 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({ isOpen, onClose
 
                 <div className="flex flex-col gap-3">
                   <button
-                    className="w-full py-5 bg-red-500 text-white font-black rounded-2xl hover:bg-red-600 transition-all cursor-pointer shadow-xl shadow-red-500/10"
+                    className="w-full py-5 bg-red-500 text-white font-black rounded-2xl hover:bg-red-600 transition-all cursor-pointer shadow-xl shadow-red-500/10 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isDeleting}
                     onClick={() => {
                       onConfirm();
-                      onClose();
                     }}
                   >
-                    Erase My Identity
+                    {isDeleting && <FiLoader className="animate-spin" />}
+                    {isDeleting ? 'Erasing Identity...' : 'Erase My Identity'}
                   </button>
                   <button
-                    className="w-full py-5 glass text-white/40 hover:text-white transition-all rounded-2xl cursor-pointer font-bold border-white/5"
+                    className="w-full py-5 glass text-white/40 hover:text-white transition-all rounded-2xl cursor-pointer font-bold border-white/5 disabled:opacity-50"
+                    disabled={isDeleting}
                     onClick={onClose}
                   >
                     Abort Operation

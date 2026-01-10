@@ -1,20 +1,78 @@
 import React, { useState } from 'react';
-import { FiEye, FiEyeOff, FiAlertTriangle, FiShield } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiAlertTriangle, FiShield, FiLoader } from 'react-icons/fi';
 import DeleteAccountModal from './DeleteAccountModal';
-// import { motion } from 'framer-motion';
+import { supabase } from '../../lib/supabaseClient';
+import { useAuth } from '../../lib/AuthContext';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 const AccountSettings = () => {
+    const { user, signOut } = useAuth();
+    const router = useRouter();
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const handleDeleteConfirm = () => {
-        console.log('Account deletion confirmed');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handlePasswordUpdate = async () => {
+        if (!newPassword || !confirmPassword) {
+            toast.error("Please fill in both password fields.");
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            toast.error("Passwords do not match.");
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            toast.error("Password must be at least 6 characters.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const { error } = await supabase.auth.updateUser({
+                password: newPassword
+            });
+
+            if (error) throw error;
+            toast.success("Security credentials updated!");
+            setNewPassword('');
+            setConfirmPassword('');
+        } catch (error: any) {
+            toast.error(error.message || "Failed to update password.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!user) return;
+
+        setIsDeleting(true);
+        try {
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .delete()
+                .eq('id', user.id);
+
+            if (profileError) throw profileError;
+            await signOut();
+            toast.success("Identity scrubbed from the matrix.");
+            router.push('/');
+        } catch (error: any) {
+            toast.error("Scrub operation failed: " + error.message);
+            setIsDeleting(false);
+        }
     };
 
     return (
         <section className="space-y-8 mb-20 md:mb-0">
-            {/* Change Password */}
             <div className="glass-card rounded-[3rem] p-10 border-white/5 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
                     <FiShield size={120} className="text-white" />
@@ -33,6 +91,8 @@ const AccountSettings = () => {
                                 <input
                                     type={showNewPassword ? 'text' : 'password'}
                                     placeholder="••••••••"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
                                     className="w-full p-5 glass rounded-2xl focus:outline-none border-white/5 text-white font-bold"
                                 />
                                 <button
@@ -50,6 +110,8 @@ const AccountSettings = () => {
                                 <input
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     placeholder="••••••••"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                     className="w-full p-5 glass rounded-2xl focus:outline-none border-white/5 text-white font-bold"
                                 />
                                 <button
@@ -63,9 +125,12 @@ const AccountSettings = () => {
                     </div>
 
                     <button
-                        className="mt-10 px-10 py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5 cursor-pointer"
+                        onClick={handlePasswordUpdate}
+                        disabled={loading}
+                        className="mt-10 px-10 py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5 cursor-pointer flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Update Credentials
+                        {loading && <FiLoader className="animate-spin" />}
+                        {loading ? 'Updating...' : 'Update Credentials'}
                     </button>
                 </div>
             </div>
@@ -97,6 +162,7 @@ const AccountSettings = () => {
                 isOpen={showDeleteModal}
                 onClose={() => setShowDeleteModal(false)}
                 onConfirm={handleDeleteConfirm}
+                isDeleting={isDeleting}
             />
         </section>
     )
