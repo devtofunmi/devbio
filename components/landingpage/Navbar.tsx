@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../lib/AuthContext';
 
 const Navbar: React.FC = () => {
+    const { user } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -47,18 +49,29 @@ const Navbar: React.FC = () => {
                                 {item}
                             </Link>
                         ))}
-                        <Link
-                            href="/login"
-                            className="text-sm font-medium text-white/50 hover:text-white transition-colors"
-                        >
-                            Log In
-                        </Link>
-                        <Link
-                            href="/signup"
-                            className="bg-white text-black px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition active:scale-95"
-                        >
-                            Get Started
-                        </Link>
+                        {user ? (
+                            <Link
+                                href="/dashboard"
+                                className="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-blue-700 transition active:scale-95 shadow-lg shadow-blue-600/20"
+                            >
+                                Dashboard
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/login"
+                                    className="text-sm font-medium text-white/50 hover:text-white transition-colors"
+                                >
+                                    Log In
+                                </Link>
+                                <Link
+                                    href="/signup"
+                                    className="bg-white text-black px-6 py-2 rounded-full text-sm font-bold hover:scale-105 transition active:scale-95"
+                                >
+                                    Get Started
+                                </Link>
+                            </>
+                        )}
                     </nav>
 
                     <div className="md:hidden">
@@ -104,8 +117,14 @@ const Navbar: React.FC = () => {
                                 </Link>
                             ))}
                             <div className="h-px bg-white/10 my-4" />
-                            <Link href="/login" className="text-2xl font-bold text-white/40" onClick={() => setIsMenuOpen(false)}>Log In</Link>
-                            <Link href="/signup" className="text-2xl font-bold text-white" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+                            {user ? (
+                                <Link href="/dashboard" className="text-2xl font-bold text-blue-400" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+                            ) : (
+                                <>
+                                    <Link href="/login" className="text-2xl font-bold text-white/40" onClick={() => setIsMenuOpen(false)}>Log In</Link>
+                                    <Link href="/signup" className="text-2xl font-bold text-white" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+                                </>
+                            )}
                         </nav>
                     </motion.div>
                 )}
