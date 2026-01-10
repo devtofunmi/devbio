@@ -314,26 +314,26 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               className={`${leftColClass} flex flex-col gap-8`}
             >
               {hasGitHub && (
-                <div className="glass-card rounded-[2rem] border border-white/10 overflow-hidden h-fit flex items-center justify-center min-h-[220px]">
-                  <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
+                <div className="glass-card rounded-[2rem] border border-white/10 overflow-hidden h-fit flex items-center justify-center min-h-[180px] md:min-h-[220px]">
+                  <div className="w-full h-full p-4 md:p-8 flex items-center justify-center">
                     <GitHubCard githubUsername={user.github_username} size={48} />
                   </div>
                 </div>
               )}
 
               {hasTech && (
-                <div className="glass-card rounded-[2rem] p-10 border border-white/10">
-                  <div className="flex justify-between items-center mb-8">
+                <div className="glass-card rounded-[2rem] p-6 md:p-10 border border-white/10">
+                  <div className="flex justify-between items-center mb-6 md:mb-8">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400">
                         <FaCode size={18} />
                       </div>
-                      <h4 className="text-2xl font-black text-white tracking-tight leading-none">Tech Stack</h4>
+                      <h4 className="text-xl md:text-2xl font-black text-white tracking-tight leading-none">Tech Stack</h4>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2 md:gap-3">
                     {(user.tech_stack as TechItem[]).map((tech) => (
-                      <span key={tech.name} className="px-6 py-3 glass rounded-2xl text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95">
+                      <span key={tech.name} className="px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap">
                         {tech.name}
                       </span>
                     ))}
