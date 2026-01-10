@@ -8,6 +8,10 @@ import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import SocialModal from "../../components/dashboard/edit/SocialModal";
 import ShareModal from "../../components/dashboard/ShareModal";
+import { supabase } from '../../lib/supabaseClient';
+import { useAuth } from '../../lib/AuthContext';
+import { toast } from 'react-toastify';
+import { ALL_TECHS, Tech } from '../../lib/constants';
 import {
   FaPlus,
   FaTwitter,
@@ -22,12 +26,10 @@ import {
   FaReact,
   FaNodeJs,
   FaCamera,
-  FaCode
+  FaCode,
+  FaAws,
+  FaMicrosoft
 } from "react-icons/fa";
-import { supabase } from '../../lib/supabaseClient';
-import { useAuth } from '../../lib/AuthContext';
-import { toast } from 'react-toastify';
-import { SiNextdotjs, SiTailwindcss, SiTypescript, SiGraphql, SiSwift, SiRust } from "react-icons/si";
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -38,22 +40,6 @@ type Project = {
   tech: string[];
   image?: string;
 };
-
-type Tech = {
-  name: string;
-  icon: React.ReactNode;
-};
-
-const ALL_TECHS = [
-  { name: 'React', icon: <FaReact /> },
-  { name: 'Next.js', icon: <SiNextdotjs /> },
-  { name: 'TypeScript', icon: <SiTypescript /> },
-  { name: 'Node.js', icon: <FaNodeJs /> },
-  { name: 'Tailwind CSS', icon: <SiTailwindcss /> },
-  { name: 'GraphQL', icon: <SiGraphql /> },
-  { name: 'Swift', icon: <SiSwift /> },
-  { name: 'Rust', icon: <SiRust /> },
-];
 
 const ensureAbsoluteUrl = (url: string) => {
   if (!url) return '';
@@ -209,10 +195,17 @@ const DashboardPage: React.FC = () => {
   };
 
   const filteredTechs = useMemo(() => {
-    return ALL_TECHS.filter(t => t.name.toLowerCase().includes(techSearch.toLowerCase()));
+    const filtered = ALL_TECHS.filter(t => t.name.toLowerCase().includes(techSearch.toLowerCase()));
+
+    // Add custom option if search has value and no exact match
+    if (techSearch && !ALL_TECHS.some(t => t.name.toLowerCase() === techSearch.toLowerCase())) {
+      filtered.unshift({ name: techSearch, icon: <FaCode /> });
+    }
+
+    return filtered;
   }, [techSearch]);
 
-  const handleTechToggle = (tech: { name: string; icon: React.ReactNode }) => {
+  const handleTechToggle = (tech: Tech) => {
     setTechStack(prev =>
       prev.some(t => t.name === tech.name)
         ? prev.filter(t => t.name !== tech.name)
@@ -385,26 +378,26 @@ const DashboardPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-8 flex flex-col gap-8">
-              <div className={`glass-card rounded-[2rem] border ${isLight ? 'border-slate-300' : 'border-white/5'} overflow-hidden group h-fit flex items-center justify-center relative`}>
+              <div className={`glass-card rounded-[2rem] border ${isLight ? 'border-slate-300' : 'border-white/5'} overflow-hidden group h-fit flex items-center justify-center relative min-h-[180px] md:min-h-fit`}>
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-20 flex items-center justify-center backdrop-blur-[2px]">
                   <button onClick={() => setGithubModalOpen(true)} className="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:scale-110 transition-all">Sync GitHub DNA</button>
                 </div>
-                <div className="w-full h-full p-6 md:p-8 flex items-center justify-center">
+                <div className="w-full h-full p-4 md:p-8 flex items-center justify-center">
                   <GithubCard githubUsername={githubUsername} size={48} />
                 </div>
               </div>
 
-              <div className={`glass-card rounded-[2rem] p-10 border ${isLight ? 'border-slate-300' : 'border-white/5'} group`}>
-                <div className="flex justify-between items-center mb-8">
+              <div className={`glass-card rounded-[2rem] p-6 md:p-10 border ${isLight ? 'border-slate-300' : 'border-white/5'} group`}>
+                <div className="flex justify-between items-center mb-6 md:mb-8">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400"><FaCode size={18} /></div>
-                    <h4 className={`text-2xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight leading-none`}>Tech Stack</h4>
+                    <h4 className={`text-xl md:text-2xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight leading-none`}>Tech Stack</h4>
                   </div>
                   <button onClick={() => setTechModalOpen(true)} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-white/20 hover:text-white transition-all"><FaPlus size={14} /></button>
                 </div>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 md:gap-3">
                   {techStack.map(tech => (
-                    <span key={tech.name} className={`px-6 py-3 glass rounded-2xl text-sm font-bold ${isLight ? 'text-black/40' : 'text-white/40'} hover:text-blue-400 ${isLight ? 'border-black/5' : 'border-white/5'} cursor-pointer transition-all hover:scale-110`}>{tech.name}</span>
+                    <span key={tech.name} className={`px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold ${isLight ? 'text-black/40' : 'text-white/40'} hover:text-blue-400 ${isLight ? 'border-black/5' : 'border-white/5'} cursor-pointer transition-all hover:scale-110 whitespace-nowrap`}>{tech.name}</span>
                   ))}
                 </div>
               </div>
