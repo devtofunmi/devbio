@@ -14,7 +14,6 @@ const LoginPage: React.FC = () => {
   const { supabase } = useAuth(); // Get supabase from context
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -41,7 +40,6 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
 
     try {
       const { data, error: signInError } = await supabase.auth.signInWithPassword({

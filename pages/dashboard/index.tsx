@@ -23,12 +23,8 @@ import {
   FaShareAlt,
   FaPalette,
   FaInfoCircle,
-  FaReact,
-  FaNodeJs,
   FaCamera,
   FaCode,
-  FaAws,
-  FaMicrosoft
 } from "react-icons/fa";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -80,7 +76,7 @@ const DashboardPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Data States
-  const [profileId, setProfileId] = useState<string | null>(null);
+
   const [name, setName] = useState("");
   const [profession, setProfession] = useState("");
   const [bio, setBio] = useState("");
@@ -129,7 +125,6 @@ const DashboardPage: React.FC = () => {
         if (profileError) throw profileError;
 
         if (profile) {
-          setProfileId(profile.id);
           setName(profile.full_name || "");
           setProfession(profile.profession || "");
           setBio(profile.bio || "");
@@ -141,16 +136,16 @@ const DashboardPage: React.FC = () => {
           setTheme(profile.theme || 'onyx');
 
           if (profile.tech_stack) {
-            const dbTechs = profile.tech_stack as any[];
+            const dbTechs = profile.tech_stack as { name: string }[];
             const rehydrated = dbTechs.map(t => {
               const matched = ALL_TECHS.find(at => at.name === t.name);
-              return matched ? matched : t;
+              return matched ? matched : { ...t, icon: <FaCode /> };
             });
             setTechStack(rehydrated);
           }
 
           if (profile.social_links) {
-            const dbSocials = profile.social_links as any[];
+            const dbSocials = profile.social_links as { name: string; href: string }[];
             setSocials(prev => prev.map(s => {
               const dbMatch = dbSocials.find(dbs => dbs.name === s.name);
               return dbMatch ? { ...s, href: dbMatch.href } : s;
@@ -167,7 +162,8 @@ const DashboardPage: React.FC = () => {
         if (userProjects) {
           setProjects(userProjects.map(p => ({ ...p, tech: p.tech_tags || [], image: p.image_url })));
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
+        console.error(error);
         toast.error('Failed to load profile data.');
       } finally {
         setFetching(false);
@@ -175,9 +171,9 @@ const DashboardPage: React.FC = () => {
     };
 
     fetchData();
-  }, [user]);
+  }, [user, supabase]);
 
-  const autoSaveProfile = async (updates: any) => {
+  const autoSaveProfile = async (updates: Record<string, unknown>) => {
     if (!user) return;
     setSaving(true);
     try {
@@ -188,6 +184,7 @@ const DashboardPage: React.FC = () => {
       });
       if (error) throw error;
     } catch (err) {
+      console.error(err);
       toast.error("Cloud sync failed");
     } finally {
       setTimeout(() => setSaving(false), 500);
@@ -234,7 +231,8 @@ const DashboardPage: React.FC = () => {
         setAvatarUrl(publicUrl);
         await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
         toast.success('Avatar updated!');
-      } catch (error: any) {
+      } catch (error: unknown) {
+        console.error(error);
         toast.error('Error uploading image');
       }
     }
@@ -363,7 +361,7 @@ const DashboardPage: React.FC = () => {
                   <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
                     {socials.filter(s => s.href).map((social, i) => (
                       <div key={i} className={`glass rounded-2xl p-4 flex items-center justify-center border ${isLight ? 'border-slate-300' : 'border-white/5'} hover:border-blue-500/30 transition-all cursor-pointer group`}>
-                        {React.cloneElement(social.icon as any, { size: 20, className: `${isLight ? 'text-black/40' : 'text-white/40'} group-hover:text-blue-400 transition-colors` })}
+                        {React.cloneElement(social.icon as React.ReactElement<{ size: number; className: string }>, { size: 20, className: `${isLight ? 'text-black/40' : 'text-white/40'} group-hover:text-blue-400 transition-colors` })}
                       </div>
                     ))}
                     <button onClick={() => setSocialModalOpen(true)} className={`glass rounded-2xl px-6 py-4 flex items-center justify-center gap-2 border-dashed ${isLight ? 'border-black/10 text-black/20 hover:text-black' : 'border-white/10 text-white/20 hover:text-white'} transition-all`}>
@@ -473,12 +471,14 @@ const DashboardPage: React.FC = () => {
             setTechSearch={setTechSearch}
             filteredTechs={filteredTechs}
             handleTechToggle={handleTechToggle}
-            setTechModalOpen={async (open) => {
-              if (!open) {
-                await autoSaveProfile({ tech_stack: techStack.map(t => ({ name: t.name })) });
-                toast.success("Tech stack updated!");
+            setTechModalOpen={(open) => {
+              const isOpen = typeof open === 'function' ? open(techModalOpen) : open;
+              if (!isOpen) {
+                autoSaveProfile({ tech_stack: techStack.map(t => ({ name: t.name })) }).then(() => {
+                  toast.success("Tech stack updated!");
+                });
               }
-              setTechModalOpen(open as any);
+              setTechModalOpen(isOpen);
             }}
           />
         )}
@@ -498,12 +498,14 @@ const DashboardPage: React.FC = () => {
           <SocialModal
             socials={socials}
             handleSocialChange={handleSocialChange}
-            setSocialModalOpen={async (open) => {
-              if (!open) {
-                await autoSaveProfile({ social_links: socials.map(s => ({ name: s.name, href: s.href })) });
-                toast.success("Social links updated!");
+            setSocialModalOpen={(open) => {
+              const isOpen = typeof open === 'function' ? open(socialModalOpen) : open;
+              if (!isOpen) {
+                autoSaveProfile({ social_links: socials.map(s => ({ name: s.name, href: s.href })) }).then(() => {
+                  toast.success("Social links updated!");
+                });
               }
-              setSocialModalOpen(open as any);
+              setSocialModalOpen(isOpen);
             }}
           />
         )}

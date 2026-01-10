@@ -41,7 +41,7 @@ const About = () => {
                                     </div>
                                     <FaArrowRight size={14} className="text-white/20 group-hover/item:text-blue-400 group-hover/item:translate-x-1 transition-all" />
                                 </a>
-                                <a href="https://twitter.com/devbio" className="flex items-center justify-between p-5 glass rounded-2xl border-white/5 hover:border-blue-400/50 transition-all group/item">
+                                {/* <a href="https://twitter.com/devbio" className="flex items-center justify-between p-5 glass rounded-2xl border-white/5 hover:border-blue-400/50 transition-all group/item">
                                     <div className="flex items-center gap-4">
                                         <FaTwitter size={24} className="text-blue-400" />
                                         <div>
@@ -50,7 +50,7 @@ const About = () => {
                                         </div>
                                     </div>
                                     <FaArrowRight size={14} className="text-white/20 group-hover/item:text-blue-400 group-hover/item:translate-x-1 transition-all" />
-                                </a>
+                                </a> */}
                             </div>
                         </div>
                     </motion.div>

@@ -134,7 +134,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   //  Fetch Projects
-  const { data: projects, error: projectsError } = await supabase
+  const { data: projects } = await supabase
     .from('projects')
     .select('*')
     .eq('user_id', profile.id)
