@@ -148,11 +148,11 @@ const Sidebar: React.FC = () => {
 
                 {/* Quick Actions */}
                 <div className="flex flex-col gap-1.5 relative z-10">
-                  <Link href={`/${profile?.username || 'profile'}`}>
+                  {/* <Link href={`/${profile?.username || 'profile'}`}>
                     <button className="w-full cursor-pointer py-2 glass rounded-lg text-[9px] font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-white/5 border-white/5 transition-all">
                       View Public Page
                     </button>
-                  </Link>
+                  </Link> */}
                   <button
                     onClick={handleLogout}
                     className="w-full cursor-pointer py-2 glass rounded-lg text-[9px] font-black uppercase tracking-widest text-red-500/40 hover:text-white hover:bg-red-500 transition-all border-white/5 flex items-center justify-center gap-2"
