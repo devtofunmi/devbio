@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub, FaTwitter, FaArrowRight } from 'react-icons/fa';
+import { FaGithub, FaArrowRight } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 const About = () => {
