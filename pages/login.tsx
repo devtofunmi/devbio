@@ -113,7 +113,7 @@ const LoginPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex mt-10 flex-col lg:flex-row w-full max-w-7xl mx-auto px-6 relative z-10">
+      <div className="flex mt-14 flex-col lg:flex-row w-full max-w-7xl mx-auto px-6 relative z-10">
         {/* Left Side: Login Form */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
