@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect } from 'react';
 import { User, Session, SupabaseClient } from '@supabase/supabase-js';
 import { useSessionContext, useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 interface AuthContextType {
     user: User | null;
@@ -25,22 +26,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const user = useUser();
     const router = useRouter();
 
+    const lastToastRef = React.useRef<number>(0);
+
     useEffect(() => {
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange(async (event: string) => {
             if (event === 'SIGNED_IN') {
+                const now = Date.now();
+                const shouldToast = now - lastToastRef.current > 2000;
+
                 const redirect = router.query.redirect as string;
+
+                // Show success message if user coming from a public page (home, login, signup)
+                // or if user just landed on the dashboard with a hash (OAuth callback)
+                const isComingFromAuth = ['/', '/login', '/signup'].includes(router.pathname);
+                const isOAuthCallback = router.pathname === '/dashboard' && typeof window !== 'undefined' && window.location.hash.includes('access_token');
+
+                if ((isComingFromAuth || isOAuthCallback) && shouldToast) {
+                    toast.success('Successfully signed in!');
+                    lastToastRef.current = now;
+                }
+
                 if (redirect) {
                     router.push(redirect);
-                } else if (['/', '/login', '/signup'].includes(router.pathname)) {
-                    router.push('/dashboard?welcome=true');
+                } else if (isComingFromAuth) {
+                    router.push('/dashboard');
                 }
             }
         });
 
         return () => subscription.unsubscribe();
-    }, [router, supabase]);
+    }, [supabase, router]); // Keep router so we have fresh path info, but throttle toast
 
     const signOut = async () => {
         await supabase.auth.signOut();
