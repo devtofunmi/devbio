@@ -128,7 +128,7 @@ const AccountSettings = () => {
                     <button
                         onClick={handlePasswordUpdate}
                         disabled={loading}
-                        className="mt-10 px-10 py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5 cursor-pointer flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="mt-10 px-5 mx-auto md:mx-0 py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5 cursor-pointer flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading && <FiLoader className="animate-spin" />}
                         {loading ? 'Updating...' : 'Update Credentials'}
