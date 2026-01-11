@@ -116,7 +116,7 @@ const CTAModal: React.FC<CTAModalProps> = ({ isOpen, onClose, ctaTitle, ctaDescr
                                         placeholder="e.g. hello@gmail.com or calendly.com/username"
                                         className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-base text-white placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 transition-all font-mono text-sm"
                                     />
-                                    <p className="text-[10px] text-white/20 px-1">Tip: Just enter an email or a website link. We'll handle the rest.</p>
+                                    <p className="text-[10px] text-white/20 px-1">Tip: Just enter an email or a website link. We&apos;ll handle the rest.</p>
                                 </div>
 
                                 {/* Quick Presets */}
