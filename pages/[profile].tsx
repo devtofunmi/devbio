@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser } from "react-icons/fa";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser, FaArrowRight } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import GitHubCard from "../components/GitHubCard";
@@ -42,6 +42,10 @@ type UserProfile = {
   tech_stack: TechItem[];
   is_available: boolean;
   status_message?: string;
+  cta_title?: string;
+  cta_description?: string;
+  cta_text?: string;
+  cta_link?: string;
   theme?: string;
   beams_enabled?: boolean;
 };
@@ -109,6 +113,8 @@ const formatSocialHref = (name: string, href: string) => {
 
 const ensureAbsoluteUrl = (url: string) => {
   if (!url) return '';
+  if (url.startsWith('mailto:') || url.startsWith('tel:')) return url;
+  if (url.includes('@') && !url.includes('://')) return `mailto:${url}`;
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   return `https://${url}`;
 };
@@ -282,6 +288,8 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                   </p>
                 </div>
 
+
+
                 {/* Social Links */}
                 <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
                   {(user.social_links as SocialLink[])?.map((social) => (
@@ -432,6 +440,44 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                   </div>
                 ))}
               </div>
+
+              {user.cta_text && user.cta_link && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="mt-20 md:mt-32"
+                >
+                  <div className="glass-card rounded-[3rem] p-8 md:p-20 border border-white/10 text-center relative overflow-hidden group">
+                    <div className="relative z-10 max-w-2xl mx-auto space-y-8">
+                      <div className="space-y-4">
+                        <h3 className="text-3xl md:text-6xl font-black text-white tracking-tighter">
+                          {user.cta_title || "Ready to work together?"}
+                        </h3>
+                        <p className="text-lg md:text-xl text-white/40 font-light leading-relaxed">
+                          {user.cta_description || "Let's build something incredible. Reach out and let's start a conversation."}
+                        </p>
+                      </div>
+
+                      <div className="pt-4">
+                        <a
+                          href={ensureAbsoluteUrl(user.cta_link)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-4 bg-white text-black px-10 py-5 rounded-[2rem] font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10 group"
+                        >
+                          {user.cta_text}
+                          <FaArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Background Accents */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -z-10 group-hover:bg-blue-500/20 transition-colors" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/5 blur-[100px] -z-10" />
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
           )}
         </div>
