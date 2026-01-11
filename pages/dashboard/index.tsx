@@ -9,6 +9,7 @@ import GitHubModal from "../../components/dashboard/edit/GitHubModal";
 import SocialModal from "../../components/dashboard/edit/SocialModal";
 import ShareModal from "../../components/dashboard/ShareModal";
 import WelcomeModal from "../../components/dashboard/WelcomeModal";
+import StatusModal from "../../components/dashboard/edit/StatusModal";
 import Portal from "../../components/Portal";
 import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
@@ -59,10 +60,10 @@ const THEME_CONFIG: Record<string, string> = {
   'ember': 'bg-[#17110e]',
   'dim': 'bg-[#15151a]',
   'alabaster': 'bg-[#1e293b]',
-  'matrix': 'https://images.unsplash.com/photo-1550684848-86a5d8727436?w=1600&q=80', // Midnight Mesh
-  'circuit': 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1600&q=80', // Dark Nebula
-  'terminal': 'https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=1600&q=80', // Cosmic Dusk (New URL)
-  'workspace': 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1600&q=80', // Abstract Flow (New URL)
+  'matrix': 'https://images.unsplash.com/photo-1550684848-86a5d8727436?w=1600&q=80', 
+  'circuit': 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1600&q=80', 
+  'terminal': 'https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=1600&q=80', 
+  'workspace': 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1600&q=80', 
   'nodes': 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=1600&q=80',
   'glass': 'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?w=1600&q=80',
   'velvet': 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1600&q=80',
@@ -89,6 +90,7 @@ const DashboardPage: React.FC = () => {
   const [githubUsername, setGithubUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
+  const [statusText, setStatusText] = useState("");
   const [theme, setTheme] = useState('onyx');
 
 
@@ -111,6 +113,7 @@ const DashboardPage: React.FC = () => {
   const [techModalOpen, setTechModalOpen] = useState(false);
   const [githubModalOpen, setGithubModalOpen] = useState(false);
   const [socialModalOpen, setSocialModalOpen] = useState(false);
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [techSearch, setTechSearch] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
@@ -182,6 +185,7 @@ const DashboardPage: React.FC = () => {
           setGithubUsername(profile.github_username || "");
           setAvatarUrl(profile.avatar_url || "");
           setIsAvailable(profile.is_available ?? false);
+          setStatusText(profile.status_message || "");
           setTheme(profile.theme || 'onyx');
 
           if (profile.tech_stack) {
@@ -492,16 +496,24 @@ const DashboardPage: React.FC = () => {
                 />
               </div>
 
-              <div onClick={() => { const v = !isAvailable; setIsAvailable(v); autoSaveProfile({ is_available: v }); }} className={`glass-card rounded-[1.5rem] p-8 border ${isLight ? 'border-slate-300' : 'border-white/5'} flex items-center justify-between group cursor-pointer hover:border-blue-500/30 transition-all`}>
+              <div
+                onClick={() => setStatusModalOpen(true)}
+                className={`glass-card rounded-[1.5rem] p-8 border ${isLight ? 'border-slate-300' : 'border-white/5'} flex items-center justify-between group cursor-pointer hover:border-blue-500/30 transition-all`}
+              >
                 <div className="flex flex-col">
-                  <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Status</span>
-                  <span className={`text-sm font-black flex items-center gap-3 ${isLight ? 'text-slate-900' : 'text-white'}`}>
-                    <span className={`w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'} ${isAvailable ? 'animate-pulse' : ''}`} />
-                    {isAvailable ? 'Available' : 'Focused'}
-                  </span>
+                  <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
+                  <div className="flex flex-col gap-1">
+                    <span className={`text-sm font-black flex items-center gap-3 ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                      <span className={`w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'} ${isAvailable ? 'animate-pulse' : ''}`} />
+                      {isAvailable ? 'Available' : 'Focused'}
+                    </span>
+                    <span className="text-xs text-white/40 font-medium truncate max-w-[180px]">
+                      {statusText || (isAvailable ? "Set availability text..." : "Set focus text...")}
+                    </span>
+                  </div>
                 </div>
-                <div className={`w-10 h-5 rounded-full relative transition-colors ${isAvailable ? 'bg-blue-600' : 'bg-white/10'}`}>
-                  <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${isAvailable ? 'left-[22px]' : 'left-1'}`} />
+                <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/20 group-hover:text-blue-400 group-hover:bg-blue-500/10 transition-all">
+                  <FaPlus size={14} />
                 </div>
               </div>
             </motion.div>
@@ -589,6 +601,20 @@ const DashboardPage: React.FC = () => {
           <ShareModal
             username={username}
             onClose={() => setShareModalOpen(false)}
+          />
+        )}
+        {statusModalOpen && (
+          <StatusModal
+            isOpen={statusModalOpen}
+            onClose={() => setStatusModalOpen(false)}
+            isAvailable={isAvailable}
+            statusText={statusText}
+            onSave={(isAvail, text) => {
+              setIsAvailable(isAvail);
+              setStatusText(text);
+              autoSaveProfile({ is_available: isAvail, status_message: text });
+              toast.success("Identity status updated!");
+            }}
           />
         )}
       </AnimatePresence>

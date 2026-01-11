@@ -41,6 +41,7 @@ type UserProfile = {
   social_links: SocialLink[];
   tech_stack: TechItem[];
   is_available: boolean;
+  status_message?: string;
   theme?: string;
   beams_enabled?: boolean;
 };
@@ -374,7 +375,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                 <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
                 <span className="text-sm font-black flex items-center gap-3 text-white">
                   <span className={`w-2.5 h-2.5 rounded-full ${user.is_available ? 'bg-green-500' : 'bg-red-500'} animate-pulse`} />
-                  {user.is_available ? 'Available' : 'Focused'}
+                  {user.status_message || (user.is_available ? 'Available' : 'Focused')}
                 </span>
               </div>
             </div>
