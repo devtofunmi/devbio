@@ -33,7 +33,7 @@ const Signup: React.FC = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
+          redirectTo: `${window.location.origin}/dashboard?welcome=true`
         }
       });
       if (error) throw error;

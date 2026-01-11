@@ -130,9 +130,12 @@ const DashboardPage: React.FC = () => {
     }
 
     // Check for welcome flag
-    if (router.query.welcome === 'true') {
+    const hasCelebrated = localStorage.getItem('hasCelebrated');
+    if (router.query.welcome === 'true' && !hasCelebrated) {
       setShowConfetti(true);
       setShowWelcomeModal(true);
+      localStorage.setItem('hasCelebrated', 'true');
+
       // Clean up the URL
       const newPath = router.pathname;
       router.replace(newPath, undefined, { shallow: true });
@@ -143,6 +146,10 @@ const DashboardPage: React.FC = () => {
         window.removeEventListener('resize', handleResize);
         clearTimeout(timer);
       };
+    } else if (router.query.welcome === 'true' && hasCelebrated) {
+      // Just clean the URL if they already celebrated
+      const newPath = router.pathname;
+      router.replace(newPath, undefined, { shallow: true });
     }
 
     return () => {
