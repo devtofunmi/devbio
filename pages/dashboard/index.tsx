@@ -10,6 +10,7 @@ import SocialModal from "../../components/dashboard/edit/SocialModal";
 import ShareModal from "../../components/dashboard/ShareModal";
 import WelcomeModal from "../../components/dashboard/WelcomeModal";
 import StatusModal from "../../components/dashboard/edit/StatusModal";
+import CTAModal from "../../components/dashboard/edit/CTAModal";
 import Portal from "../../components/Portal";
 import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
@@ -44,6 +45,8 @@ type Project = {
 
 const ensureAbsoluteUrl = (url: string) => {
   if (!url) return '';
+  if (url.startsWith('mailto:') || url.startsWith('tel:')) return url;
+  if (url.includes('@') && !url.includes('://')) return `mailto:${url}`;
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
   return `https://${url}`;
 };
@@ -60,10 +63,10 @@ const THEME_CONFIG: Record<string, string> = {
   'ember': 'bg-[#17110e]',
   'dim': 'bg-[#15151a]',
   'alabaster': 'bg-[#1e293b]',
-  'matrix': 'https://images.unsplash.com/photo-1550684848-86a5d8727436?w=1600&q=80', 
-  'circuit': 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1600&q=80', 
-  'terminal': 'https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=1600&q=80', 
-  'workspace': 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1600&q=80', 
+  'matrix': 'https://images.unsplash.com/photo-1550684848-86a5d8727436?w=1600&q=80',
+  'circuit': 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1600&q=80',
+  'terminal': 'https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=1600&q=80',
+  'workspace': 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1600&q=80',
   'nodes': 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=1600&q=80',
   'glass': 'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?w=1600&q=80',
   'velvet': 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1600&q=80',
@@ -91,6 +94,10 @@ const DashboardPage: React.FC = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [statusText, setStatusText] = useState("");
+  const [ctaTitle, setCtaTitle] = useState("");
+  const [ctaDescription, setCtaDescription] = useState("");
+  const [ctaText, setCtaText] = useState("");
+  const [ctaLink, setCtaLink] = useState("");
   const [theme, setTheme] = useState('onyx');
 
 
@@ -114,6 +121,7 @@ const DashboardPage: React.FC = () => {
   const [githubModalOpen, setGithubModalOpen] = useState(false);
   const [socialModalOpen, setSocialModalOpen] = useState(false);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
+  const [ctaModalOpen, setCtaModalOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [techSearch, setTechSearch] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
@@ -186,6 +194,10 @@ const DashboardPage: React.FC = () => {
           setAvatarUrl(profile.avatar_url || "");
           setIsAvailable(profile.is_available ?? false);
           setStatusText(profile.status_message || "");
+          setCtaTitle(profile.cta_title || "");
+          setCtaDescription(profile.cta_description || "");
+          setCtaText(profile.cta_text || "");
+          setCtaLink(profile.cta_link || "");
           setTheme(profile.theme || 'onyx');
 
           if (profile.tech_stack) {
@@ -516,6 +528,7 @@ const DashboardPage: React.FC = () => {
                   <FaPlus size={14} />
                 </div>
               </div>
+
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-12">
@@ -539,6 +552,42 @@ const DashboardPage: React.FC = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Primary Action Card - Dashboard Footer */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="mt-12"
+              >
+                <div
+                  onClick={() => setCtaModalOpen(true)}
+                  className={`glass-card rounded-[2rem] p-10 border ${isLight ? 'border-slate-300' : 'border-white/10'} bg-gradient-to-br from-blue-600/5 to-purple-600/5 flex flex-col md:flex-row items-center justify-between gap-8 group cursor-pointer hover:border-blue-500/30 transition-all shadow-2xl shadow-blue-500/5 overflow-hidden relative`}
+                >
+                  <div className="relative z-10 text-center md:text-left">
+                    <span className="text-[10px] uppercase tracking-widest text-blue-400 font-black mb-3 block">Conversion Engine</span>
+                    <h4 className={`text-2xl md:text-3xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight mb-2`}>
+                      {ctaTitle || "Primary Action Area"}
+                    </h4>
+                    <p className="text-white/40 font-light max-w-xl">
+                      {ctaDescription || "Set up your footer call-to-action to convert visitors into leads."}
+                    </p>
+                  </div>
+
+                  <div className="relative z-10 flex items-center gap-6">
+                    <div className="flex flex-col items-center md:items-end">
+                      <span className={`text-lg font-black ${isLight ? 'text-slate-900' : 'text-white'} mb-1`}>{ctaText || "Add Action"}</span>
+                      <span className="text-xs text-white/20 font-mono">{ctaLink || "No link set"}</span>
+                    </div>
+                    <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all">
+                      <FaPlus size={20} />
+                    </div>
+                  </div>
+
+                  {/* Aesthetic backgrounds */}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -z-10 group-hover:bg-blue-500/20 transition-colors" />
+                </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
@@ -614,6 +663,29 @@ const DashboardPage: React.FC = () => {
               setStatusText(text);
               autoSaveProfile({ is_available: isAvail, status_message: text });
               toast.success("Identity status updated!");
+            }}
+          />
+        )}
+        {ctaModalOpen && (
+          <CTAModal
+            isOpen={ctaModalOpen}
+            onClose={() => setCtaModalOpen(false)}
+            ctaTitle={ctaTitle}
+            ctaDescription={ctaDescription}
+            ctaText={ctaText}
+            ctaLink={ctaLink}
+            onSave={(title, desc, text, link) => {
+              setCtaTitle(title);
+              setCtaDescription(desc);
+              setCtaText(text);
+              setCtaLink(link);
+              autoSaveProfile({
+                cta_title: title,
+                cta_description: desc,
+                cta_text: text,
+                cta_link: link
+              });
+              toast.success("Primary action updated!");
             }}
           />
         )}
