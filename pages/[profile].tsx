@@ -7,7 +7,7 @@ import { supabase } from "../lib/supabaseClient";
 import GitHubCard from "../components/GitHubCard";
 import PublicShareModal from "../components/PublicShareModal";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { FiShare2 } from "react-icons/fi";
 
@@ -157,6 +157,55 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   const [shareModalOpen, setShareModalOpen] = useState(false);
+  const geoRef = useRef({ country: 'Unknown', code: 'UN' });
+
+  useEffect(() => {
+    const recordViewData = async () => {
+      if (!user?.id) return;
+
+      let geo = { country: 'Unknown', code: 'UN' };
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        if (data.country_name) {
+          geo = { country: data.country_name, code: data.country_code };
+          geoRef.current = geo;
+        }
+      } catch { /* silent fail */ }
+
+      supabase
+        .from('profile_views')
+        .insert([{
+          profile_id: user.id,
+          viewer_country: geo.country,
+          viewer_country_code: geo.code
+        }])
+        .then(({ error }) => {
+          if (error) console.error('Error recording view:', error);
+        });
+
+    };
+
+    recordViewData();
+  }, [user?.id]);
+
+  const recordClick = async (type: string, url: string) => {
+    if (user?.id) {
+      const geo = geoRef.current;
+      supabase
+        .from('link_clicks')
+        .insert([{
+          profile_id: user.id,
+          link_type: type,
+          link_url: url,
+          viewer_country: geo.country,
+          viewer_country_code: geo.code
+        }])
+        .then(({ error }) => {
+          if (error) console.error('Error recording click:', error);
+        });
+    }
+  };
 
   if (!user) {
     return (
@@ -299,6 +348,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                         href={formatSocialHref(social.name, social.href)}
                         target="_blank"
                         rel="noreferrer"
+                        onClick={() => recordClick('social', social.name)}
                         className="glass rounded-2xl p-4 flex items-center justify-center border border-white/10 hover:border-blue-500/30 transition-all cursor-pointer group"
                         title={social.name}
                       >
@@ -421,7 +471,13 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                         )}
                       </div>
                       {project.url && (
-                        <a href={ensureAbsoluteUrl(project.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10">
+                        <a
+                          href={ensureAbsoluteUrl(project.url)}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => recordClick('project', project.title)}
+                          className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10"
+                        >
                           <FaExternalLinkAlt size={14} />
                         </a>
                       )}
@@ -464,6 +520,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                           href={ensureAbsoluteUrl(user.cta_link)}
                           target="_blank"
                           rel="noreferrer"
+                          onClick={() => recordClick('cta', user.cta_text || 'Primary CTA')}
                           className="inline-flex items-center gap-4 bg-white text-black px-10 py-5 rounded-[2rem] font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10 group"
                         >
                           {user.cta_text}
