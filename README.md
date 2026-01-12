@@ -60,12 +60,6 @@ npm run dev
 
 ---
 
-## Screenshots
-
-*(Add your screenshots here after deployment)*
-
----
-
 ## Contributing
 
 We welcome contributions! Please check out our [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
