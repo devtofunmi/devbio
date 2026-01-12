@@ -82,6 +82,14 @@ const Contribute: React.FC = () => {
                         description="Connect with other elite engineers and share ideas in our discussions forum."
                         link="https://github.com/devtofunmi/devbio/discussions"
                         linkText="Join Discussions"
+                        delay={0.4}
+                    />
+                    <ContributionCard
+                        icon={FaCode}
+                        title="Contribution Guide"
+                        description="Learn about our project structure, development standards, and how to get started."
+                        link="https://github.com/devtofunmi/devbio/blob/main/CONTRIBUTING.md"
+                        linkText="Read the Guide"
                         delay={0.5}
                     />
                     <ContributionCard
