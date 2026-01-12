@@ -55,6 +55,7 @@ const Signup: React.FC = () => {
           data: {
             username: formData.username,
           },
+          emailRedirectTo: `${window.location.origin}/dashboard?welcome=true`
         },
       });
 

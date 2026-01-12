@@ -51,7 +51,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 if (redirect) {
                     router.push(redirect);
                 } else if (isComingFromAuth) {
-                    router.push('/dashboard');
+                    const welcome = router.query.welcome;
+                    router.push({
+                        pathname: '/dashboard',
+                        query: welcome === 'true' ? { welcome: 'true' } : {}
+                    });
                 }
             }
         });
