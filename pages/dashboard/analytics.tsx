@@ -3,7 +3,6 @@ import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import { FiBarChart2, FiLink, FiActivity, FiTrendingUp, FiGlobe, FiCalendar } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useAuth } from "../../lib/AuthContext";
-import { supabase } from "../../lib/supabaseClient";
 import {
   AreaChart,
   Area,
@@ -24,7 +23,7 @@ interface AnalyticsSummary {
 }
 
 const AnalyticsPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, supabase } = useAuth();
   const [data, setData] = useState<AnalyticsSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState(7); // days
@@ -118,7 +117,7 @@ const AnalyticsPage: React.FC = () => {
     };
 
     fetchAnalytics();
-  }, [user, timeRange]);
+  }, [user, timeRange, supabase]);
 
   const cards = [
     { title: "Total Views", value: loading ? "..." : data?.totalViews.toLocaleString(), icon: <FiBarChart2 />, color: "text-blue-400" },
