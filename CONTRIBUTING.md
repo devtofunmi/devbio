@@ -24,21 +24,26 @@ First off, thank you for considering contributing to DevBio! It's people like yo
 
 ```text
 ├── components/
-│   ├── dashboard/       # Editor & User Dashboard components
-│   │   └── edit/        # Modals and Inline editing tools
-│   ├── landingpage/     # Marketing & Front-facing site components
-│   └── ui/              # Shared primitive UI components
+│   ├── dashboard/          # Editor & User Dashboard components
+│   │   └── edit/           # Modals and Inline editing tools
+│   ├── landingpage/        # Marketing & Front-facing site components
+│   ├── GitHubCard.tsx      # GitHub contribution graph component
+│   ├── PublicShareModal.tsx # Share modal for public profiles
+│   └── Portal.tsx          # React portal wrapper
 ├── lib/
-│   ├── AuthContext.tsx  # Supabase Authentication logic
-│   ├── constants.tsx    # Themes, Tech Icons, and Social URLs
-│   ├── supabase.ts      # Database client initialization
-│   └── utils.ts         # Shared helper functions (URL formatting)
+│   ├── AuthContext.tsx     # Supabase Authentication logic
+│   ├── constants.tsx       # Themes, Tech Icons, and Social URLs
+│   ├── supabaseClient.ts   # Database client initialization
+│   └── utils.ts            # Shared helper functions (URL formatting)
 ├── pages/
-│   ├── dashboard/       # Private editor routes
-│   └── [profile].tsx    # High-performance public bio page
-├── public/              # Static assets (logos, icons)
-├── styles/              # Global CSS & Tailwind configuration
-└── SETUP_DB.sql         # Database schema & RLS policies
+│   ├── dashboard/          # Private editor routes
+│   ├── [profile].tsx       # High-performance public bio page
+│   ├── login.tsx           # Authentication page
+│   └── signup.tsx          # User registration page
+├── public/                 # Static assets (logos, icons)
+├── styles/                 # Global CSS & Tailwind configuration
+├── middleware.ts           # Auth middleware for protected routes
+└── SETUP_DB.sql            # Database schema & RLS policies
 ```
 
 ## Design Principles
