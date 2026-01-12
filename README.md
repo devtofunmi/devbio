@@ -11,7 +11,7 @@ DevBio is a high-performance, developer-focused personal landing page builder. I
 ## Features
 
 - **Advanced Analytics**: Track profile views, link clicks, and geographic distribution with interactive charts.
-- **Premium Themes**: Choose from 20+ preset themes (Onyx, Aurora, Matrix, etc.) or create your own.
+- **Premium Themes**: Choose from 20+ preset themes (Onyx, Aurora, Matrix, etc.)
 - **Primary Action (CTA)**: Optimized footer section with "Smart Link" technology (auto-detects emails and URLs).
 - **Project Showcase**: Beautifully display your GitHub repositories and professional projects.
 - **Status Indicators**: Real-time "Current Status" badges (Available, Deep Work, Out of Office).
