@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck } from 'react-icons/fi';
+import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck, FiDownload } from 'react-icons/fi';
 import { FaTwitter } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
@@ -23,6 +23,25 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
         setCopied(true);
         toast.success("Link copied to clipboard!");
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const downloadQRCode = async () => {
+        try {
+            const response = await fetch(qrCodeUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${username}-devbio-qr.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            toast.success("QR Code downloaded!");
+        } catch (error) {
+            console.error('Download error:', error);
+            toast.error("Download failed.");
+        }
     };
 
     return (
@@ -63,7 +82,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
                     {/* Content - Scrollable */}
                     <div className="p-5 md:p-8 space-y-6 md:space-y-8 overflow-y-auto custom-scrollbar flex-1">
                         <div className="flex flex-col items-center justify-center">
-                            <div className="relative group p-3 bg-white rounded-xl overflow-hidden mb-3 shadow-xl">
+                            <div className="relative group p-3 bg-white rounded-xl overflow-hidden mb-4 shadow-xl">
                                 <div className="relative w-24 h-24 md:w-32 md:h-32">
                                     <Image
                                         src={qrCodeUrl}
@@ -78,7 +97,13 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
                                     </div>
                                 </div>
                             </div>
-                            <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-black text-center">Your unique digital signature</p>
+                            <button
+                                onClick={downloadQRCode}
+                                className="flex cursor-pointer items-center gap-2 text-white/40 hover:text-white transition-colors uppercase tracking-[0.2em] font-black text-[10px]"
+                            >
+                                <FiDownload size={12} className="text-blue-500" />
+                                Download QR Code
+                            </button>
                         </div>
 
                         {/* Link Section */}

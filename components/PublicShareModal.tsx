@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck, FiUser } from 'react-icons/fi';
+import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck, FiUser, FiDownload } from 'react-icons/fi';
 import { FaTwitter, FaLinkedin, FaWhatsapp, FaFacebook } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
@@ -31,6 +31,25 @@ const PublicShareModal: React.FC<PublicShareModalProps> = ({ username, fullName,
         setCopied(true);
         toast.success("Link copied!");
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const downloadQRCode = async () => {
+        try {
+            const response = await fetch(qrCodeUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${username}-devbio-qr.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            toast.success("QR Code downloaded!");
+        } catch (error) {
+            console.error('Download error:', error);
+            toast.error("Download failed. Try right-clicking the QR.");
+        }
     };
 
     return (
@@ -75,7 +94,7 @@ const PublicShareModal: React.FC<PublicShareModalProps> = ({ username, fullName,
                         <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-stretch">
                             {/* QR Code Section - Hidden on Mobile */}
                             <div className="hidden md:flex flex-col items-center justify-center pt-2 lg:border-r lg:border-white/5 lg:pr-8 shrink-0">
-                                <div className="relative group p-2 bg-white rounded-xl overflow-hidden mb-3 shadow-xl shrink-0">
+                                <div className="relative group p-2 bg-white rounded-xl overflow-hidden mb-4 shadow-xl shrink-0">
                                     <div className="relative w-24 h-24 lg:w-28 lg:h-28">
                                         <Image
                                             src={qrCodeUrl}
@@ -85,7 +104,13 @@ const PublicShareModal: React.FC<PublicShareModalProps> = ({ username, fullName,
                                         />
                                     </div>
                                 </div>
-                                <p className="text-white/40 text-[7px] uppercase tracking-[0.2em] font-black text-center whitespace-nowrap">Scan for legacy</p>
+                                <button
+                                    onClick={downloadQRCode}
+                                    className="flex cursor-pointer items-center gap-2 text-white/40 hover:text-white transition-colors uppercase tracking-[0.2em] font-black text-[7px]"
+                                >
+                                    <FiDownload size={10} className="text-blue-500" />
+                                    Download QR
+                                </button>
                             </div>
 
                             {/* Redesigned Call to Action Item */}
