@@ -5,7 +5,6 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { motion } from "framer-motion";
 import { SiGithub, SiReact, SiNodedotjs, SiNextdotjs, SiTailwindcss } from 'react-icons/si';
 import { useAuth } from '../lib/AuthContext';
-// import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { toast } from 'react-toastify';
 import SuccessModal from '../components/SuccessModal';
 import LoadingSpinner from '../components/LoadingSpinner';
