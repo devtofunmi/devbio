@@ -510,7 +510,13 @@ const DashboardPage: React.FC = () => {
                 {projects.map((p, i) => (
                   <div key={i} className={`glass-card rounded-[2rem] p-6 border ${isLight ? 'border-slate-300' : 'border-white/5'} group hover:border-blue-500/30 transition-all`}>
                     <div className="flex justify-between items-start mb-6">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5"><Image src={p.image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"} alt={p.title} fill className="object-cover" /></div>
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5 flex items-center justify-center">
+                        {p.image ? (
+                          <Image src={p.image} alt={p.title} fill className="object-cover" />
+                        ) : (
+                          <FaCode className="text-white/10" size={28} />
+                        )}
+                      </div>
                       <a href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors"><FaExternalLinkAlt size={14} /></a>
                     </div>
                     <h4 className={`text-xl font-bold ${isLight ? 'text-slate-900' : 'text-white'} mb-2 tracking-tight`}>{p.title}</h4>
