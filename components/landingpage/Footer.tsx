@@ -17,7 +17,7 @@ const Footer: React.FC = () => (
             <div className="flex gap-10 text-xs font-semibold uppercase tracking-widest text-white/30">
                 <Link href="/about" className="hover:text-blue-400 transition-colors">About</Link>
                 <Link href="/contribute" className="hover:text-blue-400 transition-colors">Contribute</Link>
-                {/* <a href="https://twitter.com/devbio" className="hover:text-blue-400 transition-colors">Twitter</a> */}
+                <Link href="/donate" className="hover:text-blue-400 transition-colors">Donate</Link>
                 <a href="https://github.com/devtofunmi/devbio" className="hover:text-blue-400 transition-colors">GitHub</a>
             </div>
 
