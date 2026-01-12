@@ -11,12 +11,12 @@ export async function middleware(req: NextRequest) {
     } = await supabase.auth.getSession()
 
     // Protect dashboard routes
-    // Checks if the user is trying to access the dashboard
     if (req.nextUrl.pathname.startsWith('/dashboard')) {
         if (!session) {
             const redirectUrl = req.nextUrl.clone()
             redirectUrl.pathname = '/login'
-            redirectUrl.searchParams.set('redirect', req.nextUrl.pathname)
+            // Preserve the original path and ALL existing search params (like ?welcome=true)
+            redirectUrl.searchParams.set('redirect', req.nextUrl.pathname + req.nextUrl.search)
             return NextResponse.redirect(redirectUrl)
         }
     }
@@ -26,6 +26,10 @@ export async function middleware(req: NextRequest) {
         if (session) {
             const redirectUrl = req.nextUrl.clone()
             redirectUrl.pathname = '/dashboard'
+            // Preserve query params when force-redirecting to dashboard
+            req.nextUrl.searchParams.forEach((value, key) => {
+                redirectUrl.searchParams.set(key, value)
+            })
             return NextResponse.redirect(redirectUrl)
         }
     }
