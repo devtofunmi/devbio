@@ -24,7 +24,10 @@ const Signup: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'username' ? value.toLowerCase() : value
+    }));
   };
 
   const handleGitHubLogin = async () => {
