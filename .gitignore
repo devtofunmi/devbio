@@ -39,4 +39,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-SETUP_DB.sql
+# SETUP_DB.sql
