@@ -22,10 +22,15 @@ const LoginPage: React.FC = () => {
 
   const handleGitHubLogin = async () => {
     try {
+      const redirect = router.query.redirect as string;
+      const redirectTo = redirect
+        ? `${window.location.origin}${redirect}`
+        : `${window.location.origin}/dashboard`;
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
+          redirectTo: redirectTo
         }
       });
       if (error) throw error;
@@ -50,7 +55,12 @@ const LoginPage: React.FC = () => {
       if (signInError) throw signInError;
 
       if (data.session) {
-        router.push('/dashboard');
+        const redirect = router.query.redirect as string;
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push('/dashboard');
+        }
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to sign in";
