@@ -1,40 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# DevBio
 
-## Getting Started
+DevBio is a high-performance, developer-focused personal landing page builder. It allows engineers to create premium, interactive, and high-conversion bio pages with built-in analytics, project showcases, and custom themes.
 
-First, run the development server:
+![License](https://img.shields.io/badge/license-AGPL--3.0-orange.svg)
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![Supabase](https://img.shields.io/badge/Supabase-Database-green)
 
+---
+
+## Features
+
+- **Advanced Analytics**: Track profile views, link clicks, and geographic distribution with interactive charts.
+- **Premium Themes**: Choose from 20+ preset themes (Onyx, Aurora, Matrix, etc.) or create your own.
+- **Primary Action (CTA)**: Optimized footer section with "Smart Link" technology (auto-detects emails and URLs).
+- **Project Showcase**: Beautifully display your GitHub repositories and professional projects.
+- **Status Indicators**: Real-time "Current Status" badges (Available, Deep Work, Out of Office).
+- **Sleek Layout**: Modern, responsive design that looks stunning on every device.
+
+---
+
+## Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (Turbopack)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Database / Auth**: [Supabase](https://supabase.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Charts**: [Recharts](https://recharts.org/)
+- **Icons**: React Icons / Lucide
+
+---
+
+## Installation & Setup
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/devtofunmi/devbio
+cd devbio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 3. Environment Variables
+Create a `.env.local` file in the root directory and add your Supabase credentials:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### 4. Database Setup
+Run the SQL commands found in `SETUP_DB.sql` in your Supabase SQL Editor to initialize the required tables and RLS policies.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### 5. Run the dev server
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+*(Add your screenshots here after deployment)*
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+We welcome contributions! Please check out our [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## License
+
+DevBio is open-source software licensed under the [GNU AGPLv3 License](LICENSE). 
