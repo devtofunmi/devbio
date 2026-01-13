@@ -67,6 +67,7 @@ const DashboardPage: React.FC = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [statusText, setStatusText] = useState("");
+  const [statusIcon, setStatusIcon] = useState("💭");
   const [ctaTitle, setCtaTitle] = useState("");
   const [ctaDescription, setCtaDescription] = useState("");
   const [ctaText, setCtaText] = useState("");
@@ -170,6 +171,7 @@ const DashboardPage: React.FC = () => {
           setAvatarUrl(profile.avatar_url || "");
           setIsAvailable(profile.is_available ?? false);
           setStatusText(profile.status_message || "");
+          setStatusIcon(profile.status_icon || "💭");
           setCtaTitle(profile.cta_title || "");
           setCtaDescription(profile.cta_description || "");
           setCtaText(profile.cta_text || "");
@@ -713,10 +715,12 @@ const DashboardPage: React.FC = () => {
             onClose={() => setStatusModalOpen(false)}
             isAvailable={isAvailable}
             statusText={statusText}
-            onSave={(isAvail, text) => {
+            statusIcon={statusIcon}
+            onSave={(isAvail, text, icon) => {
               setIsAvailable(isAvail);
               setStatusText(text);
-              autoSaveProfile({ is_available: isAvail, status_message: text });
+              setStatusIcon(icon);
+              autoSaveProfile({ is_available: isAvail, status_message: text, status_icon: icon });
               toast.success("Identity status updated!");
             }}
           />

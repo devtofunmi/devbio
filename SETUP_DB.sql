@@ -12,6 +12,7 @@ create table profiles (
   status_message text,
   github_username text, -- For Contribution Graph
   github_graph_title text default '', -- Added custom title for GitHub Graph
+  status_icon text default null, -- Status Emoji
   social_links jsonb default '[]'::jsonb, -- Store links: [{ name, icon, href }]
   tech_stack jsonb default '[]'::jsonb, -- Store list of tech: [{ name, icon }]
   about_me text, -- Separate field for the About Me card
