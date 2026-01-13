@@ -1,7 +1,7 @@
 import React from 'react';
 
 const SocialProof: React.FC = () => (
-    <section id="social-proof" className="flex flex-col bg-[#3b82f6] text-black items-center justify-center py-26 px-6 text-center">
+    <section id="social-proof" className="flex flex-col bg-[#3b82f6] text-black items-center justify-center py-30 px-6 text-center">
         <h3 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4">
             Your Code Repos. Analytics.
         </h3>
