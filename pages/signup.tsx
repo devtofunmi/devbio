@@ -17,17 +17,13 @@ const Signup: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'username' ? value.toLowerCase() : value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleGitHubLogin = async () => {
@@ -35,7 +31,7 @@ const Signup: React.FC = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/dashboard?welcome=true`
+          redirectTo: `${window.location.origin}/claim`
         }
       });
       if (error) throw error;
@@ -54,10 +50,7 @@ const Signup: React.FC = () => {
         email: formData.email,
         password: formData.password,
         options: {
-          data: {
-            username: formData.username,
-          },
-          emailRedirectTo: `${window.location.origin}/dashboard?welcome=true`
+          emailRedirectTo: `${window.location.origin}/claim`
         },
       });
 
@@ -80,7 +73,7 @@ const Signup: React.FC = () => {
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    router.push('/dashboard?welcome=true');
+    router.push('/claim');
   };
 
   type FloatingProps = {
@@ -152,22 +145,6 @@ const Signup: React.FC = () => {
             </p>
 
             <form onSubmit={handleSignup} className="space-y-6">
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-1">Username</label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 font-bold">devbio.co/</span>
-                  <input
-                    type="text"
-                    name="username"
-                    placeholder="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    required
-                    className="w-full glass p-4 pl-24 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all border-white/5 placeholder:text-white/20 bg-transparent"
-                  />
-                </div>
-              </div>
 
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-1">Email Address</label>
