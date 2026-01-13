@@ -20,6 +20,11 @@ const ClaimPage: React.FC = () => {
             return;
         }
 
+        // Clean up URL by removing auth code parameter
+        if (router.query.code) {
+            router.replace('/claim', undefined, { shallow: true });
+        }
+
         // Check if user already has a username
         const checkExistingUsername = async () => {
             const { data } = await supabase
@@ -116,9 +121,9 @@ const ClaimPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-black text-white flex items-center justify-center p-6 relative overflow-hidden">
             {/* Background Effects */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-pink-600/10" />
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px]" />
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[120px]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-transparent" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full opacity-50" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             {/* Logo */}
             <div className="fixed top-8 left-8 z-50">
@@ -145,15 +150,17 @@ const ClaimPage: React.FC = () => {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', delay: 0.2 }}
-                        className="text-6xl mb-6"
+                        className="text-6xl mt-10 mb-6"
                     >
                         🥳
                     </motion.div>
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        Welcome, early bird!
+                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">
+                        <span className="text-gradient">Claim Your</span>
+                        <br />
+                        <span className="text-white">Developer Identity</span>
                     </h1>
                     <p className="text-xl text-white/60 font-light">
-                        How do you want to name your page?
+                        Choose your unique username to get started
                     </p>
                 </div>
 
@@ -218,8 +225,9 @@ const ClaimPage: React.FC = () => {
                         disabled={claiming || !available || username.length < 3}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-6 rounded-3xl font-black text-xl hover:shadow-2xl hover:shadow-blue-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                        className="group relative w-full bg-white text-black py-6 rounded-full font-black text-xl hover:shadow-2xl hover:shadow-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 overflow-hidden"
                     >
+                        <div className="absolute cursor-pointer inset-0 bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 group-hover:opacity-10 transition-opacity" />
                         {claiming ? (
                             <>
                                 <LoadingSpinner />
@@ -227,8 +235,7 @@ const ClaimPage: React.FC = () => {
                             </>
                         ) : (
                             <>
-                                <span>Claim My Page</span>
-                                <span className="text-2xl">🚀</span>
+                                <span>Claim My Username</span>
                             </>
                         )}
                     </motion.button>
