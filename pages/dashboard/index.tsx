@@ -433,16 +433,7 @@ const DashboardPage: React.FC = () => {
                         className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight"
                         placeholder="Your Profession"
                       />
-                      <span className="hidden lg:block w-1.5 h-1.5 rounded-full bg-white/20" />
-                      <div className="flex items-center justify-center lg:justify-start gap-1.5 text-white/40 font-mono text-xs md:text-sm">
-                        <span>devbio.co/</span>
-                        <InlineEdit
-                          value={username}
-                          onSave={(val) => { setUsername(val); autoSaveProfile({ username: val }); }}
-                          className={`text-white hover:text-blue-400 transition-colors ${isLight ? 'text-slate-900' : ''}`}
-                          placeholder="username"
-                        />
-                      </div>
+
                     </div>
                   </div>
 
