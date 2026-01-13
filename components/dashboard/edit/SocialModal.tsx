@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { FaTimes } from "react-icons/fa";
 import { motion } from "framer-motion";
 
@@ -21,6 +21,8 @@ const SocialModal: React.FC<SocialModalProps> = ({
   handleSocialChange,
   setSocialModalOpen,
 }) => {
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
   return (
     <Portal>
       <motion.div
@@ -48,15 +50,27 @@ const SocialModal: React.FC<SocialModalProps> = ({
           </div>
 
           <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar flex-1">
-            {socials.map((social) => (
+            {socials.map((social, index) => (
               <div key={social.name} className="flex items-center glass rounded-2xl p-2 border-white/5 group focus-within:border-blue-500/50 transition-all">
                 <div className="w-12 h-12 flex items-center justify-center text-white/40 group-focus-within:text-blue-400 transition-colors">
                   {social.icon}
                 </div>
                 <input
+                  ref={(el) => { inputRefs.current[index] = el; }}
                   type="text"
                   value={social.href}
                   onChange={(e) => handleSocialChange(social.name, e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const nextInput = inputRefs.current[index + 1];
+                      if (nextInput) {
+                        nextInput.focus();
+                      } else {
+                        setSocialModalOpen(false);
+                      }
+                    }
+                  }}
                   className="flex-1 p-3 bg-transparent focus:outline-none text-white placeholder:text-white/20 font-medium"
                   placeholder={`@username`}
                 />
