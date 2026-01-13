@@ -45,6 +45,7 @@ type UserProfile = {
   tech_stack: TechItem[];
   is_available: boolean;
   status_message?: string;
+  status_icon?: string;
   cta_title?: string;
   cta_description?: string;
   cta_text?: string;
@@ -265,12 +266,16 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                   ) : (
                     <FaUser className="text-white/10 text-5xl md:text-7xl" />
                   )}
+                 
                 </div>
-                {user.is_available && (
-                  <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-green-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white border-4 border-black group-hover:scale-110 transition-transform">
-                    <span className="w-3 h-3 rounded-full bg-white animate-pulse" />
+                 <div className="absolute bottom-7 left-23 md:left-35 w-10 h-10 md:w-12 md:h-12 bg-[#1e1e1e] rounded-full flex items-center justify-center border-4 border-[#0a0a0a] group-hover:scale-110 transition-transform cursor-pointer relative group/status z-20" onClick={(e) => e.stopPropagation()}>
+                  <span className="text-lg md:text-xl">{user.status_icon || (user.is_available)}</span>
+                  <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-max max-w-[200px] px-3 py-1.5 glass bg-[#1e1e1e] border border-white/10 rounded-full text-xs font-bold text-white shadow-xl opacity-0 group-hover/status:opacity-100 group-active/status:opacity-100 transition-all pointer-events-none select-none flex items-center gap-2 z-50">
+                    <span className={`w-2 h-2 rounded-full ${user.is_available ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+                    {user.status_message || (user.is_available ? "Available" : "Focused")}
                   </div>
-                )}
+                </div>
+                
               </div>
 
               {/* Info Section */}
@@ -392,16 +397,8 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               </div>
             )}
 
-            {/* Status Card */}
-            <div className="glass-card rounded-[1.5rem] p-8 border border-white/10 flex items-center justify-between group">
-              <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
-                <span className="text-sm font-black flex items-center gap-3 text-white">
-                  <span className={`w-2.5 h-2.5 rounded-full ${user.is_available ? 'bg-green-500' : 'bg-red-500'} animate-pulse`} />
-                  {user.status_message || (user.is_available ? 'Available' : 'Focused')}
-                </span>
-              </div>
-            </div>
+           
+           
           </motion.div>
 
           {/* Projects Showcase - Full Width */}
