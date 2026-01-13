@@ -8,20 +8,24 @@ interface StatusModalProps {
     onClose: () => void;
     isAvailable: boolean;
     statusText: string;
-    onSave: (isAvailable: boolean, statusText: string) => void;
+    statusIcon?: string;
+    onSave: (isAvailable: boolean, statusText: string, statusIcon: string) => void;
 }
 
-const StatusModal: React.FC<StatusModalProps> = ({ isOpen, onClose, isAvailable, statusText, onSave }) => {
+const StatusModal: React.FC<StatusModalProps> = ({ isOpen, onClose, isAvailable, statusText, statusIcon, onSave }) => {
     const [localIsAvailable, setLocalIsAvailable] = useState(isAvailable);
     const [localStatusText, setLocalStatusText] = useState(statusText);
+    const [localStatusIcon, setLocalStatusIcon] = useState(statusIcon || "💭");
 
     const handleSave = () => {
-        onSave(localIsAvailable, localStatusText);
+        onSave(localIsAvailable, localStatusText, localStatusIcon);
         onClose();
     };
 
     const availableOptions = ["Available for hire", "Open to collaborate", "Building in public", "Freelancing", "Mentoring"];
     const focusedOptions = ["Focused on current role", "Deep work", "Shit posting", "Learning", "Working on projects"];
+
+    const [emojiOptions] = useState(["💭", "💻", "🎓", "⚡", "🍔", "🌴", "🤒", "🏠", "🎯", "🤔", "👀", "🚀", "🔥", "✨", "💤"]);
 
     return (
         <AnimatePresence>
@@ -39,7 +43,7 @@ const StatusModal: React.FC<StatusModalProps> = ({ isOpen, onClose, isAvailable,
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative glass-card border-white/10 rounded-[2.5rem] p-8 md:p-10 max-w-lg w-full overflow-hidden shadow-2xl"
+                            className="relative glass-card border-white/10 rounded-[2.5rem] p-5 max-w-lg w-full overflow-hidden shadow-2xl"
                         >
                             <div className="flex justify-between items-center mb-8">
                                 <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Identity Status</h2>
@@ -69,13 +73,25 @@ const StatusModal: React.FC<StatusModalProps> = ({ isOpen, onClose, isAvailable,
                                 {/* Input section */}
                                 <div className="space-y-3">
                                     <span className="text-[10px] uppercase tracking-widest text-white/40 px-1">Status Message</span>
-                                    <input
-                                        type="text"
-                                        value={localStatusText}
-                                        onChange={(e) => setLocalStatusText(e.target.value)}
-                                        placeholder={localIsAvailable ? "What are you available for?" : "What are you focused on?"}
-                                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-base text-white placeholder:text-white/20 focus:outline-none focus:border-blue-500/50 transition-all"
-                                    />
+                                    <div className="flex bg-white/5 border border-white/10 rounded-2xl p-1 relative focus-within:border-blue-500/50 transition-all">
+                                        <div className="flex items-center justify-center w-14 border-r border-white/5 text-2xl">
+                                            {localStatusIcon}
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={localStatusText}
+                                            onChange={(e) => setLocalStatusText(e.target.value)}
+                                            placeholder={localIsAvailable ? "What are you available for?" : "What are you focused on?"}
+                                            className="flex-1 bg-transparent px-4 py-3 text-base text-white placeholder:text-white/20 focus:outline-none"
+                                        />
+                                    </div>
+                                    <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                                        {emojiOptions.map(emoji => (
+                                            <button key={emoji} onClick={() => setLocalStatusIcon(emoji)} className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all ${localStatusIcon === emoji ? 'bg-white text-black scale-110' : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white'}`}>
+                                                {emoji}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
 
                                 {/* Options section */}
