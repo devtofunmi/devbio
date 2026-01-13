@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { FaTimes, FaGithub } from "react-icons/fa";
+import { FaTimes, FaGithub, FaCheck, FaExclamationCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Portal from "../../Portal";
 
 type GitHubModalProps = {
   githubUsername: string;
@@ -8,14 +9,37 @@ type GitHubModalProps = {
   onClose: () => void;
 };
 
-import Portal from "../../Portal";
-
 const GitHubModal: React.FC<GitHubModalProps> = ({
   githubUsername,
   onSave,
   onClose,
 }) => {
   const [localUsername, setLocalUsername] = useState(githubUsername);
+  const [verifying, setVerifying] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSave = async () => {
+    if (!localUsername.trim()) {
+      setError("Username is required");
+      return;
+    }
+
+    setVerifying(true);
+    setError("");
+
+    try {
+      const res = await fetch(`https://api.github.com/users/${localUsername}`);
+      if (res.ok) {
+        onSave(localUsername);
+      } else {
+        setError("User not found on GitHub");
+      }
+    } catch (err) {
+      setError("Failed to verify username");
+    } finally {
+      setVerifying(false);
+    }
+  };
 
   return (
     <Portal>
@@ -47,23 +71,39 @@ const GitHubModal: React.FC<GitHubModalProps> = ({
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-y-0 left-6 flex items-center text-white/20 group-focus-within:text-blue-500 transition-colors">
+            <div className={`absolute inset-y-0 left-6 flex items-center transition-colors ${error ? 'text-red-500' : 'text-white/20 group-focus-within:text-blue-500'}`}>
               <FaGithub size={20} />
             </div>
             <input
               type="text"
               value={localUsername}
-              onChange={(e) => setLocalUsername(e.target.value)}
-              className="w-full pl-14 pr-6 py-5 glass rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-white placeholder:text-white/20 border-white/5 font-bold"
+              onChange={(e) => {
+                setLocalUsername(e.target.value);
+                setError("");
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleSave()}
+              className={`w-full pl-14 pr-6 py-5 glass rounded-2xl focus:outline-none focus:ring-2 ${error ? 'focus:ring-red-500/50 border-red-500/50' : 'focus:ring-blue-500/50 border-white/5'} text-white placeholder:text-white/20 font-bold transition-all`}
               placeholder="Username"
             />
           </div>
 
+          {error && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-red-500 text-xs font-bold mt-3 ml-2">
+              <FaExclamationCircle />
+              <span>{error}</span>
+            </motion.div>
+          )}
+
           <button
-            onClick={() => onSave(localUsername)}
-            className="w-full mt-8 py-5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl"
+            onClick={handleSave}
+            disabled={verifying}
+            className="w-full mt-8 py-5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Connect Identity
+            {verifying ? (
+              <>Verifying...</>
+            ) : (
+              <>Connect Identity</>
+            )}
           </button>
 
           <p className="text-center text-[10px] text-white/20 mt-6 font-medium uppercase tracking-[0.2em]">
