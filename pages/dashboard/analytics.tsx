@@ -122,7 +122,7 @@ const AnalyticsPage: React.FC = () => {
   const cards = [
     { title: "Total Views", value: loading ? "..." : data?.totalViews.toLocaleString(), icon: <FiBarChart2 />, color: "text-blue-400" },
     { title: "Link Clicks", value: loading ? "..." : data?.totalClicks.toLocaleString(), icon: <FiLink />, color: "text-purple-400" },
-    { title: "Engagement", value: loading ? "..." : `${data?.engagementRate.toFixed(1)}%`, icon: <FiActivity />, color: "text-emerald-400" },
+    { title: "Click Rate", value: loading ? "..." : `${data?.engagementRate.toFixed(1)}%`, icon: <FiActivity />, color: "text-emerald-400" },
   ];
 
   const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { value: number; name: string; color: string }[]; label?: string }) => {
