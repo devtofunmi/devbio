@@ -17,6 +17,39 @@ const AccountSettings = () => {
     const [loading, setLoading] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    const [username, setUsername] = useState('');
+    const [loadingUsername, setLoadingUsername] = useState(true);
+    const [savingUsername, setSavingUsername] = useState(false);
+
+    React.useEffect(() => {
+        if (user) {
+            supabase.from('profiles').select('username').eq('id', user.id).single()
+                .then(({ data, error }) => {
+                    if (data) setUsername(data.username || '');
+                    setLoadingUsername(false);
+                });
+        }
+    }, [user, supabase]);
+
+    const handleUsernameUpdate = async () => {
+        if (!user) return;
+        if (!username || username.length < 3) {
+            toast.error("Username must be at least 3 characters.");
+            return;
+        }
+        setSavingUsername(true);
+        try {
+            const { error } = await supabase.from('profiles').update({ username }).eq('id', user.id);
+            if (error) throw error;
+            toast.success("Username updated!");
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "Failed to update username.";
+            toast.error(message);
+        } finally {
+            setSavingUsername(false);
+        }
+    };
+
     const handlePasswordUpdate = async () => {
         if (!newPassword || !confirmPassword) {
             toast.error("Please fill in both password fields.");
@@ -80,6 +113,34 @@ const AccountSettings = () => {
                 </div>
 
                 <div className="relative z-10">
+                    <div className="mb-10 border-b border-white/5 pb-10">
+                        <div className="mb-8">
+                            <h3 className="text-2xl font-black text-white tracking-tighter">Public Handle</h3>
+                            <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Your unique identity on the matrix</p>
+                        </div>
+                        <div className="flex flex-col md:flex-row gap-4 items-end">
+                            <div className="space-y-2 w-full md:w-[320px]">
+                                <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-4">Username</label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, ''))}
+                                        placeholder="username"
+                                        className="w-full p-5 glass rounded-2xl focus:outline-none border-white/5 text-white font-bold font-mono"
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                onClick={handleUsernameUpdate}
+                                disabled={savingUsername || loadingUsername}
+                                className="w-full md:w-auto px-8 py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5 cursor-pointer flex items-center justify-center gap-3 disabled:opacity-50"
+                            >
+                                {savingUsername ? <FiLoader className="animate-spin" /> : 'Save'}
+                            </button>
+                        </div>
+                    </div>
+
                     <div className="mb-10">
                         <h3 className="text-2xl font-black text-white tracking-tighter">Identity Security</h3>
                         <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Manage your access credentials</p>
