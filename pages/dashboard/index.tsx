@@ -270,8 +270,7 @@ const DashboardPage: React.FC = () => {
     }
   };
 
-  if (fetching) return <div className="min-h-screen bg-black flex items-center justify-center"><div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" /></div>;
-
+  // Show skeleton instead of full-page spinner
   const isLight = false;
 
   const bgConfig = THEME_CONFIG[theme] || 'bg-black';
@@ -325,9 +324,11 @@ const DashboardPage: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             className="glass backdrop-blur-xl bg-black/60 p-2 rounded-[2rem] border-white/10 flex items-center justify-between md:justify-start gap-2 w-full md:w-auto"
           >
-            <div className={`flex items-center gap-2 px-4 md:px-6 py-3 border-r border-white/10 pr-4 md:pr-6 shrink-0 ${saving ? 'opacity-100' : 'opacity-50'}`}>
-              <div className={`w-2 h-2 rounded-full ${saving ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`} />
-              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">{saving ? 'Syncing...' : 'Live Sync'}</span>
+            <div className={`flex items-center gap-2 px-4 md:px-6 py-3 border-r border-white/10 pr-4 md:pr-6 shrink-0 ${(saving || fetching) ? 'opacity-100' : 'opacity-50'}`}>
+              <div className={`w-2 h-2 rounded-full ${(saving || fetching) ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`} />
+              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">
+                {fetching ? 'Loading...' : saving ? 'Syncing...' : 'Live Sync'}
+              </span>
             </div>
 
             <div className="flex items-center gap-1 md:gap-2 px-2 flex-1 justify-end md:justify-start">
@@ -344,7 +345,7 @@ const DashboardPage: React.FC = () => {
         </div>
 
         {/* Main Content Area */}
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className={`max-w-7xl mx-auto px-6 relative z-10 transition-opacity duration-300 ${fetching ? 'opacity-50' : 'opacity-100'}`}>
           <div className="mb-10 md:mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
