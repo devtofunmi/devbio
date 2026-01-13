@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../components/landingpage/Navbar';
 import Footer from '../components/landingpage/Footer';
 import { motion } from 'framer-motion';
-import { FaHeart, FaGithub, FaCoffee, FaRocket } from 'react-icons/fa';
+import { FaHeart, FaGithub, FaRocket } from 'react-icons/fa';
 
 const DonatePage: React.FC = () => {
     return (

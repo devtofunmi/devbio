@@ -100,9 +100,10 @@ const ClaimPage: React.FC = () => {
 
             toast.success('Username claimed! 🎉');
             router.push('/dashboard?welcome=true');
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error claiming username:', error);
-            toast.error(error.message || 'Failed to claim username');
+            const message = error instanceof Error ? error.message : 'Failed to claim username';
+            toast.error(message);
         } finally {
             setClaiming(false);
         }
