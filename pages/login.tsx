@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { motion } from "framer-motion";
 import { FiEye, FiEyeOff } from 'react-icons/fi';
@@ -14,6 +14,13 @@ const LoginPage: React.FC = () => {
   const { supabase } = useAuth(); // Get supabase from context
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Clean up URL by removing auth code parameter
+  useEffect(() => {
+    if (router.query.code) {
+      router.replace('/login', undefined, { shallow: true });
+    }
+  }, [router]);
 
   const [formData, setFormData] = useState({
     email: '',
