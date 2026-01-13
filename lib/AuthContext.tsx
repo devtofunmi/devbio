@@ -38,13 +38,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
                 const redirect = router.query.redirect as string;
 
+                // Check if this is an email verification (claim page or has token in URL)
+                const isEmailVerification = router.pathname === '/claim' ||
+                    (typeof window !== 'undefined' && window.location.hash.includes('type=signup'));
+
                 // Show success message if user coming from a public page (home, login, signup)
                 // or if user just landed on the dashboard with a hash (OAuth callback)
                 const isComingFromAuth = ['/', '/login', '/signup'].includes(router.pathname);
                 const isOAuthCallback = router.pathname === '/dashboard' && typeof window !== 'undefined' && window.location.hash.includes('access_token');
 
-                if ((isComingFromAuth || isOAuthCallback) && shouldToast) {
-                    toast.success('Successfully signed in!');
+                if ((isComingFromAuth || isOAuthCallback || isEmailVerification) && shouldToast) {
+                    const message = isEmailVerification
+                        ? 'Email verified successfully! 🎉'
+                        : 'Successfully signed in!';
+                    toast.success(message);
                     lastToastRef.current = now;
                 }
 
