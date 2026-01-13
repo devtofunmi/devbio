@@ -40,6 +40,7 @@ type UserProfile = {
   about_me: string;
   avatar_url: string;
   github_username: string;
+  github_graph_title?: string;
   social_links: SocialLink[];
   tech_stack: TechItem[];
   is_available: boolean;
@@ -329,8 +330,14 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               className={`${leftColClass} flex flex-col gap-8`}
             >
               {hasGitHub && (
-                <div className="glass-card rounded-[2rem] border border-white/10 overflow-hidden h-fit flex items-center justify-center min-h-[180px] md:min-h-[220px]">
-                  <div className="w-full h-full p-4 md:p-8 flex items-center justify-center">
+                <div className="glass-card rounded-[2rem] p-6 md:p-8 border border-white/10 overflow-hidden h-fit relative">
+                  <div className="flex items-center gap-4 ">
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white"><FaGithub size={20} /></div>
+                    <h4 className="text-xl md:text-2xl font-black text-white tracking-tight leading-none">
+                      {user.github_graph_title}
+                    </h4>
+                  </div>
+                  <div className="w-full h-full flex items-center justify-center">
                     <GitHubCard githubUsername={user.github_username} size={48} />
                   </div>
                 </div>
