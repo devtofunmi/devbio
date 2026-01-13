@@ -30,7 +30,10 @@ import {
   FaCamera,
   FaCode,
   FaUser,
-  FaCog
+  FaCog,
+  FaEllipsisV,
+  FaTrash,
+  FaPen
 } from "react-icons/fa";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -38,6 +41,7 @@ import { useRouter } from 'next/router';
 import Confetti from 'react-confetti';
 
 type Project = {
+  id?: string;
   title: string;
   description: string;
   url: string;
@@ -86,6 +90,8 @@ const DashboardPage: React.FC = () => {
 
   // Modal States
   const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | undefined>(undefined);
+  const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
   const [techModalOpen, setTechModalOpen] = useState(false);
   const [githubModalOpen, setGithubModalOpen] = useState(false);
   const [socialModalOpen, setSocialModalOpen] = useState(false);
@@ -278,6 +284,33 @@ const DashboardPage: React.FC = () => {
 
   const bgConfig = THEME_CONFIG[theme] || 'bg-black';
   const isImageBg = bgConfig.startsWith('http');
+
+  const handleSaveProject = (savedProject: Project) => {
+    setProjects(prev => {
+      const index = prev.findIndex(p => p.id === savedProject.id);
+      if (index >= 0) {
+        const newArr = [...prev];
+        newArr[index] = savedProject;
+        return newArr;
+      }
+      return [savedProject, ...prev];
+    });
+    setProjectModalOpen(false);
+  };
+
+  const deleteProject = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm("Are you sure you want to delete this project?")) return;
+    try {
+      const { error } = await supabase.from('projects').delete().eq('id', id);
+      if (error) throw error;
+      setProjects(prev => prev.filter(p => p.id !== id));
+      toast.success("Project deleted");
+    } catch (err) {
+      toast.error("Failed to delete");
+    }
+    setOpenMenuIndex(null);
+  };
 
   return (
     <DashboardLayout>
@@ -536,24 +569,41 @@ const DashboardPage: React.FC = () => {
                   <h3 className={`text-4xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tighter mb-2`}>Featured Projects</h3>
                   <p className="text-white/30 font-light">Showcase your best builds.</p>
                 </div>
-                <button onClick={() => setProjectModalOpen(true)} className="bg-white text-black px-8 py-4 rounded-3xl font-black flex items-center gap-3 hover:scale-105 transition-all whitespace-nowrap"><FaPlus size={14} /> <span>New Project</span></button>
+                <button onClick={() => { setEditingProject(undefined); setProjectModalOpen(true); }} className="bg-white text-black px-8 py-4 rounded-3xl font-black flex items-center gap-3 hover:scale-105 transition-all whitespace-nowrap"><FaPlus size={14} /> <span>New Project</span></button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {projects.map((p, i) => (
-                  <div key={i} className={`glass-card rounded-[2rem] p-6 border ${isLight ? 'border-slate-300' : 'border-white/5'} group hover:border-blue-500/30 transition-all`}>
-                    <div className="flex justify-between items-start mb-6">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5 flex items-center justify-center">
+                  <div key={i} className={`glass-card rounded-[2rem] p-6 border ${isLight ? 'border-slate-300' : 'border-white/5'} group hover:border-blue-500/30 transition-all relative flex flex-col h-full`} onMouseLeave={() => setOpenMenuIndex(null)}>
+
+                    {/* Option Menu */}
+                    <div className="absolute top-4 right-4 z-20">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setOpenMenuIndex(openMenuIndex === i ? null : i); }}
+                        className="w-8 h-8 flex items-center justify-center text-white/20 hover:text-white glass rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <FaEllipsisV size={12} />
+                      </button>
+                      {openMenuIndex === i && (
+                        <div className="absolute top-10 right-0 glass bg-black border border-white/10 rounded-xl overflow-hidden min-w-[120px] z-30 shadow-2xl flex flex-col items-start p-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                          <button onClick={() => { setEditingProject(p); setProjectModalOpen(true); setOpenMenuIndex(null); }} className="w-full text-left px-4 py-2.5 hover:bg-white/10 text-xs font-bold text-white flex items-center gap-2 rounded-lg transition-colors"><FaPen size={10} /> Edit</button>
+                          <button onClick={(e) => deleteProject(p.id!, e)} className="w-full text-left px-4 py-2.5 hover:bg-red-500/20 text-xs font-bold text-red-500 flex items-center gap-2 rounded-lg transition-colors"><FaTrash size={10} /> Delete</button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex justify-between items-start mb-6 w-full">
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5 flex items-center justify-center shrink-0">
                         {p.image ? (
                           <Image src={p.image} alt={p.title} fill className="object-cover" />
                         ) : (
                           <FaCode className="text-white/10" size={28} />
                         )}
                       </div>
-                      <a href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors"><FaExternalLinkAlt size={14} /></a>
+                      <a href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors mr-10"><FaExternalLinkAlt size={14} /></a>
                     </div>
                     <h4 className={`text-xl font-bold ${isLight ? 'text-slate-900' : 'text-white'} mb-2 tracking-tight`}>{p.title}</h4>
                     <p className={`${isLight ? 'text-black/40' : 'text-white/40'} font-light mb-6 text-sm leading-relaxed line-clamp-2`}>{p.description}</p>
-                    <div className="flex flex-wrap gap-2">{p.tech.map(t => <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg">{t}</span>)}</div>
+                    <div className="flex flex-wrap gap-2 mt-auto">{p.tech.map(t => <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg">{t}</span>)}</div>
                   </div>
                 ))}
               </div>
@@ -601,9 +651,9 @@ const DashboardPage: React.FC = () => {
       <AnimatePresence>
         {projectModalOpen && (
           <ProjectModal
-            projects={projects}
+            existingProject={editingProject}
             onClose={() => setProjectModalOpen(false)}
-            onSave={(newProjects) => { setProjects(newProjects); setProjectModalOpen(false); }}
+            onSave={handleSaveProject}
           />
         )}
         {techModalOpen && (
