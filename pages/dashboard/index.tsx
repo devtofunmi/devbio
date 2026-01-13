@@ -444,7 +444,7 @@ const DashboardPage: React.FC = () => {
                 {githubUsername && (
                   <button
                     onClick={() => setGithubModalOpen(true)}
-                    className="absolute top-6 right-6 z-30 w-8 h-8 glass rounded-full flex items-center justify-center text-white/20 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                    className="absolute top-4 right-4 z-30 w-8 h-8 glass rounded-full flex items-center justify-center text-white/20 hover:text-white transition-all opacity-0 group-hover:opacity-100"
                   >
                     <FaCog size={14} />
                   </button>
