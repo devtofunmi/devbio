@@ -10,8 +10,8 @@ export async function middleware(req: NextRequest) {
         data: { session },
     } = await supabase.auth.getSession()
 
-    // Protect dashboard routes
-    if (req.nextUrl.pathname.startsWith('/dashboard')) {
+    // Protect dashboard and claim routes
+    if (req.nextUrl.pathname.startsWith('/dashboard') || req.nextUrl.pathname === '/claim') {
         if (!session) {
             const redirectUrl = req.nextUrl.clone()
             redirectUrl.pathname = '/login'
@@ -24,12 +24,26 @@ export async function middleware(req: NextRequest) {
     // Redirect signed-in users away from login/signup pages
     if (['/login', '/signup'].includes(req.nextUrl.pathname)) {
         if (session) {
+            // Check if user has a username
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('username')
+                .eq('id', session.user.id)
+                .single()
+
             const redirectUrl = req.nextUrl.clone()
-            redirectUrl.pathname = '/dashboard'
-            // Preserve query params when force-redirecting to dashboard
-            req.nextUrl.searchParams.forEach((value, key) => {
-                redirectUrl.searchParams.set(key, value)
-            })
+
+            // If no username, send to claim page
+            if (!profile?.username) {
+                redirectUrl.pathname = '/claim'
+            } else {
+                redirectUrl.pathname = '/dashboard'
+                // Preserve query params when force-redirecting to dashboard
+                req.nextUrl.searchParams.forEach((value, key) => {
+                    redirectUrl.searchParams.set(key, value)
+                })
+            }
+
             return NextResponse.redirect(redirectUrl)
         }
     }
@@ -38,5 +52,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/login', '/signup'],
+    matcher: ['/dashboard/:path*', '/claim', '/login', '/signup'],
 }
