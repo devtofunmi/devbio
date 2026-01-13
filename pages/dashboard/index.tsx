@@ -483,7 +483,10 @@ const DashboardPage: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap gap-2 md:gap-3">
                   {techStack.map(tech => (
-                    <span key={tech.name} className={`px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold ${isLight ? 'text-black/40' : 'text-white/40'} hover:text-blue-400 ${isLight ? 'border-black/5' : 'border-white/5'} cursor-pointer transition-all hover:scale-110 whitespace-nowrap`}>{tech.name}</span>
+                    <span key={tech.name} className={`px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold ${isLight ? 'text-black/40' : 'text-white/40'} hover:text-blue-400 ${isLight ? 'border-black/5' : 'border-white/5'} cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap flex items-center gap-2`}>
+                      <span className="text-lg opacity-80">{tech.icon}</span>
+                      <span>{tech.name}</span>
+                    </span>
                   ))}
                 </div>
               </div>
