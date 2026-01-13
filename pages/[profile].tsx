@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { FiShare2 } from "react-icons/fi";
-import { THEME_CONFIG, SOCIAL_BASE_URLS } from "../lib/constants";
+import { THEME_CONFIG, SOCIAL_BASE_URLS, ALL_TECHS } from "../lib/constants";
 import { ensureAbsoluteUrl, formatSocialHref } from "../lib/utils";
 
 type SocialLink = {
@@ -354,11 +354,15 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 md:gap-3">
-                    {(user.tech_stack as TechItem[]).map((tech) => (
-                      <span key={tech.name} className="px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap">
-                        {tech.name}
-                      </span>
-                    ))}
+                    {(user.tech_stack as TechItem[]).map((tech) => {
+                      const matchedTech = ALL_TECHS.find(t => t.name === tech.name);
+                      return (
+                        <span key={tech.name} className="px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap flex items-center gap-2">
+                          <span className="text-lg opacity-80">{matchedTech?.icon || <FaCode />}</span>
+                          <span>{tech.name}</span>
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               )}
