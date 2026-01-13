@@ -29,7 +29,8 @@ import {
   FaInfoCircle,
   FaCamera,
   FaCode,
-  FaUser
+  FaUser,
+  FaCog
 } from "react-icons/fa";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -58,6 +59,7 @@ const DashboardPage: React.FC = () => {
   const [aboutMe, setAboutMe] = useState("");
   const [username, setUsername] = useState("");
   const [githubUsername, setGithubUsername] = useState("");
+  const [githubGraphTitle, setGithubGraphTitle] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
   const [statusText, setStatusText] = useState("");
@@ -158,6 +160,7 @@ const DashboardPage: React.FC = () => {
           setAboutMe(profile.about_me || "");
           setUsername(profile.username || "");
           setGithubUsername(profile.github_username || "");
+          setGithubGraphTitle(profile.github_graph_title || "");
           setAvatarUrl(profile.avatar_url || "");
           setIsAvailable(profile.is_available ?? false);
           setStatusText(profile.status_message || "");
@@ -436,11 +439,36 @@ const DashboardPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-8 flex flex-col gap-8">
-              <div className={`glass-card rounded-[2rem] border ${isLight ? 'border-slate-300' : 'border-white/5'} overflow-hidden group h-fit flex items-center justify-center relative min-h-[180px] md:min-h-fit`}>
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-20 flex items-center justify-center backdrop-blur-[2px]">
-                  <button onClick={() => setGithubModalOpen(true)} className="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:scale-110 transition-all">Sync GitHub DNA</button>
+              <div className={`glass-card rounded-[2rem] p-6 md:p-8 border ${isLight ? 'border-slate-300' : 'border-white/5'} group relative min-h-[200px]`}>
+
+                {githubUsername && (
+                  <button
+                    onClick={() => setGithubModalOpen(true)}
+                    className="absolute top-6 right-6 z-30 w-8 h-8 glass rounded-full flex items-center justify-center text-white/20 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                  >
+                    <FaCog size={14} />
+                  </button>
+                )}
+
+                <div className="flex justify-between items-start mb-2 z-20 relative">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white"><FaGithub size={20} /></div>
+                    <InlineEdit
+                      value={githubGraphTitle}
+                      onSave={(val) => { setGithubGraphTitle(val); autoSaveProfile({ github_graph_title: val }); }}
+                      className={`text-xl md:text-2xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight cursor-text hover:text-blue-400 transition-colors`}
+                      placeholder="GitHub DNA"
+                    />
+                  </div>
                 </div>
-                <div className="w-full h-full p-4 md:p-8 flex items-center justify-center">
+
+                {!githubUsername && (
+                  <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center backdrop-blur-[2px] rounded-[2rem]">
+                    <button onClick={() => setGithubModalOpen(true)} className="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:scale-110 transition-all shadow-xl">Sync GitHub DNA</button>
+                  </div>
+                )}
+
+                <div className="w-full flex items-center justify-center relative z-0 mt-2">
                   <GithubCard githubUsername={githubUsername} size={48} />
                 </div>
               </div>
