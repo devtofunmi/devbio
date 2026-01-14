@@ -73,6 +73,7 @@ const DashboardPage: React.FC = () => {
   const [ctaText, setCtaText] = useState("");
   const [ctaLink, setCtaLink] = useState("");
   const [theme, setTheme] = useState('onyx');
+  const [isDonor, setIsDonor] = useState(false);
 
 
   // Loading State
@@ -177,6 +178,7 @@ const DashboardPage: React.FC = () => {
           setCtaText(profile.cta_text || "");
           setCtaLink(profile.cta_link || "");
           setTheme(profile.theme || 'onyx');
+          setIsDonor(profile.is_donor || false);
 
           if (profile.tech_stack) {
             const dbTechs = profile.tech_stack as { name: string }[];
@@ -402,7 +404,10 @@ const DashboardPage: React.FC = () => {
 
               <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
                 <div className="relative group/avatar shrink-0">
-                  <div onClick={() => fileInputRef.current?.click()} className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 ${isLight ? 'border-slate-300' : 'border-white/10'} relative cursor-pointer flex items-center justify-center bg-white/5`}>
+                  <div onClick={() => fileInputRef.current?.click()} className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative cursor-pointer flex items-center justify-center bg-white/5 transition-all duration-500 ${isDonor
+                    ? 'border-4 border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.3)] ring-4 ring-yellow-500/10'
+                    : `border-4 ${isLight ? 'border-slate-300' : 'border-white/10'}`
+                    }`}>
                     {avatarUrl ? (
                       <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                     ) : (
@@ -412,6 +417,9 @@ const DashboardPage: React.FC = () => {
                       <FaCamera className="text-white text-3xl mb-2" />
                       <span className="text-[10px] font-black uppercase tracking-widest text-white">Upload Brand</span>
                     </div>
+                    {isDonor && (
+                      <div className="absolute inset-0 border-[4px] border-yellow-400/20 rounded-[2.5rem] md:rounded-[3rem] pointer-events-none" />
+                    )}
                   </div>
                   <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white border-4 border-black">
                     <FaMagic size={18} className="animate-pulse" />
