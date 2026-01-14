@@ -110,12 +110,10 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) => {
 
                             <div className="space-y-4">
                                 <a
-                                    href="https://github.com/sponsors/devtofunmi"
-                                    target="_blank"
-                                    rel="noreferrer"
+                                    href="/donate"
                                     className="block w-full py-4 bg-white text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl uppercase tracking-widest text-[10px]"
                                 >
-                                    Donate via GitHub Sponsors
+                                    💛 Support DevBio
                                 </a>
                                 <button
                                     onClick={onClose}
