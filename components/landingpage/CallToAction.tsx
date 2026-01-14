@@ -75,11 +75,13 @@ const CallToAction: React.FC = () => (
                 viewport={{ once: false }}
                 transition={{ delay: 0.4 }}
             >
-                <Link href="/signup">
-                    <button className="bg-white text-black font-extrabold px-12 py-6 rounded-2xl text-xl md:text-2xl hover:scale-[1.05] active:scale-[0.98] transition-all shadow-2xl shadow-blue-500/10 cursor-pointer">
-                        Get Started for Free
-                    </button>
-                </Link>
+                <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                    <Link href="/signup">
+                        <button className="bg-white text-black font-extrabold px-12 py-6 rounded-2xl text-xl md:text-2xl hover:scale-[1.05] active:scale-[0.98] transition-all shadow-2xl shadow-blue-500/10 cursor-pointer w-full md:w-auto">
+                            Get Started for Free
+                        </button>
+                    </Link>
+                </div>
                 <p className="mt-8 text-white/30 font-medium uppercase tracking-widest text-xs">
                     No credit card required. Built for engineers.
                 </p>
