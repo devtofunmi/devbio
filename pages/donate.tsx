@@ -145,7 +145,7 @@ const DonatePage: React.FC = () => {
                                             }}
                                             className="w-32 h-32 rounded-[2.5rem] overflow-hidden relative bg-white/5 flex items-center justify-center border-4 border-yellow-500/50 ring-4 ring-yellow-500/10"
                                         >
-                                            <div className="absolute inset-0 border-[4px] border-yellow-400/20 rounded-[2.5rem] pointer-events-none" />
+
                                             {userAvatar ? (
                                                 <Image
                                                     src={userAvatar}
@@ -154,9 +154,7 @@ const DonatePage: React.FC = () => {
                                                     className="object-cover"
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center">
-                                                    <span className="text-5xl">👑</span>
-                                                </div>
+                                                <span className="text-5xl">👑</span>
                                             )}
                                         </motion.div>
                                     </div>

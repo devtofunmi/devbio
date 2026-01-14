@@ -404,10 +404,24 @@ const DashboardPage: React.FC = () => {
 
               <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
                 <div className="relative group/avatar shrink-0">
-                  <div onClick={() => fileInputRef.current?.click()} className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative cursor-pointer flex items-center justify-center bg-white/5 transition-all duration-500 ${isDonor
-                    ? 'border-4 border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.3)] ring-4 ring-yellow-500/10'
-                    : `border-4 ${isLight ? 'border-slate-300' : 'border-white/10'}`
-                    }`}>
+                  <motion.div
+                    onClick={() => fileInputRef.current?.click()}
+                    animate={isDonor ? {
+                      boxShadow: [
+                        '0 0 30px rgba(234,179,8,0.3)',
+                        '0 0 40px rgba(234,179,8,0.5)',
+                        '0 0 30px rgba(234,179,8,0.3)',
+                      ],
+                    } : {}}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative cursor-pointer flex items-center justify-center bg-white/5 transition-all duration-500 ${isDonor
+                      ? 'border-4 border-yellow-500/50 ring-4 ring-yellow-500/10'
+                      : `border-4 ${isLight ? 'border-slate-300' : 'border-white/10'}`
+                      }`}>
                     {avatarUrl ? (
                       <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                     ) : (
@@ -417,10 +431,8 @@ const DashboardPage: React.FC = () => {
                       <FaCamera className="text-white text-3xl mb-2" />
                       <span className="text-[10px] font-black uppercase tracking-widest text-white">Upload Brand</span>
                     </div>
-                    {isDonor && (
-                      <div className="absolute inset-0 border-[4px] border-yellow-400/20 rounded-[2.5rem] md:rounded-[3rem] pointer-events-none" />
-                    )}
-                  </div>
+
+                  </motion.div>
                   <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white border-4 border-black">
                     <FaMagic size={18} className="animate-pulse" />
                   </div>
@@ -647,7 +659,7 @@ const DashboardPage: React.FC = () => {
             </motion.div>
           </div>
         </div>
-      </div>
+      </div >
 
       <AnimatePresence>
         {projectModalOpen && (
@@ -748,7 +760,7 @@ const DashboardPage: React.FC = () => {
           />
         )}
       </AnimatePresence>
-    </DashboardLayout>
+    </DashboardLayout >
   );
 };
 
