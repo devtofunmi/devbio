@@ -117,20 +117,30 @@ const Features: React.FC = () => {
           isReversed={false}
         >
           <div className="w-full space-y-4">
-            <div className="p-6 glass rounded-2xl border-white/10">
+            <a
+              href="https://www.safescore.pro/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block p-6 glass rounded-2xl border-white/10 hover:border-blue-500/30 transition-all hover:scale-[1.02] cursor-pointer group"
+            >
               <div className="flex justify-between items-start mb-4">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-500/30 transition-colors">
                   <FaRocket />
                 </div>
                 <div className="px-3 py-1 glass rounded-full text-[10px] text-white/40 font-bold uppercase tracking-widest">Live</div>
               </div>
-              <h4 className="text-lg font-bold text-white mb-1">SafeScore</h4>
+              <h4 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">SafeScore</h4>
               <p className="text-sm text-white/40">Data-driven football prediction platform.</p>
-            </div>
-            <div className="p-6 glass rounded-2xl border-white/10 opacity-40">
-              <h4 className="text-lg font-bold text-white mb-1">Prepkitty</h4>
+            </a>
+            <a
+              href="https://www.prepkitty.co/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block p-6 glass rounded-2xl border-white/10 opacity-40 hover:opacity-100 hover:border-blue-500/30 transition-all hover:scale-[1.02] cursor-pointer group"
+            >
+              <h4 className="text-lg font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">Prepkitty</h4>
               <p className="text-sm text-white/40">AI-driven interview coach with real-time feedback.</p>
-            </div>
+            </a>
           </div>
         </FeatureBlock>
 
