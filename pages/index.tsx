@@ -9,6 +9,7 @@ import SocialProof from '../components/landingpage/SocialProof';
 import Testimonials from '../components/landingpage/Testimonials';
 import FAQ from '../components/landingpage/FAQ';
 import Navbar from '../components/landingpage/Navbar';
+import DonationCTA from '../components/landingpage/DonationCTA';
 
 const geistSans = { className: "font-sans" };
 const geistMono = { className: "font-mono" };
@@ -25,6 +26,7 @@ const Home: React.FC = () => {
             <Testimonials />
             <FAQ />
             <CallToAction />
+            <DonationCTA />
             <Footer />
         </div>
     );
