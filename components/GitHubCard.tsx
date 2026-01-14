@@ -132,6 +132,9 @@ const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
   }
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, day: ContributionDay) => {
+    // Only show tooltip if there's actual data (date exists)
+    if (!day.date) return;
+
     const rect = e.currentTarget.getBoundingClientRect();
     setTooltip({
       x: rect.left + rect.width / 2,
@@ -170,7 +173,7 @@ const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
                     key={`${ci}-${ri}`}
                     onMouseEnter={(e) => handleMouseEnter(e, day)}
                     onMouseLeave={handleMouseLeave}
-                    className={`aspect-square w-full rounded-[2px] transition-all duration-300 hover:scale-125 hover:z-10 ${colorFor(day.level)} cursor-help relative`}
+                    className={`aspect-square w-full rounded-[2px] transition-all duration-300 hover:scale-125 hover:z-10 ${colorFor(day.level)} cursor-pointer relative`}
                   />
                 ))}
               </div>
