@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaStar, FaUserPlus, FaHeart } from 'react-icons/fa';
+import Link from 'next/link';
 import Portal from '../Portal';
 import { toast } from 'react-toastify';
 
@@ -109,12 +110,12 @@ const SupportModal: React.FC<SupportModalProps> = ({ isOpen, onClose }) => {
                             </div>
 
                             <div className="space-y-4">
-                                <a
+                                <Link
                                     href="/donate"
-                                    className="block w-full py-4 bg-white text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl uppercase tracking-widest text-[10px]"
+                                    className="block w-full py-4 bg-white text-black font-black rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-xl uppercase tracking-widest text-center text-[10px]"
                                 >
                                     💛 Support DevBio
-                                </a>
+                                </Link>
                                 <button
                                     onClick={onClose}
                                     className="text-white/20 hover:text-white/40 text-[10px] font-black uppercase tracking-[0.2em] transition-colors"

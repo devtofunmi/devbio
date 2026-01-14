@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Navbar from '../components/landingpage/Navbar';
 import Footer from '../components/landingpage/Footer';
 import { motion } from 'framer-motion';
-import { FaHeart, FaGithub, FaRocket, FaBolt, FaUser } from 'react-icons/fa';
+import { FaHeart, FaRocket, FaBolt } from 'react-icons/fa';
 import { useUser } from '@supabase/auth-helpers-react';
 import { supabase } from '../lib/supabaseClient';
 

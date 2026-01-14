@@ -52,7 +52,7 @@ const SuccessPage: React.FC = () => {
                         className="glass-card p-8 md:p-12 rounded-[2.5rem] border border-white/10 mb-12"
                     >
                         <p className="text-xl md:text-2xl text-white/70 font-light leading-relaxed mb-8">
-                            Your support means the world to us. You're now officially a champion of the open-source developer community.
+                            Your support means the world to us. You&apos;re now officially a champion of the open-source developer community.
                         </p>
 
                         <div className="flex flex-col items-center gap-4 text-blue-400 font-bold bg-blue-500/5 py-4 rounded-2xl border border-blue-500/10">

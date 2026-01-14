@@ -310,7 +310,7 @@ const DashboardPage: React.FC = () => {
       if (error) throw error;
       setProjects(prev => prev.filter(p => p.id !== id));
       toast.success("Project deleted");
-    } catch (err) {
+    } catch {
       toast.error("Failed to delete");
     }
     setOpenMenuIndex(null);
