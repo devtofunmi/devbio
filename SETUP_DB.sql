@@ -22,6 +22,7 @@ create table profiles (
   cta_link text,
   theme text default 'dark',
   beams_enabled boolean default true,
+  is_donor boolean default false,
   
   constraint username_length check (char_length(username) >= 3)
 );
