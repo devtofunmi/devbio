@@ -52,6 +52,7 @@ type UserProfile = {
   cta_link?: string;
   theme?: string;
   beams_enabled?: boolean;
+  is_donor?: boolean;
 };
 
 type Props = {
@@ -255,7 +256,10 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
               {/* Avatar Container */}
               <div className="relative shrink-0">
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-white/10 relative bg-white/5 flex items-center justify-center">
+                <div className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative bg-white/5 flex items-center justify-center transition-all duration-500 ${user.is_donor
+                    ? 'border-4 border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.3)] ring-4 ring-yellow-500/10'
+                    : 'border-4 border-white/10'
+                  }`}>
                   {user.avatar_url ? (
                     <Image
                       src={user.avatar_url}
@@ -266,16 +270,18 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                   ) : (
                     <FaUser className="text-white/10 text-5xl md:text-7xl" />
                   )}
-                 
+                  {user.is_donor && (
+                    <div className="absolute inset-0 border-[4px] border-yellow-400/20 rounded-[2.5rem] md:rounded-[3rem] pointer-events-none" />
+                  )}
                 </div>
-                 <div className="absolute bottom-7 left-23 md:left-35 w-10 h-10 md:w-12 md:h-12 bg-[#1e1e1e] rounded-full flex items-center justify-center border-4 border-[#0a0a0a] group-hover:scale-110 transition-transform cursor-pointer relative group/status z-20" onClick={(e) => e.stopPropagation()}>
+                <div className="absolute bottom-7 left-23 md:left-35 w-10 h-10 md:w-12 md:h-12 bg-[#1e1e1e] rounded-full flex items-center justify-center border-4 border-[#0a0a0a] group-hover:scale-110 transition-transform cursor-pointer relative group/status z-20" onClick={(e) => e.stopPropagation()}>
                   <span className="text-lg md:text-xl">{user.status_icon || (user.is_available)}</span>
                   <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-max max-w-[200px] px-3 py-1.5 glass bg-[#1e1e1e] border border-white/10 rounded-full text-xs font-bold text-white shadow-xl opacity-0 group-hover/status:opacity-100 group-active/status:opacity-100 transition-all pointer-events-none select-none flex items-center gap-2 z-50">
                     <span className={`w-2 h-2 rounded-full ${user.is_available ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
                     {user.status_message || (user.is_available ? "Available" : "Focused")}
                   </div>
                 </div>
-                
+
               </div>
 
               {/* Info Section */}
@@ -397,8 +403,8 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               </div>
             )}
 
-           
-           
+
+
           </motion.div>
 
           {/* Projects Showcase - Full Width */}
