@@ -177,11 +177,24 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   // Layout logic: if one side is missing, the other takes up more space
   const leftColClass = !hasAboutMe ? "md:col-span-12" : "md:col-span-8";
   const rightColClass = !hasLeftColumn ? "md:col-span-12" : "md:col-span-4";
-  const bgConfig = THEME_CONFIG[user.theme || 'onyx'] || 'bg-black';
+
+  const themeConfig = THEME_CONFIG[user.theme || 'onyx'] || THEME_CONFIG['onyx'];
+  const bgConfig = themeConfig.bg;
   const isImageBg = bgConfig.startsWith('http');
 
+  const themeStyles = {
+    '--theme-card-bg': themeConfig.card,
+    '--theme-border': themeConfig.border,
+    '--theme-accent': themeConfig.accent,
+    '--theme-text': themeConfig.text,
+    '--theme-text-secondary': themeConfig.textSecondary,
+  } as React.CSSProperties;
+
   return (
-    <div className={`relative min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-white selection:bg-blue-500/30 transition-colors duration-700`}>
+    <div
+      className={`relative min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-[var(--theme-text)] selection:bg-[var(--theme-accent)] transition-colors duration-700`}
+      style={themeStyles}
+    >
       {isImageBg && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Image
@@ -215,19 +228,19 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           className="group relative flex items-center cursor-pointer"
         >
           {/* Outer Neon Ring Glow */}
-          <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 rounded-full bg-[var(--theme-accent)] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-          <div className="relative flex items-center justify-center glass rounded-full border-blue-500/20 group-hover:border-blue-500/50 p-2 md:p-3 shadow-2xl transition-all duration-500 backdrop-blur-3xl overflow-hidden">
+          <div className="relative flex items-center justify-center glass rounded-full border-[var(--theme-border)] group-hover:border-[var(--theme-accent)] p-2 md:p-3 shadow-2xl transition-all duration-500 backdrop-blur-3xl overflow-hidden">
             {/* Animated Background Sweep */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--theme-accent)] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-20" />
 
             {/* Neon Icon Core */}
-            <div className="w-12 h-12 md:w-14 md:h-14 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] group-hover:shadow-[0_0_35px_rgba(59,130,246,0.8)] transition-all group-hover:scale-105 relative z-10">
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-[var(--theme-accent)] rounded-full flex items-center justify-center text-[var(--theme-text)] shadow-lg transition-all group-hover:scale-105 relative z-10">
               <FiShare2 size={24} className="group-hover:rotate-12 transition-transform" />
             </div>
 
             {/* Interactive Border */}
-            <div className="absolute inset-0 border border-blue-500/0 group-hover:border-blue-500/20 rounded-full m-[1px]" />
+            <div className="absolute inset-0 border border-[var(--theme-border)] group-hover:border-[var(--theme-accent)] rounded-full m-[1px]" />
           </div>
         </button>
       </motion.div>
@@ -238,7 +251,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-white/10"
+            className="relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-[var(--theme-border)]"
           >
             {/* High-End Background Effect */}
             <div className="absolute inset-0 z-0">
@@ -249,8 +262,8 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                 className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[2s] opacity-40 blur-sm"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent" />
-              <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-500/10 blur-[150px] rounded-full" />
-              <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-purple-500/10 blur-[120px] rounded-full" />
+              <div className="absolute top-0 right-0 w-1/2 h-full bg-[var(--theme-accent)] blur-[150px] rounded-full opacity-20" />
+              <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-[var(--theme-accent)] blur-[120px] rounded-full opacity-10" />
             </div>
 
             <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
@@ -269,9 +282,9 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative bg-white/5 flex items-center justify-center transition-all duration-500 ${user.is_donor
+                  className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative bg-[var(--theme-card-bg)] flex items-center justify-center transition-all duration-500 ${user.is_donor
                     ? 'border-4 border-yellow-500/50 ring-4 ring-yellow-500/10'
-                    : 'border-4 border-white/10'
+                    : 'border-4 border-[var(--theme-border)]'
                     }`}>
                   {user.avatar_url ? (
                     <Image
@@ -281,13 +294,13 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                       className="object-cover"
                     />
                   ) : (
-                    <FaUser className="text-white/10 text-5xl md:text-7xl" />
+                    <FaUser className="text-[var(--theme-text-secondary)] text-5xl md:text-7xl" />
                   )}
 
                 </motion.div>
                 <div className="absolute bottom-7 left-23 md:left-35 w-10 h-10 md:w-12 md:h-12 bg-[#1e1e1e] rounded-full flex items-center justify-center border-4 border-[#0a0a0a] group-hover:scale-110 transition-transform cursor-pointer relative group/status z-20" onClick={(e) => e.stopPropagation()}>
                   <span className="text-lg md:text-xl">{user.status_icon || (user.is_available)}</span>
-                  <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-max max-w-[200px] px-3 py-1.5 glass bg-[#1e1e1e] border border-white/10 rounded-full text-xs font-bold text-white shadow-xl opacity-0 group-hover/status:opacity-100 group-active/status:opacity-100 transition-all pointer-events-none select-none flex items-center gap-2 z-50 backdrop-blur-xl">
+                  <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-max max-w-[200px] px-3 py-1.5 glass bg-[#1e1e1e] border border-[var(--theme-border)] rounded-full text-xs font-bold text-white shadow-xl opacity-0 group-hover/status:opacity-100 group-active/status:opacity-100 transition-all pointer-events-none select-none flex items-center gap-2 z-50 backdrop-blur-xl">
                     <span className={`w-2 h-2 rounded-full ${user.is_available ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
                     {user.status_message || (user.is_available ? "Available" : "Focused")}
                   </div>
@@ -298,18 +311,18 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               {/* Info Section */}
               <div className="flex-1 space-y-6 w-full overflow-hidden">
                 <div className="flex flex-col gap-2">
-                  <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white block leading-[1.1]">
+                  <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1]">
                     {user.full_name}
                   </h1>
                   <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-                    <p className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight">
+                    <p className="text-lg md:text-2xl text-[var(--theme-accent)] font-bold tracking-tight leading-tight">
                       {user.profession}
                     </p>
                   </div>
                 </div>
 
                 <div className="max-w-2xl mx-auto lg:mx-0">
-                  <p className="text-base md:text-xl text-white/50 leading-relaxed font-light">
+                  <p className="text-base md:text-xl text-[var(--theme-text-secondary)] leading-relaxed font-light">
                     {user.bio}
                   </p>
                 </div>
@@ -326,10 +339,10 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                         target="_blank"
                         rel="noreferrer"
                         onClick={() => recordClick('social', social.name)}
-                        className="glass rounded-2xl p-4 flex items-center justify-center border border-white/10 hover:border-blue-500/30 transition-all cursor-pointer group"
+                        className="glass rounded-2xl p-4 flex items-center justify-center border border-[var(--theme-border)] hover:border-[var(--theme-accent)] transition-all cursor-pointer group"
                         title={social.name}
                       >
-                        <div className="text-white/40 group-hover:text-blue-400 transition-colors">
+                        <div className="text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-accent)] transition-colors">
                           {SOCIAL_ICONS[social.name] || <FaExternalLinkAlt size={20} />}
                         </div>
                       </a>
@@ -352,10 +365,10 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               className={`${leftColClass} flex flex-col gap-8`}
             >
               {hasGitHub && (
-                <div className="glass-card rounded-[2rem] p-6 md:p-8 border border-white/10 overflow-hidden h-fit relative">
+                <div className="glass-card bg-[var(--theme-card-bg)] rounded-[2rem] p-6 md:p-8 border border-[var(--theme-border)] overflow-hidden h-fit relative">
                   <div className="flex items-center gap-4 ">
-                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white"><FaGithub size={20} /></div>
-                    <h4 className="text-xl md:text-2xl font-black text-white tracking-tight leading-none">
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-text)]"><FaGithub size={20} /></div>
+                    <h4 className="text-xl md:text-2xl font-black text-[var(--theme-text)] tracking-tight leading-none">
                       {user.github_graph_title}
                     </h4>
                   </div>
@@ -366,20 +379,20 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               )}
 
               {hasTech && (
-                <div className="glass-card rounded-[2rem] p-6 md:p-10 border border-white/10">
+                <div className="glass-card bg-[var(--theme-card-bg)] rounded-[2rem] p-6 md:p-10 border border-[var(--theme-border)]">
                   <div className="flex justify-between items-center mb-6 md:mb-8">
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400">
+                      <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-accent)]">
                         <FaCode size={18} />
                       </div>
-                      <h4 className="text-xl md:text-2xl font-black text-white tracking-tight leading-none">Tech Stack</h4>
+                      <h4 className="text-xl md:text-2xl font-black text-[var(--theme-text)] tracking-tight leading-none">Tech Stack</h4>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 md:gap-3">
                     {(user.tech_stack as TechItem[]).map((tech) => {
                       const matchedTech = ALL_TECHS.find(t => t.name === tech.name);
                       return (
-                        <span key={tech.name} className="px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold text-white/40 hover:text-blue-400 border-white/5 cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap flex items-center gap-2">
+                        <span key={tech.name} className="px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold text-[var(--theme-text-secondary)] hover:text-[var(--theme-accent)] border border-[var(--theme-border)] cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap flex items-center gap-2">
                           <span className="text-lg opacity-80">{matchedTech?.icon || <FaCode />}</span>
                           <span>{tech.name}</span>
                         </span>
@@ -399,16 +412,16 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             className={`${rightColClass} space-y-8`}
           >
             {hasAboutMe && (
-              <div className="glass-card rounded-[2rem] p-10 border border-white/10 bg-white/[0.01]">
+              <div className="glass-card bg-[var(--theme-card-bg)] rounded-[2rem] p-10 border border-[var(--theme-border)] bg-white/[0.01]">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400">
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-accent)]">
                       <FaInfoCircle size={18} />
                     </div>
-                    <h4 className="text-xl font-black text-white tracking-tight">About Me</h4>
+                    <h4 className="text-xl font-black text-[var(--theme-text)] tracking-tight">About Me</h4>
                   </div>
                 </div>
-                <p className="text-sm text-white/40 leading-relaxed font-light min-h-[120px] whitespace-pre-wrap">
+                <p className="text-sm text-[var(--theme-text-secondary)] leading-relaxed font-light min-h-[120px] whitespace-pre-wrap">
                   {user.about_me}
                 </p>
               </div>
@@ -428,16 +441,16 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             >
               <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
                 <div className="text-center md:text-left">
-                  <h3 className="text-4xl font-black text-white tracking-tighter mb-2">Featured Projects</h3>
-                  <p className="text-white/30 font-light">Showcase of best builds and creations.</p>
+                  <h3 className="text-4xl font-black text-[var(--theme-text)] tracking-tighter mb-2">Featured Projects</h3>
+                  <p className="text-[var(--theme-text-secondary)] font-light">Showcase of best builds and creations.</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {projects.map((project, i) => (
-                  <div key={project.id || i} className="glass-card rounded-[2rem] p-6 border border-white/10 group hover:border-blue-500/30 transition-all flex flex-col h-full">
+                  <div key={project.id || i} className="glass-card bg-[var(--theme-card-bg)] rounded-[2rem] p-6 border border-[var(--theme-border)] group hover:border-[var(--theme-accent)] transition-all flex flex-col h-full">
                     <div className="flex justify-between items-start mb-6">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/[0.03] flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-[var(--theme-border)] bg-white/[0.03] flex items-center justify-center">
                         {project.image_url ? (
                           <Image
                             src={project.image_url}
@@ -446,7 +459,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                             className="object-cover"
                           />
                         ) : (
-                          <FaCode size={24} className="text-white/10" />
+                          <FaCode size={24} className="text-[var(--theme-text-secondary)]" />
                         )}
                       </div>
                       {project.url && (
@@ -455,19 +468,19 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                           target="_blank"
                           rel="noreferrer"
                           onClick={() => recordClick('project', project.title)}
-                          className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors hover:bg-white/10"
+                          className="p-3 glass rounded-xl text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-colors hover:bg-white/10"
                         >
                           <FaExternalLinkAlt size={14} />
                         </a>
                       )}
                     </div>
 
-                    <h4 className="text-xl font-bold text-white mb-2 tracking-tight">{project.title}</h4>
-                    <p className="text-white/40 font-light mb-6 text-sm leading-relaxed min-h-[40px]">{project.description}</p>
+                    <h4 className="text-xl font-bold text-[var(--theme-text)] mb-2 tracking-tight">{project.title}</h4>
+                    <p className="text-[var(--theme-text-secondary)] font-light mb-6 text-sm leading-relaxed min-h-[40px]">{project.description}</p>
 
                     <div className="flex flex-wrap gap-2 mt-auto">
                       {project.tech_tags?.map(t => (
-                        <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg border border-white/5">
+                        <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-[var(--theme-card-bg)] text-[var(--theme-text-secondary)] rounded-lg border border-[var(--theme-border)]">
                           {t}
                         </span>
                       ))}
@@ -483,13 +496,13 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                   viewport={{ once: true }}
                   className="mt-20 md:mt-32"
                 >
-                  <div className="glass-card rounded-[3rem] p-8 md:p-20 border border-white/10 text-center relative overflow-hidden group">
+                  <div className="glass-card bg-[var(--theme-card-bg)] rounded-[3rem] p-8 md:p-20 border border-[var(--theme-border)] text-center relative overflow-hidden group">
                     <div className="relative z-10 max-w-2xl mx-auto space-y-8">
                       <div className="space-y-4">
-                        <h3 className="text-3xl md:text-6xl font-black text-white tracking-tighter">
+                        <h3 className="text-3xl md:text-6xl font-black text-[var(--theme-text)] tracking-tighter">
                           {user.cta_title || "Ready to work together?"}
                         </h3>
-                        <p className="text-lg md:text-xl text-white/40 font-light leading-relaxed">
+                        <p className="text-lg md:text-xl text-[var(--theme-text-secondary)] font-light leading-relaxed">
                           {user.cta_description || "Let's build something incredible. Reach out and let's start a conversation."}
                         </p>
                       </div>
@@ -500,7 +513,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                           target="_blank"
                           rel="noreferrer"
                           onClick={() => recordClick('cta', user.cta_text || 'Primary CTA')}
-                          className="inline-flex items-center gap-4 bg-white text-black px-10 py-5 rounded-[2rem] font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-white/10 group"
+                          className="inline-flex items-center gap-4 bg-[var(--theme-accent)] text-[var(--theme-text)] px-10 py-5 rounded-[2rem] font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[var(--theme-accent)]/20 group"
                         >
                           {user.cta_text}
                           <FaArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
@@ -509,7 +522,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                     </div>
 
                     {/* Background Accents */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -z-10 group-hover:bg-blue-500/20 transition-colors" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--theme-accent)] blur-[100px] -z-10 group-hover:bg-[var(--theme-accent)] opacity-20 transition-colors" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/5 blur-[100px] -z-10" />
                   </div>
                 </motion.div>
@@ -522,9 +535,9 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="mt-16 text-center text-white/20 text-sm font-medium tracking-widest uppercase"
+          className="mt-16 text-center text-[var(--theme-text-secondary)] text-sm font-medium tracking-widest uppercase"
         >
-          Built with <span className="text-white/40">DevBio.co</span>
+          Built with <span className="text-[var(--theme-text)]">DevBio.co</span>
         </motion.footer>
       </main>
 
