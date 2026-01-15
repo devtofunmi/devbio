@@ -141,59 +141,63 @@ const AccountSettings = () => {
                         </div>
                     </div>
 
-                    <div className="mb-10">
-                        <h3 className="text-2xl font-black text-white tracking-tighter">Identity Security</h3>
-                        <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Manage your access credentials</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-2">
-                            <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-4">New Password</label>
-                            <div className="relative">
-                                <input
-                                    type={showNewPassword ? 'text' : 'password'}
-                                    placeholder="••••••••"
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                    className="w-full p-5 glass rounded-2xl focus:outline-none border-white/5 text-white font-bold"
-                                />
-                                <button
-                                    onClick={() => setShowNewPassword(!showNewPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors cursor-pointer"
-                                >
-                                    {showNewPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-                                </button>
+                    {user?.app_metadata?.provider === 'email' && (
+                        <>
+                            <div className="mb-10">
+                                <h3 className="text-2xl font-black text-white tracking-tighter">Identity Security</h3>
+                                <p className="text-white/40 text-sm font-medium uppercase tracking-widest mt-1">Manage your access credentials</p>
                             </div>
-                        </div>
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-4">Confirm Identity</label>
-                            <div className="relative">
-                                <input
-                                    type={showConfirmPassword ? 'text' : 'password'}
-                                    placeholder="••••••••"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full p-5 glass rounded-2xl focus:outline-none border-white/5 text-white font-bold"
-                                />
-                                <button
-                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors cursor-pointer"
-                                >
-                                    {showConfirmPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-                                </button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-4">New Password</label>
+                                    <div className="relative">
+                                        <input
+                                            type={showNewPassword ? 'text' : 'password'}
+                                            placeholder="••••••••"
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            className="w-full p-5 glass rounded-2xl focus:outline-none border-white/5 text-white font-bold"
+                                        />
+                                        <button
+                                            onClick={() => setShowNewPassword(!showNewPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors cursor-pointer"
+                                        >
+                                            {showNewPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-4">Confirm Identity</label>
+                                    <div className="relative">
+                                        <input
+                                            type={showConfirmPassword ? 'text' : 'password'}
+                                            placeholder="••••••••"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            className="w-full p-5 glass rounded-2xl focus:outline-none border-white/5 text-white font-bold"
+                                        />
+                                        <button
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors cursor-pointer"
+                                        >
+                                            {showConfirmPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <button
-                        onClick={handlePasswordUpdate}
-                        disabled={loading}
-                        className="mt-10 px-5 mx-auto md:mx-0 py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5 cursor-pointer flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading && <FiLoader className="animate-spin" />}
-                        {loading ? 'Updating...' : 'Update Credentials'}
-                    </button>
+                            <button
+                                onClick={handlePasswordUpdate}
+                                disabled={loading}
+                                className="mt-10 px-5 mx-auto md:mx-0 py-5 bg-white text-black font-black rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-white/5 cursor-pointer flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {loading && <FiLoader className="animate-spin" />}
+                                {loading ? 'Updating...' : 'Update Credentials'}
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
 
