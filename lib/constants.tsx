@@ -41,32 +41,214 @@ export const ALL_TECHS: Tech[] = [
     { name: 'Elixir', icon: <SiElixir /> },
 ];
 
-export const THEME_CONFIG: Record<string, string> = {
-    'onyx': 'bg-black',
-    'ghost': 'bg-[#080808]',
-    'midnight': 'bg-[#020617]',
-    'forest': 'bg-[#051f1b]',
-    'dracula': 'bg-[#130912]',
-    'cobalt': 'bg-[#040a1d]',
-    'carbon': 'bg-[#141414]',
-    'nord': 'bg-[#1a202c]',
-    'ember': 'bg-[#17110e]',
-    'dim': 'bg-[#15151a]',
-    'alabaster': 'bg-[#1e293b]',
-    'matrix': 'https://images.unsplash.com/photo-1550684848-86a5d8727436?w=1600&q=80',
-    'circuit': 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1600&q=80',
-    'terminal': 'https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=1600&q=80',
-    'workspace': 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1600&q=80',
-    'nodes': 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=1600&q=80',
-    'glass': 'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?w=1600&q=80',
-    'velvet': 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1600&q=80',
-    'aurora': 'https://images.unsplash.com/photo-1536431311719-398b6704d4cc?w=1600&q=80',
-    'silence': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80',
-    'prism': 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=1600&q=80',
-    'cloud': 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1600&q=80',
-    'smoke': 'https://images.unsplash.com/photo-1541450805268-4822a3a774ca?w=1600&q=80',
-    'mesh': 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=1600&q=80',
-    'flow': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80',
+export type ThemeStyle = {
+    bg: string;
+    card: string;
+    border: string;
+    accent: string;
+    text: string;
+    textSecondary: string;
+};
+
+export const THEME_CONFIG: Record<string, ThemeStyle> = {
+    // Solid Colors
+    'onyx': {
+        bg: 'bg-[#000000]',
+        card: 'rgba(20, 20, 20, 0.8)',
+        border: 'rgba(255, 255, 255, 0.08)',
+        accent: '#ffffff',
+        text: '#ffffff',
+        textSecondary: '#a1a1aa'
+    },
+    'ghost': {
+        bg: 'bg-zinc-950',
+        card: 'rgba(39, 39, 42, 0.5)',
+        border: 'rgba(255, 255, 255, 0.1)',
+        accent: '#e4e4e7',
+        text: '#f4f4f5',
+        textSecondary: '#a1a1aa'
+    },
+    'midnight': {
+        bg: 'bg-[#020617]',
+        card: 'rgba(15, 23, 42, 0.6)',
+        border: 'rgba(56, 189, 248, 0.1)',
+        accent: '#38bdf8',
+        text: '#f8fafc',
+        textSecondary: '#94a3b8'
+    },
+    'forest': {
+        bg: 'bg-[#051f1b]',
+        card: 'rgba(6, 78, 59, 0.4)',
+        border: 'rgba(52, 211, 153, 0.1)',
+        accent: '#34d399',
+        text: '#ecfdf5',
+        textSecondary: '#6ee7b7'
+    },
+    'dracula': {
+        bg: 'bg-[#1e1b2e]',
+        card: 'rgba(49, 46, 129, 0.3)',
+        border: 'rgba(192, 132, 252, 0.2)',
+        accent: '#c084fc',
+        text: '#faf5ff',
+        textSecondary: '#e9d5ff'
+    },
+    'cobalt': {
+        bg: 'bg-[#0b1121]',
+        card: 'rgba(29, 78, 216, 0.15)',
+        border: 'rgba(96, 165, 250, 0.2)',
+        accent: '#60a5fa',
+        text: '#eff6ff',
+        textSecondary: '#bfdbfe'
+    },
+    'carbon': {
+        bg: 'bg-[#171717]',
+        card: 'rgba(64, 64, 64, 0.3)',
+        border: 'rgba(255, 255, 255, 0.05)',
+        accent: '#d4d4d4',
+        text: '#e5e5e5',
+        textSecondary: '#a3a3a3'
+    },
+    'nord': {
+        bg: 'bg-[#2e3440]',
+        card: 'rgba(59, 66, 82, 0.6)',
+        border: 'rgba(136, 192, 208, 0.2)',
+        accent: '#88c0d0',
+        text: '#eceff4',
+        textSecondary: '#d8dee9'
+    },
+    'ember': {
+        bg: 'bg-[#2a120b]',
+        card: 'rgba(67, 20, 7, 0.4)',
+        border: 'rgba(251, 146, 60, 0.2)',
+        accent: '#fb923c',
+        text: '#fff7ed',
+        textSecondary: '#fdba74'
+    },
+    'dim': {
+        bg: 'bg-[#18181b]',
+        card: 'rgba(39, 39, 42, 0.4)',
+        border: 'rgba(113, 113, 122, 0.2)',
+        accent: '#a1a1aa',
+        text: '#f4f4f5',
+        textSecondary: '#71717a'
+    },
+    'alabaster': {
+        bg: 'bg-[#0f172a]', card: 'rgba(30, 41, 59, 0.6)', border: 'rgba(148, 163, 184, 0.1)', accent: '#38bdf8', text: '#f8fafc', textSecondary: '#94a3b8'
+    },
+
+    // Image & Gradient Themes
+    'matrix': {
+        bg: 'https://images.unsplash.com/photo-1550684848-86a5d8727436?w=1600&q=80',
+        card: 'rgba(0, 20, 0, 0.85)',
+        border: 'rgba(34, 197, 94, 0.4)',
+        accent: '#22c55e',
+        text: '#f0fdf4',
+        textSecondary: '#86efac'
+    },
+    'circuit': {
+        bg: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1600&q=80',
+        card: 'rgba(8, 47, 73, 0.8)',
+        border: 'rgba(14, 165, 233, 0.4)',
+        accent: '#38bdf8',
+        text: '#f0f9ff',
+        textSecondary: '#bae6fd'
+    },
+    'terminal': {
+        bg: 'https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=1600&q=80',
+        card: 'rgba(20, 10, 0, 0.85)',
+        border: 'rgba(245, 158, 11, 0.4)',
+        accent: '#fbbf24',
+        text: '#fffbeb',
+        textSecondary: '#fcd34d'
+    },
+    'workspace': {
+        bg: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1600&q=80',
+        card: 'rgba(15, 15, 25, 0.7)',
+        border: 'rgba(139, 92, 246, 0.3)',
+        accent: '#a78bfa',
+        text: '#ffffff',
+        textSecondary: '#c4b5fd'
+    },
+    'nodes': {
+        bg: 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=1600&q=80',
+        card: 'rgba(25, 10, 20, 0.7)',
+        border: 'rgba(236, 72, 153, 0.3)',
+        accent: '#f472b6',
+        text: '#fff1f2',
+        textSecondary: '#fbcfe8'
+    },
+    'glass': {
+        bg: 'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?w=1600&q=80',
+        card: 'rgba(255, 255, 255, 0.1)',
+        border: 'rgba(255, 255, 255, 0.2)',
+        accent: '#ffffff',
+        text: '#ffffff',
+        textSecondary: 'rgba(255, 255, 255, 0.7)'
+    },
+    'velvet': {
+        bg: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1600&q=80',
+        card: 'rgba(20, 0, 10, 0.6)',
+        border: 'rgba(216, 180, 254, 0.2)',
+        accent: '#e9d5ff',
+        text: '#faf5ff',
+        textSecondary: '#d8b4fe'
+    },
+    'aurora': {
+        bg: 'https://images.unsplash.com/photo-1536431311719-398b6704d4cc?w=1600&q=80',
+        card: 'rgba(0, 20, 30, 0.6)',
+        border: 'rgba(45, 212, 191, 0.2)',
+        accent: '#2dd4bf',
+        text: '#f0fdfa',
+        textSecondary: '#99f6e4'
+    },
+    'silence': {
+        bg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80',
+        card: 'rgba(15, 23, 42, 0.4)',
+        border: 'rgba(148, 163, 184, 0.1)',
+        accent: '#94a3b8',
+        text: '#f1f5f9',
+        textSecondary: '#cbd5e1'
+    },
+    'prism': {
+        bg: 'https://images.unsplash.com/photo-1550684376-efcbd6e3f031?w=1600&q=80',
+        card: 'rgba(10, 10, 10, 0.7)',
+        border: 'rgba(255, 255, 255, 0.15)',
+        accent: '#ffffff',
+        text: '#ffffff',
+        textSecondary: '#e5e7eb'
+    },
+    'cloud': {
+        bg: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1600&q=80',
+        card: 'rgba(255, 255, 255, 0.1)',
+        border: 'rgba(255, 255, 255, 0.2)',
+        accent: '#bae6fd',
+        text: '#ffffff',
+        textSecondary: '#e0f2fe'
+    },
+    'smoke': {
+        bg: 'https://images.unsplash.com/photo-1541450805268-4822a3a774ca?w=1600&q=80',
+        card: 'rgba(0, 0, 0, 0.6)',
+        border: 'rgba(100, 116, 139, 0.3)',
+        accent: '#94a3b8',
+        text: '#f8fafc',
+        textSecondary: '#cbd5e1'
+    },
+    'mesh': {
+        bg: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=1600&q=80',
+        card: 'rgba(10, 10, 30, 0.7)',
+        border: 'rgba(129, 140, 248, 0.2)',
+        accent: '#818cf8',
+        text: '#e0e7ff',
+        textSecondary: '#c7d2fe'
+    },
+    'flow': {
+        bg: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80',
+        card: 'rgba(10, 20, 20, 0.6)',
+        border: 'rgba(56, 189, 248, 0.2)',
+        accent: '#38bdf8',
+        text: '#f0f9ff',
+        textSecondary: '#bae6fd'
+    },
 };
 
 export const SOCIAL_BASE_URLS: Record<string, string> = {
