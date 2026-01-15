@@ -36,6 +36,8 @@ const Sidebar: React.FC = () => {
     { href: '/dashboard/settings', label: 'Settings', icon: FiSettings },
   ];
 
+  // ... (useEffect for click outside remains same)
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {

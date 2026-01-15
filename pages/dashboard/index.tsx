@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import ThemeTrigger from "../../components/dashboard/ThemeTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import InlineEdit from "../../components/dashboard/edit/InlineEdit";
 import GithubCard from "../../components/GitHubCard";
@@ -216,6 +217,19 @@ const DashboardPage: React.FC = () => {
     };
 
     fetchData();
+
+    const handleThemeChange = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        setTheme(customEvent.detail);
+      }
+    };
+
+    window.addEventListener('theme-change', handleThemeChange);
+
+    return () => {
+      window.removeEventListener('theme-change', handleThemeChange);
+    };
   }, [user, supabase]);
 
   const autoSaveProfile = async (updates: Record<string, unknown>) => {
@@ -372,11 +386,7 @@ const DashboardPage: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-1 md:gap-2 px-2 flex-1 justify-end md:justify-start">
-              <Link href="/dashboard/themes">
-                <button className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Custom Theme">
-                  <FaPalette size={16} />
-                </button>
-              </Link>
+              <ThemeTrigger />
               <button onClick={() => setShareModalOpen(true)} className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Share Page">
                 <FaShareAlt size={16} />
               </button>
