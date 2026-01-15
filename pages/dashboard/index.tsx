@@ -232,6 +232,19 @@ const DashboardPage: React.FC = () => {
     };
   }, [user, supabase]);
 
+  // Add another useEffect to apply theme when `theme` state changes (from fetch or event)
+  useEffect(() => {
+    if (theme) {
+      const config = THEME_CONFIG[theme] || THEME_CONFIG['onyx'];
+      const root = document.documentElement;
+      root.style.setProperty('--theme-card-bg', config.card);
+      root.style.setProperty('--theme-border', config.border);
+      root.style.setProperty('--theme-accent', config.accent);
+      root.style.setProperty('--theme-text', config.text);
+      root.style.setProperty('--theme-text-secondary', config.textSecondary);
+    }
+  }, [theme]);
+
   const autoSaveProfile = async (updates: Record<string, unknown>) => {
     if (!user) return;
     setSaving(true);
@@ -300,7 +313,8 @@ const DashboardPage: React.FC = () => {
   // Show skeleton instead of full-page spinner
   const isLight = false;
 
-  const bgConfig = THEME_CONFIG[theme] || 'bg-black';
+  const themeConfig = THEME_CONFIG[theme] || THEME_CONFIG['onyx'];
+  const bgConfig = themeConfig.bg;
   const isImageBg = bgConfig.startsWith('http');
 
   const handleSaveProject = (savedProject: Project) => {
@@ -355,7 +369,10 @@ const DashboardPage: React.FC = () => {
         }}
       />
 
-      <div className={`relative pt-12 min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-white transition-colors duration-700 pb-20`}>
+      <div
+        className={`relative pt-12 min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-[var(--theme-text)] transition-colors duration-700 pb-20`}
+      >
+
         {isImageBg && (
           <div className="absolute inset-0 z-0 pointer-events-none">
             <Image
@@ -376,18 +393,18 @@ const DashboardPage: React.FC = () => {
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="glass backdrop-blur-xl bg-black/60 p-2 rounded-[2rem] border-white/10 flex items-center justify-between md:justify-start gap-2 w-full md:w-auto"
+            className="glass backdrop-blur-xl bg-[var(--theme-card-bg)] p-2 rounded-[2rem] border-[var(--theme-border)] flex items-center justify-between md:justify-start gap-2 w-full md:w-auto"
           >
-            <div className={`flex items-center gap-2 px-4 md:px-6 py-3 border-r border-white/10 pr-4 md:pr-6 shrink-0 ${(saving || fetching) ? 'opacity-100' : 'opacity-50'}`}>
+            <div className={`flex items-center gap-2 px-4 md:px-6 py-3 border-r border-[var(--theme-border)] pr-4 md:pr-6 shrink-0 ${(saving || fetching) ? 'opacity-100' : 'opacity-50'}`}>
               <div className={`w-2 h-2 rounded-full ${(saving || fetching) ? 'bg-yellow-500' : 'bg-green-500'} animate-pulse`} />
-              <span className="text-[10px] font-black uppercase tracking-widest text-white/40">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--theme-text-secondary)]">
                 {fetching ? 'Loading...' : saving ? 'Syncing...' : 'Live Sync'}
               </span>
             </div>
 
             <div className="flex items-center gap-1 md:gap-2 px-2 flex-1 justify-end md:justify-start">
               <ThemeTrigger />
-              <button onClick={() => setShareModalOpen(true)} className="p-3 cursor-pointer glass rounded-xl text-white/40 hover:text-white transition-all hover:bg-white/5" title="Share Page">
+              <button onClick={() => setShareModalOpen(true)} className="p-3 cursor-pointer glass rounded-xl text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-all hover:bg-white/5" title="Share Page">
                 <FaShareAlt size={16} />
               </button>
             </div>
@@ -400,7 +417,7 @@ const DashboardPage: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border ${isLight ? 'border-slate-300' : 'border-white/5'}`}
+              className={`relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-[var(--theme-border)]`}
             >
               <div className="absolute inset-0 z-0">
                 <Image
@@ -430,7 +447,7 @@ const DashboardPage: React.FC = () => {
                     }}
                     className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative cursor-pointer flex items-center justify-center bg-white/5 transition-all duration-500 ${isDonor
                       ? 'border-4 border-yellow-500/50 ring-4 ring-yellow-500/10'
-                      : `border-4 ${isLight ? 'border-slate-300' : 'border-white/10'}`
+                      : `border-4 border-[var(--theme-border)]`
                       }`}>
                     {avatarUrl ? (
                       <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
@@ -453,14 +470,14 @@ const DashboardPage: React.FC = () => {
                     <InlineEdit
                       value={name}
                       onSave={(val) => { setName(val); autoSaveProfile({ full_name: val }); }}
-                      className="text-4xl md:text-7xl font-black tracking-tighter text-white block leading-[1.1]"
+                      className="text-4xl md:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1]"
                       placeholder="Your Name"
                     />
                     <div className="flex flex-col lg:flex-row lg:items-center gap-3">
                       <InlineEdit
                         value={profession}
                         onSave={(val) => { setProfession(val); autoSaveProfile({ profession: val }); }}
-                        className="text-lg md:text-2xl text-blue-400 font-bold tracking-tight leading-tight"
+                        className="text-lg md:text-2xl text-[var(--theme-accent)] font-bold tracking-tight leading-tight"
                         placeholder="Your Profession"
                       />
 
@@ -472,18 +489,18 @@ const DashboardPage: React.FC = () => {
                       value={bio}
                       onSave={(val) => { setBio(val); autoSaveProfile({ bio: val }); }}
                       as="textarea"
-                      className={`text-base md:text-xl ${isLight ? 'text-slate-900/50' : 'text-white/50'} leading-relaxed font-light`}
+                      className={`text-base md:text-xl text-[var(--theme-text-secondary)] leading-relaxed font-light`}
                       placeholder="Add a high-impact headline/bio..."
                     />
                   </div>
 
                   <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
                     {socials.filter(s => s.href).map((social, i) => (
-                      <div key={i} className={`glass rounded-2xl p-4 flex items-center justify-center border ${isLight ? 'border-slate-300' : 'border-white/5'} hover:border-blue-500/30 transition-all cursor-pointer group`}>
-                        {React.cloneElement(social.icon as React.ReactElement<{ size: number; className: string }>, { size: 20, className: `${isLight ? 'text-black/40' : 'text-white/40'} group-hover:text-blue-400 transition-colors` })}
+                      <div key={i} className={`glass rounded-2xl p-4 flex items-center justify-center border border-[var(--theme-border)] hover:border-[var(--theme-accent)] transition-all cursor-pointer group`}>
+                        {React.cloneElement(social.icon as React.ReactElement<{ size: number; className: string }>, { size: 20, className: `text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-accent)] transition-colors` })}
                       </div>
                     ))}
-                    <button onClick={() => setSocialModalOpen(true)} className={`glass rounded-2xl px-6 py-4 flex items-center justify-center gap-2 border-dashed ${isLight ? 'border-black/10 text-black/20 hover:text-black' : 'border-white/10 text-white/20 hover:text-white'} transition-all`}>
+                    <button onClick={() => setSocialModalOpen(true)} className={`glass rounded-2xl px-6 py-4 flex items-center justify-center gap-2 border-dashed border-[var(--theme-border)] text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-all`}>
                       <FaPlus size={12} />
                       <span className="text-[10px] font-black uppercase tracking-widest">Connect Identity</span>
                     </button>
@@ -495,12 +512,12 @@ const DashboardPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-8 flex flex-col gap-8">
-              <div className={`glass-card rounded-[2rem] p-6 md:p-8 border ${isLight ? 'border-slate-300' : 'border-white/5'} group relative min-h-[200px]`}>
+              <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 md:p-8 border group relative min-h-[200px]`}>
 
                 {githubUsername && (
                   <button
                     onClick={() => setGithubModalOpen(true)}
-                    className="absolute top-4 right-4 z-30 w-8 h-8 glass rounded-full flex items-center justify-center text-white/20 hover:text-white transition-all opacity-0 group-hover:opacity-100"
+                    className="absolute top-4 right-4 z-30 w-8 h-8 glass rounded-full flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-all opacity-0 group-hover:opacity-100"
                   >
                     <FaCog size={14} />
                   </button>
@@ -508,11 +525,11 @@ const DashboardPage: React.FC = () => {
 
                 <div className="flex justify-between items-start mb-2 z-20 relative">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white"><FaGithub size={20} /></div>
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-text)]"><FaGithub size={20} /></div>
                     <InlineEdit
                       value={githubGraphTitle}
                       onSave={(val) => { setGithubGraphTitle(val); autoSaveProfile({ github_graph_title: val }); }}
-                      className={`text-xl md:text-2xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight cursor-text hover:text-blue-400 transition-colors`}
+                      className={`text-xl md:text-2xl font-black text-[var(--theme-text)] tracking-tight cursor-text hover:text-[var(--theme-accent)] transition-colors`}
                       placeholder="GitHub DNA"
                     />
                   </div>
@@ -529,17 +546,17 @@ const DashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className={`glass-card rounded-[2rem] p-6 md:p-10 border ${isLight ? 'border-slate-300' : 'border-white/5'} group`}>
+              <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 md:p-10 border group`}>
                 <div className="flex justify-between items-center mb-6 md:mb-8">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-blue-400"><FaCode size={18} /></div>
-                    <h4 className={`text-xl md:text-2xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight leading-none`}>Tech Stack</h4>
+                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-accent)]"><FaCode size={18} /></div>
+                    <h4 className={`text-xl md:text-2xl font-black text-[var(--theme-text)] tracking-tight leading-none`}>Tech Stack</h4>
                   </div>
-                  <button onClick={() => setTechModalOpen(true)} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-white/20 hover:text-white transition-all"><FaPlus size={14} /></button>
+                  <button onClick={() => setTechModalOpen(true)} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-all"><FaPlus size={14} /></button>
                 </div>
                 <div className="flex flex-wrap gap-2 md:gap-3">
                   {techStack.map(tech => (
-                    <span key={tech.name} className={`px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold ${isLight ? 'text-black/40' : 'text-white/40'} hover:text-blue-400 ${isLight ? 'border-black/5' : 'border-white/5'} cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap flex items-center gap-2`}>
+                    <span key={tech.name} className={`px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold text-[var(--theme-text-secondary)] hover:text-[var(--theme-accent)] border-[var(--theme-border)] cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap flex items-center gap-2`}>
                       <span className="text-lg opacity-80">{tech.icon}</span>
                       <span>{tech.name}</span>
                     </span>
@@ -549,37 +566,37 @@ const DashboardPage: React.FC = () => {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="md:col-span-4 space-y-8">
-              <div className={`glass-card rounded-[2rem] p-10 border ${isLight ? 'border-slate-300' : 'border-white/5'} group bg-white/[0.01]`}>
+              <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-10 border group bg-white/[0.01]`}>
                 <div className="flex items-center gap-4 mb-8">
                   <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400"><FaInfoCircle size={18} /></div>
-                  <h4 className={`text-xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight`}>About Me</h4>
+                  <h4 className={`text-xl font-black text-[var(--theme-text)] tracking-tight`}>About Me</h4>
                 </div>
                 <InlineEdit
                   value={aboutMe}
                   onSave={(val) => { setAboutMe(val); autoSaveProfile({ about_me: val }); }}
                   as="textarea"
-                  className={`text-sm ${isLight ? 'text-black/40' : 'text-white/40'} leading-relaxed font-light min-h-[120px]`}
+                  className={`text-sm text-[var(--theme-text-secondary)] leading-relaxed font-light min-h-[120px]`}
                   placeholder="Tell your story..."
                 />
               </div>
 
               <div
                 onClick={() => setStatusModalOpen(true)}
-                className={`glass-card rounded-[1.5rem] p-8 border ${isLight ? 'border-slate-300' : 'border-white/5'} flex items-center justify-between group cursor-pointer hover:border-blue-500/30 transition-all`}
+                className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[1.5rem] p-8 border flex items-center justify-between group cursor-pointer hover:border-[var(--theme-accent)] transition-all`}
               >
                 <div className="flex flex-col">
-                  <span className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Current Status</span>
+                  <span className="text-[10px] uppercase tracking-widest text-[var(--theme-text-secondary)] mb-2">Current Status</span>
                   <div className="flex flex-col gap-1">
-                    <span className={`text-sm font-black flex items-center gap-3 ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                    <span className={`text-sm font-black flex items-center gap-3 text-[var(--theme-text)]`}>
                       <span className={`w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'} ${isAvailable ? 'animate-pulse' : ''}`} />
                       {isAvailable ? 'Available' : 'Focused'}
                     </span>
-                    <span className="text-xs text-white/40 font-medium truncate max-w-[180px]">
+                    <span className="text-xs text-[var(--theme-text-secondary)] font-medium truncate max-w-[180px]">
                       {statusText || (isAvailable ? "Set availability text..." : "Set focus text...")}
                     </span>
                   </div>
                 </div>
-                <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/20 group-hover:text-blue-400 group-hover:bg-blue-500/10 transition-all">
+                <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-accent)] group-hover:bg-blue-500/10 transition-all">
                   <FaPlus size={14} />
                 </div>
               </div>
@@ -589,20 +606,20 @@ const DashboardPage: React.FC = () => {
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-12">
               <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
                 <div className="text-center md:text-left">
-                  <h3 className={`text-4xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tighter mb-2`}>Featured Projects</h3>
-                  <p className="text-white/30 font-light">Showcase your best builds.</p>
+                  <h3 className={`text-4xl font-black text-[var(--theme-text)] tracking-tighter mb-2`}>Featured Projects</h3>
+                  <p className="text-[var(--theme-text-secondary)] font-light">Showcase your best builds.</p>
                 </div>
                 <button onClick={() => { setEditingProject(undefined); setProjectModalOpen(true); }} className="bg-white text-black px-8 py-4 rounded-3xl font-black flex items-center gap-3 hover:scale-105 transition-all whitespace-nowrap"><FaPlus size={14} /> <span>New Project</span></button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {projects.map((p, i) => (
-                  <div key={i} className={`glass-card rounded-[2rem] p-6 border ${isLight ? 'border-slate-300' : 'border-white/5'} group hover:border-blue-500/30 transition-all relative flex flex-col h-full`} onMouseLeave={() => setOpenMenuIndex(null)}>
+                  <div key={i} className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 border group hover:border-[var(--theme-accent)] transition-all relative flex flex-col h-full`} onMouseLeave={() => setOpenMenuIndex(null)}>
 
                     {/* Option Menu */}
                     <div className="absolute top-4 right-4 z-20">
                       <button
                         onClick={(e) => { e.stopPropagation(); setOpenMenuIndex(openMenuIndex === i ? null : i); }}
-                        className="w-8 h-8 flex items-center justify-center text-white/20 hover:text-white glass rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="w-8 h-8 flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] glass rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <FaEllipsisV size={12} />
                       </button>
@@ -622,11 +639,11 @@ const DashboardPage: React.FC = () => {
                           <FaCode className="text-white/10" size={28} />
                         )}
                       </div>
-                      <a href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-white/40 hover:text-white transition-colors mr-10"><FaExternalLinkAlt size={14} /></a>
+                      <a href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-colors mr-10"><FaExternalLinkAlt size={14} /></a>
                     </div>
-                    <h4 className={`text-xl font-bold ${isLight ? 'text-slate-900' : 'text-white'} mb-2 tracking-tight`}>{p.title}</h4>
-                    <p className={`${isLight ? 'text-black/40' : 'text-white/40'} font-light mb-6 text-sm leading-relaxed line-clamp-2`}>{p.description}</p>
-                    <div className="flex flex-wrap gap-2 mt-auto">{p.tech.map(t => <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-white/5 text-white/40 rounded-lg">{t}</span>)}</div>
+                    <h4 className={`text-xl font-bold text-[var(--theme-text)] mb-2 tracking-tight`}>{p.title}</h4>
+                    <p className={`text-[var(--theme-text-secondary)] font-light mb-6 text-sm leading-relaxed line-clamp-2`}>{p.description}</p>
+                    <div className="flex flex-wrap gap-2 mt-auto">{p.tech.map(t => <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-[var(--theme-card-bg)] text-[var(--theme-text-secondary)] rounded-lg">{t}</span>)}</div>
                   </div>
                 ))}
               </div>
@@ -640,22 +657,22 @@ const DashboardPage: React.FC = () => {
               >
                 <div
                   onClick={() => setCtaModalOpen(true)}
-                  className={`glass-card rounded-[2rem] p-10 border ${isLight ? 'border-slate-300' : 'border-white/10'} bg-gradient-to-br from-blue-600/5 to-purple-600/5 flex flex-col md:flex-row items-center justify-between gap-8 group cursor-pointer hover:border-blue-500/30 transition-all shadow-2xl shadow-blue-500/5 overflow-hidden relative`}
+                  className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-10 border bg-gradient-to-br from-blue-600/5 to-purple-600/5 flex flex-col md:flex-row items-center justify-between gap-8 group cursor-pointer hover:border-[var(--theme-accent)] transition-all shadow-2xl shadow-blue-500/5 overflow-hidden relative`}
                 >
                   <div className="relative z-10 text-center md:text-left">
-                    <span className="text-[10px] uppercase tracking-widest text-blue-400 font-black mb-3 block">Conversion Engine</span>
-                    <h4 className={`text-2xl md:text-3xl font-black ${isLight ? 'text-slate-900' : 'text-white'} tracking-tight mb-2`}>
+                    <span className="text-[10px] uppercase tracking-widest text-[var(--theme-accent)] font-black mb-3 block">Conversion Engine</span>
+                    <h4 className={`text-2xl md:text-3xl font-black text-[var(--theme-text)] tracking-tight mb-2`}>
                       {ctaTitle || "Primary Action Area"}
                     </h4>
-                    <p className="text-white/40 font-light max-w-xl">
+                    <p className="text-[var(--theme-text-secondary)] font-light max-w-xl">
                       {ctaDescription || "Set up your footer call-to-action to convert visitors into leads."}
                     </p>
                   </div>
 
                   <div className="relative z-10 flex items-center gap-6">
                     <div className="flex flex-col items-center md:items-end">
-                      <span className={`text-lg font-black ${isLight ? 'text-slate-900' : 'text-white'} mb-1`}>{ctaText || "Add Action"}</span>
-                      <span className="text-xs text-white/20 font-mono">{ctaLink || "No link set"}</span>
+                      <span className={`text-lg font-black text-[var(--theme-text)] mb-1`}>{ctaText || "Add Action"}</span>
+                      <span className="text-xs text-[var(--theme-text-secondary)] font-mono">{ctaLink || "No link set"}</span>
                     </div>
                     <div className="w-14 h-14 bg-white text-black rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all">
                       <FaPlus size={20} />
@@ -667,6 +684,7 @@ const DashboardPage: React.FC = () => {
                 </div>
               </motion.div>
             </motion.div>
+
           </div>
         </div>
       </div >
