@@ -186,6 +186,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
     '--theme-card-bg': themeConfig.card,
     '--theme-border': themeConfig.border,
     '--theme-accent': themeConfig.accent,
+    '--theme-accent-text': themeConfig.accentText,
     '--theme-text': themeConfig.text,
     '--theme-text-secondary': themeConfig.textSecondary,
   } as React.CSSProperties;
@@ -235,7 +236,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--theme-accent)] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 opacity-20" />
 
             {/* Neon Icon Core */}
-            <div className="w-12 h-12 md:w-14 md:h-14 bg-[var(--theme-accent)] rounded-full flex items-center justify-center text-[var(--theme-text)] shadow-lg transition-all group-hover:scale-105 relative z-10">
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-[var(--theme-accent)] rounded-full flex items-center justify-center text-[var(--theme-accent-text)] shadow-lg transition-all group-hover:scale-105 relative z-10">
               <FiShare2 size={24} className="group-hover:rotate-12 transition-transform" />
             </div>
 
@@ -513,7 +514,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                           target="_blank"
                           rel="noreferrer"
                           onClick={() => recordClick('cta', user.cta_text || 'Primary CTA')}
-                          className="inline-flex items-center gap-4 bg-[var(--theme-accent)] text-[var(--theme-text)] px-10 py-5 rounded-[2rem] font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[var(--theme-accent)]/20 group"
+                          className="inline-flex items-center gap-4 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] px-10 py-5 rounded-[2rem] font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[var(--theme-accent)]/20 group"
                         >
                           {user.cta_text}
                           <FaArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
