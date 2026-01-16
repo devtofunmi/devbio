@@ -268,7 +268,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
               <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-[var(--theme-accent)] blur-[120px] rounded-full opacity-10" />
             </div>
 
-            <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
+            <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-0 md:gap-8 text-center lg:text-left">
               {/* Avatar Container */}
               <div className="relative shrink-0">
                 <motion.div

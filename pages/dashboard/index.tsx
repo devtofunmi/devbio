@@ -431,7 +431,7 @@ const DashboardPage: React.FC = () => {
                 <div className="absolute inset-0" style={{ background: 'var(--theme-hero-gradient)' }} />
               </div>
 
-              <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-8 md:gap-12 text-center lg:text-left">
+              <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-4 md:gap-8 text-center lg:text-left">
                 <div className="relative group/avatar shrink-0">
                   <motion.div
                     onClick={() => fileInputRef.current?.click()}
@@ -672,10 +672,7 @@ const DashboardPage: React.FC = () => {
                   </div>
 
                   <div className="relative z-10 flex items-center gap-6">
-                    <div className="flex flex-col items-center md:items-end">
-                      <span className={`text-lg font-black text-[var(--theme-text)] mb-1`}>{ctaText || "Add Action"}</span>
-                      <span className="text-xs text-[var(--theme-text-secondary)] font-mono">{ctaLink || "No link set"}</span>
-                    </div>
+                    
                     <div className="w-14 h-14 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all">
                       <FaPlus size={20} />
                     </div>
