@@ -306,6 +306,76 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         textSecondary: '#bae6fd',
         heroGradient: 'linear-gradient(to top, #0a1414 10%, rgba(10,20,20,0.8) 50%, rgba(56,189,248,0.15) 100%)'
     },
+    'grid_system': {
+        bg: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1600&q=80',
+        card: 'rgba(0, 10, 20, 0.8)',
+        border: 'rgba(6, 182, 212, 0.4)',
+        accent: '#06b6d4',
+        accentText: '#000000',
+        text: '#ecfeff',
+        textSecondary: '#a5f3fc',
+        heroGradient: 'linear-gradient(to top, #001015 10%, rgba(0,20,30,0.8) 50%, rgba(6,182,212,0.15) 100%)'
+    },
+    'retro_vapor': {
+        bg: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=1600&q=80',
+        card: 'rgba(20, 0, 20, 0.8)',
+        border: 'rgba(217, 70, 239, 0.4)',
+        accent: '#d946ef',
+        accentText: '#000000',
+        text: '#fdf4ff',
+        textSecondary: '#f0abfc',
+        heroGradient: 'linear-gradient(to top, #1a0515 10%, rgba(30,0,30,0.8) 50%, rgba(217,70,239,0.15) 100%)'
+    },
+    'obsidian': {
+        bg: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80',
+        card: 'rgba(10, 10, 10, 0.85)',
+        border: 'rgba(255, 255, 255, 0.15)',
+        accent: '#ffffff',
+        accentText: '#000000',
+        text: '#ffffff',
+        textSecondary: '#d4d4d4',
+        heroGradient: 'linear-gradient(to top, #000000 10%, rgba(20,20,20,0.8) 50%, rgba(255,255,255,0.05) 100%)'
+    },
+    'speedway': {
+        bg: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=1600&q=80',
+        card: 'rgba(20, 10, 0, 0.8)',
+        border: 'rgba(249, 115, 22, 0.4)',
+        accent: '#f97316',
+        accentText: '#000000',
+        text: '#fff7ed',
+        textSecondary: '#fdba74',
+        heroGradient: 'linear-gradient(to top, #1c0a00 10%, rgba(30,15,5,0.8) 50%, rgba(249,115,22,0.15) 100%)'
+    },
+    'hive': {
+        bg: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=1600&q=80',
+        card: 'rgba(20, 20, 0, 0.8)',
+        border: 'rgba(234, 179, 8, 0.4)',
+        accent: '#eab308',
+        accentText: '#000000',
+        text: '#fefce8',
+        textSecondary: '#fde047',
+        heroGradient: 'linear-gradient(to top, #1a1500 10%, rgba(30,30,5,0.8) 50%, rgba(234,179,8,0.15) 100%)'
+    },
+    'graphite': {
+        bg: 'bg-[#18181b]',
+        card: 'rgba(39, 39, 42, 0.6)',
+        border: 'rgba(161, 161, 170, 0.2)',
+        accent: '#a1a1aa',
+        accentText: '#000000',
+        text: '#f4f4f5',
+        textSecondary: '#71717a',
+        heroGradient: 'linear-gradient(to top, #18181b 10%, rgba(24,24,27,0.8) 50%, rgba(255,255,255,0.05) 100%)'
+    },
+    'topography': {
+        bg: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1600&q=80',
+        card: 'rgba(0, 20, 10, 0.8)',
+        border: 'rgba(16, 185, 129, 0.4)',
+        accent: '#10b981',
+        accentText: '#000000',
+        text: '#ecfdf5',
+        textSecondary: '#6ee7b7',
+        heroGradient: 'linear-gradient(to top, #001510 10%, rgba(0,30,20,0.8) 50%, rgba(16,185,129,0.15) 100%)'
+    },
 };
 
 export const SOCIAL_BASE_URLS: Record<string, string> = {

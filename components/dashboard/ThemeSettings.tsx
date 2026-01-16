@@ -31,6 +31,13 @@ const themes = [
     { id: 'smoke', name: 'Dark Ethereal', type: 'gradient', preview: 'https://images.unsplash.com/photo-1541450805268-4822a3a774ca?w=800&q=80' },
     { id: 'mesh', name: 'Cyber Silk', type: 'gradient', preview: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80' },
     { id: 'flow', name: 'Liquid Metal', type: 'gradient', preview: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80' },
+    { id: 'grid_system', name: 'System Grid', type: 'image', preview: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80' },
+    { id: 'retro_vapor', name: 'Vapor Wave', type: 'image', preview: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=800&q=80' },
+    { id: 'obsidian', name: 'Obsidian Tile', type: 'image', preview: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80' },
+    { id: 'speedway', name: 'Velocity', type: 'image', preview: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?w=800&q=80' },
+    { id: 'hive', name: 'Hive Mind', type: 'image', preview: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=800&q=80' },
+    { id: 'graphite', name: 'Graphite', type: 'solid', preview: 'bg-[#18181b] border border-zinc-700' },
+    { id: 'topography', name: 'Terraform', type: 'image', preview: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80' },
 ];
 
 const ThemeSettings: React.FC<{ compact?: boolean; onThemeChange?: (theme: string) => void }> = ({ compact = false, onThemeChange }) => {
