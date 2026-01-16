@@ -46,6 +46,7 @@ export type ThemeStyle = {
     card: string;
     border: string;
     accent: string;
+    accentText: string;
     text: string;
     textSecondary: string;
 };
@@ -57,6 +58,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(20, 20, 20, 0.8)',
         border: 'rgba(255, 255, 255, 0.08)',
         accent: '#ffffff',
+        accentText: '#000000',
         text: '#ffffff',
         textSecondary: '#a1a1aa'
     },
@@ -65,6 +67,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(39, 39, 42, 0.5)',
         border: 'rgba(255, 255, 255, 0.1)',
         accent: '#e4e4e7',
+        accentText: '#000000',
         text: '#f4f4f5',
         textSecondary: '#a1a1aa'
     },
@@ -73,6 +76,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(15, 23, 42, 0.6)',
         border: 'rgba(56, 189, 248, 0.1)',
         accent: '#38bdf8',
+        accentText: '#ffffff',
         text: '#f8fafc',
         textSecondary: '#94a3b8'
     },
@@ -81,6 +85,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(6, 78, 59, 0.4)',
         border: 'rgba(52, 211, 153, 0.1)',
         accent: '#34d399',
+        accentText: '#ffffff',
         text: '#ecfdf5',
         textSecondary: '#6ee7b7'
     },
@@ -89,6 +94,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(49, 46, 129, 0.3)',
         border: 'rgba(192, 132, 252, 0.2)',
         accent: '#c084fc',
+        accentText: '#ffffff',
         text: '#faf5ff',
         textSecondary: '#e9d5ff'
     },
@@ -97,6 +103,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(29, 78, 216, 0.15)',
         border: 'rgba(96, 165, 250, 0.2)',
         accent: '#60a5fa',
+        accentText: '#ffffff',
         text: '#eff6ff',
         textSecondary: '#bfdbfe'
     },
@@ -105,6 +112,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(64, 64, 64, 0.3)',
         border: 'rgba(255, 255, 255, 0.05)',
         accent: '#d4d4d4',
+        accentText: '#000000',
         text: '#e5e5e5',
         textSecondary: '#a3a3a3'
     },
@@ -113,6 +121,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(59, 66, 82, 0.6)',
         border: 'rgba(136, 192, 208, 0.2)',
         accent: '#88c0d0',
+        accentText: '#ffffff',
         text: '#eceff4',
         textSecondary: '#d8dee9'
     },
@@ -121,6 +130,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(67, 20, 7, 0.4)',
         border: 'rgba(251, 146, 60, 0.2)',
         accent: '#fb923c',
+        accentText: '#000000',
         text: '#fff7ed',
         textSecondary: '#fdba74'
     },
@@ -129,11 +139,18 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(39, 39, 42, 0.4)',
         border: 'rgba(113, 113, 122, 0.2)',
         accent: '#a1a1aa',
+        accentText: '#000000',
         text: '#f4f4f5',
         textSecondary: '#71717a'
     },
     'alabaster': {
-        bg: 'bg-[#0f172a]', card: 'rgba(30, 41, 59, 0.6)', border: 'rgba(148, 163, 184, 0.1)', accent: '#38bdf8', text: '#f8fafc', textSecondary: '#94a3b8'
+        bg: 'bg-[#0f172a]',
+        card: 'rgba(30, 41, 59, 0.6)',
+        border: 'rgba(148, 163, 184, 0.1)',
+        accent: '#38bdf8',
+        accentText: '#ffffff',
+        text: '#f8fafc',
+        textSecondary: '#94a3b8'
     },
 
     // Image & Gradient Themes
@@ -142,6 +159,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(0, 20, 0, 0.85)',
         border: 'rgba(34, 197, 94, 0.4)',
         accent: '#22c55e',
+        accentText: '#ffffff',
         text: '#f0fdf4',
         textSecondary: '#86efac'
     },
@@ -150,6 +168,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(8, 47, 73, 0.8)',
         border: 'rgba(14, 165, 233, 0.4)',
         accent: '#38bdf8',
+        accentText: '#ffffff',
         text: '#f0f9ff',
         textSecondary: '#bae6fd'
     },
@@ -158,6 +177,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(20, 10, 0, 0.85)',
         border: 'rgba(245, 158, 11, 0.4)',
         accent: '#fbbf24',
+        accentText: '#000000',
         text: '#fffbeb',
         textSecondary: '#fcd34d'
     },
@@ -166,6 +186,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(15, 15, 25, 0.7)',
         border: 'rgba(139, 92, 246, 0.3)',
         accent: '#a78bfa',
+        accentText: '#ffffff',
         text: '#ffffff',
         textSecondary: '#c4b5fd'
     },
@@ -174,6 +195,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(25, 10, 20, 0.7)',
         border: 'rgba(236, 72, 153, 0.3)',
         accent: '#f472b6',
+        accentText: '#ffffff',
         text: '#fff1f2',
         textSecondary: '#fbcfe8'
     },
@@ -182,6 +204,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(255, 255, 255, 0.1)',
         border: 'rgba(255, 255, 255, 0.2)',
         accent: '#ffffff',
+        accentText: '#000000',
         text: '#ffffff',
         textSecondary: 'rgba(255, 255, 255, 0.7)'
     },
@@ -190,6 +213,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(20, 0, 10, 0.6)',
         border: 'rgba(216, 180, 254, 0.2)',
         accent: '#e9d5ff',
+        accentText: '#000000',
         text: '#faf5ff',
         textSecondary: '#d8b4fe'
     },
@@ -198,6 +222,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(0, 20, 30, 0.6)',
         border: 'rgba(45, 212, 191, 0.2)',
         accent: '#2dd4bf',
+        accentText: '#ffffff',
         text: '#f0fdfa',
         textSecondary: '#99f6e4'
     },
@@ -206,6 +231,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(15, 23, 42, 0.4)',
         border: 'rgba(148, 163, 184, 0.1)',
         accent: '#94a3b8',
+        accentText: '#ffffff',
         text: '#f1f5f9',
         textSecondary: '#cbd5e1'
     },
@@ -214,6 +240,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(10, 10, 10, 0.7)',
         border: 'rgba(255, 255, 255, 0.15)',
         accent: '#ffffff',
+        accentText: '#000000',
         text: '#ffffff',
         textSecondary: '#e5e7eb'
     },
@@ -222,6 +249,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(255, 255, 255, 0.1)',
         border: 'rgba(255, 255, 255, 0.2)',
         accent: '#bae6fd',
+        accentText: '#000000',
         text: '#ffffff',
         textSecondary: '#e0f2fe'
     },
@@ -230,6 +258,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(0, 0, 0, 0.6)',
         border: 'rgba(100, 116, 139, 0.3)',
         accent: '#94a3b8',
+        accentText: '#ffffff',
         text: '#f8fafc',
         textSecondary: '#cbd5e1'
     },
@@ -238,6 +267,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(10, 10, 30, 0.7)',
         border: 'rgba(129, 140, 248, 0.2)',
         accent: '#818cf8',
+        accentText: '#ffffff',
         text: '#e0e7ff',
         textSecondary: '#c7d2fe'
     },
@@ -246,6 +276,7 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
         card: 'rgba(10, 20, 20, 0.6)',
         border: 'rgba(56, 189, 248, 0.2)',
         accent: '#38bdf8',
+        accentText: '#ffffff',
         text: '#f0f9ff',
         textSecondary: '#bae6fd'
     },
