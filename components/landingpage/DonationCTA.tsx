@@ -64,7 +64,7 @@ const DonationCTA: React.FC = () => {
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="bg-white cursor-pointer text-black font-extrabold px-10 py-5 rounded-2xl text-lg flex items-center justify-center gap-2 hover:bg-blue-50 transition-colors w-full sm:w-auto shadow-xl shadow-white/10"
+                                    className="bg-white cursor-pointer text-black font-extrabold px-5  md:px-10 py-5 rounded-2xl text-lg flex items-center justify-center gap-2 hover:bg-blue-50 transition-colors w-full sm:w-auto shadow-xl shadow-white/10"
                                 >
                                     Make a Donation
                                     <FiArrowRight className="w-5 h-5" />
