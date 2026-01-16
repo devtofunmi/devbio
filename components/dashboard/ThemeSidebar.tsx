@@ -26,7 +26,7 @@ const ThemeSidebar: React.FC<ThemeSidebarProps> = ({ isOpen, onClose }) => {
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed top-0 right-0 h-full w-full max-w-md bg-[#000000] border-l border-white/10 z-[70] shadow-2xl overflow-hidden flex flex-col"
+                        className="fixed top-0 right-0 h-full w-full max-w-md bg-[#050505] border-l border-white/10 z-[70] shadow-2xl overflow-hidden flex flex-col"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-white/5">
