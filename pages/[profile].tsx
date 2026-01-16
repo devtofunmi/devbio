@@ -189,6 +189,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
     '--theme-accent-text': themeConfig.accentText,
     '--theme-text': themeConfig.text,
     '--theme-text-secondary': themeConfig.textSecondary,
+    '--theme-hero-gradient': themeConfig.heroGradient,
   } as React.CSSProperties;
 
   return (
@@ -262,7 +263,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                 fill
                 className="object-cover scale-105 group-hover:scale-100 transition-transform duration-[2s] opacity-40 blur-sm"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent" />
+              <div className="absolute inset-0" style={{ background: 'var(--theme-hero-gradient)' }} />
               <div className="absolute top-0 right-0 w-1/2 h-full bg-[var(--theme-accent)] blur-[150px] rounded-full opacity-20" />
               <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-[var(--theme-accent)] blur-[120px] rounded-full opacity-10" />
             </div>
