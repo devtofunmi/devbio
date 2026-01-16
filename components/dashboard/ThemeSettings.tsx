@@ -97,12 +97,12 @@ const ThemeSettings: React.FC<{ compact?: boolean; onThemeChange?: (theme: strin
 
     return (
         <section className={`mb-20 md:mb-0 relative ${compact ? 'px-1' : ''}`}>
-            <div className="mb-6 flex items-center gap-2 p-1 glass rounded-xl w-fit mx-auto relative z-10">
+            <div className="mb-6  flex items-center gap-2 p-1 bg-[#050505] border border-white/10 rounded-xl w-fit mx-auto relative z-10">
                 {['all', 'solid', 'gradient', 'image'].map((f) => (
                     <button
                         key={f}
                         onClick={() => setFilter(f)}
-                        className={`relative px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors z-20 ${filter === f ? 'text-black' : 'text-white/40 hover:text-white'
+                        className={`relative px-4 py-2  rounded-lg text-xs font-bold uppercase tracking-wider transition-colors z-20 ${filter === f ? 'text-black' : 'text-white/40 hover:text-white'
                             }`}
                     >
                         {filter === f && (
