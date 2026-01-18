@@ -2,8 +2,6 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import ThemeTrigger from "../../components/dashboard/ThemeTrigger";
 import { motion, AnimatePresence } from "framer-motion";
-import InlineEdit from "../../components/dashboard/edit/InlineEdit";
-import GithubCard from "../../components/GitHubCard";
 import ProjectModal from "../../components/dashboard/edit/ProjectModal";
 import TechStackModal from "../../components/dashboard/edit/TechStackModal";
 import GitHubModal from "../../components/dashboard/edit/GitHubModal";
@@ -13,28 +11,26 @@ import WelcomeModal from "../../components/dashboard/WelcomeModal";
 import StatusModal from "../../components/dashboard/edit/StatusModal";
 import CTAModal from "../../components/dashboard/edit/CTAModal";
 import Portal from "../../components/Portal";
+import DashboardHero from "../../components/dashboard/DashboardHero";
+import GitHubDNACard from "../../components/dashboard/GitHubDNACard";
+import CVCard from "../../components/dashboard/cv/CVCard";
+import ProjectGrid from "../../components/dashboard/ProjectGrid";
+import CVDeleteModal from "../../components/dashboard/cv/CVDeleteModal";
+import AboutMeCard from "../../components/dashboard/AboutMeCard";
+import TechStackCard from "../../components/dashboard/TechStackCard";
+import StatusCard from "../../components/dashboard/StatusCard";
+import CTACard from "../../components/dashboard/CTACard";
 import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
 import { ALL_TECHS, Tech, THEME_CONFIG } from '../../lib/constants';
-import { ensureAbsoluteUrl } from '../../lib/utils';
 import {
   FaPlus,
   FaTwitter,
   FaGithub,
   FaLinkedin,
   FaYoutube,
-  FaExternalLinkAlt,
-  FaMagic,
   FaShareAlt,
-  FaPalette,
-  FaInfoCircle,
-  FaCamera,
-  FaCode,
-  FaUser,
-  FaCog,
-  FaEllipsisV,
-  FaTrash,
-  FaPen
+  FaCode, // Keep FaCode for ALL_TECHS fallback
 } from "react-icons/fa";
 import Link from 'next/link';
 import Image from 'next/image';
@@ -55,6 +51,7 @@ type Project = {
 const DashboardPage: React.FC = () => {
   const { user, supabase } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cvInputRef = useRef<HTMLInputElement>(null);
 
   // Data States
 
@@ -75,6 +72,7 @@ const DashboardPage: React.FC = () => {
   const [ctaLink, setCtaLink] = useState("");
   const [theme, setTheme] = useState('onyx');
   const [isDonor, setIsDonor] = useState(false);
+  const [cvUrl, setCvUrl] = useState("");
 
 
   // Loading State
@@ -105,6 +103,8 @@ const DashboardPage: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [cvMenuOpen, setCvMenuOpen] = useState(false);
+  const [cvDeleteModalOpen, setCvDeleteModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -180,6 +180,7 @@ const DashboardPage: React.FC = () => {
           setCtaLink(profile.cta_link || "");
           setTheme(profile.theme || 'onyx');
           setIsDonor(profile.is_donor || false);
+          setCvUrl(profile.cv_url || "");
 
           if (profile.tech_stack) {
             const dbTechs = profile.tech_stack as { name: string }[];
@@ -312,6 +313,59 @@ const DashboardPage: React.FC = () => {
     }
   };
 
+  const handleCvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    // Check file type (PDF only for CVs)
+    if (file.type !== 'application/pdf') {
+      toast.error('Please upload a PDF file for your CV.');
+      return;
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB.');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const safeUsername = username || user.id;
+      const fileName = `${safeUsername}_CV.pdf`;
+      const { error: uploadError } = await supabase.storage.from('cvs').upload(fileName, file, {
+        upsert: true
+      });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage.from('cvs').getPublicUrl(fileName);
+
+      setCvUrl(publicUrl);
+      await supabase.from('profiles').update({ cv_url: publicUrl }).eq('id', user.id);
+      toast.success('CV uploaded successfully!');
+    } catch (error: unknown) {
+      console.error(error);
+      toast.error('Error uploading CV');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const removeCv = async () => {
+    if (!user) return;
+    setSaving(true);
+    try {
+      await supabase.from('profiles').update({ cv_url: null }).eq('id', user.id);
+      setCvUrl("");
+      toast.success("CV removed.");
+    } catch {
+      toast.error("Failed to remove CV");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   // Show skeleton instead of full-page spinner
   const isLight = false;
 
@@ -389,6 +443,7 @@ const DashboardPage: React.FC = () => {
         )}
 
         <input type="file" ref={fileInputRef} onChange={handleImageChange} className="hidden" accept="image/*" />
+        <input type="file" ref={cvInputRef} onChange={handleCvUpload} className="hidden" accept="application/pdf" />
 
         {/* Floating Top Bar */}
         <div className="fixed top-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-12 z-[100] w-[92%] md:w-auto">
@@ -415,278 +470,70 @@ const DashboardPage: React.FC = () => {
 
         {/* Main Content Area */}
         <div className={`max-w-7xl mx-auto px-6 relative z-10 transition-opacity duration-300 ${fetching ? 'opacity-50' : 'opacity-100'}`}>
-          <div className="mb-10 md:mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-[var(--theme-border)]`}
-            >
-              <div className="absolute inset-0 z-0">
-                <Image
-                  src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1600&q=80"
-                  alt="Profile Aura"
-                  fill
-                  className="object-cover scale-105 group-hover:scale-110 transition-transform duration-[2s] opacity-20 blur-sm"
-                />
-                <div className="absolute inset-0" style={{ background: 'var(--theme-hero-gradient)' }} />
-              </div>
-
-              <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-start gap-4 md:gap-8 text-center lg:text-left">
-                <div className="relative group/avatar shrink-0">
-                  <motion.div
-                    onClick={() => fileInputRef.current?.click()}
-                    animate={isDonor ? {
-                      boxShadow: [
-                        '0 0 30px rgba(234,179,8,0.3)',
-                        '0 0 40px rgba(234,179,8,0.5)',
-                        '0 0 30px rgba(234,179,8,0.3)',
-                      ],
-                    } : {}}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    className={`w-32 h-32 md:w-48 md:h-48 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden relative cursor-pointer flex items-center justify-center bg-white/5 transition-all duration-500 ${isDonor
-                      ? 'border-4 border-yellow-500/50 ring-4 ring-yellow-500/10'
-                      : `border-4 border-[var(--theme-border)]`
-                      }`}>
-                    {avatarUrl ? (
-                      <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
-                    ) : (
-                      <FaUser className="text-white/10 text-5xl md:text-7xl" />
-                    )}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center backdrop-blur-sm">
-                      <FaCamera className="text-white text-3xl mb-2" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-white">Upload Brand</span>
-                    </div>
-
-                  </motion.div>
-                  <div className="absolute -bottom-2 -right-2 w-10 h-10 md:w-12 md:h-12 bg-blue-600 rounded-xl md:rounded-2xl flex items-center justify-center text-white border-4 border-black">
-                    <FaMagic size={18} className="animate-pulse" />
-                  </div>
-                </div>
-
-                <div className="flex-1 space-y-6 w-full overflow-hidden">
-                  <div className="flex flex-col gap-2">
-                    <InlineEdit
-                      value={name}
-                      onSave={(val) => { setName(val); autoSaveProfile({ full_name: val }); }}
-                      className="text-4xl md:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1]"
-                      placeholder="Your Name"
-                    />
-                    <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-                      <InlineEdit
-                        value={profession}
-                        onSave={(val) => { setProfession(val); autoSaveProfile({ profession: val }); }}
-                        className="text-lg md:text-2xl text-[var(--theme-accent)] font-bold tracking-tight leading-tight"
-                        placeholder="Your Profession"
-                      />
-
-                    </div>
-                  </div>
-
-                  <div className="max-w-2xl mx-auto lg:mx-0">
-                    <InlineEdit
-                      value={bio}
-                      onSave={(val) => { setBio(val); autoSaveProfile({ bio: val }); }}
-                      as="textarea"
-                      className={`text-base md:text-xl text-[var(--theme-text-secondary)] leading-relaxed font-light`}
-                      placeholder="Add a high-impact headline/bio..."
-                    />
-                  </div>
-
-                  <div className="flex flex-wrap gap-4 pt-4 items-center justify-center lg:justify-start">
-                    {socials.filter(s => s.href).map((social, i) => (
-                      <div key={i} className={`glass rounded-2xl p-4 flex items-center justify-center border border-[var(--theme-border)] hover:border-[var(--theme-accent)] transition-all cursor-pointer group`}>
-                        {React.cloneElement(social.icon as React.ReactElement<{ size: number; className: string }>, { size: 20, className: `text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-accent)] transition-colors` })}
-                      </div>
-                    ))}
-                    <button onClick={() => setSocialModalOpen(true)} className={`glass rounded-2xl px-6 py-4 flex items-center justify-center gap-2 border-dashed border-[var(--theme-border)] text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-all`}>
-                      <FaPlus size={12} />
-                      <span className="text-[10px] font-black uppercase tracking-widest">Connect Identity</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          <DashboardHero
+            name={name}
+            profession={profession}
+            bio={bio}
+            avatarUrl={avatarUrl}
+            isDonor={isDonor}
+            socials={socials}
+            onNameSave={(val) => { setName(val); autoSaveProfile({ full_name: val }); }}
+            onProfessionSave={(val) => { setProfession(val); autoSaveProfile({ profession: val }); }}
+            onBioSave={(val) => { setBio(val); autoSaveProfile({ bio: val }); }}
+            onAvatarClick={() => fileInputRef.current?.click()}
+            onSocialClick={() => setSocialModalOpen(true)}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-8 flex flex-col gap-8">
-              <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 md:p-8 border group relative min-h-[200px]`}>
+              <GitHubDNACard
+                githubUsername={githubUsername}
+                githubGraphTitle={githubGraphTitle}
+                onTitleSave={(val) => { setGithubGraphTitle(val); autoSaveProfile({ github_graph_title: val }); }}
+                onSettingsClick={() => setGithubModalOpen(true)}
+              />
 
-                {githubUsername && (
-                  <button
-                    onClick={() => setGithubModalOpen(true)}
-                    className="absolute top-4 right-4 z-30 w-8 h-8 glass rounded-full flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-all opacity-0 group-hover:opacity-100"
-                  >
-                    <FaCog size={14} />
-                  </button>
-                )}
-
-                <div className="flex justify-between items-start mb-2 z-20 relative">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-text)]"><FaGithub size={20} /></div>
-                    <InlineEdit
-                      value={githubGraphTitle}
-                      onSave={(val) => { setGithubGraphTitle(val); autoSaveProfile({ github_graph_title: val }); }}
-                      className={`text-xl md:text-2xl font-black text-[var(--theme-text)] tracking-tight cursor-text hover:text-[var(--theme-accent)] transition-colors`}
-                      placeholder="GitHub DNA"
-                    />
-                  </div>
-                </div>
-
-                {!githubUsername && (
-                  <div className="absolute inset-0 bg-black/40 z-10 flex items-center justify-center backdrop-blur-[2px] rounded-[2rem]">
-                    <button onClick={() => setGithubModalOpen(true)} className="bg-white text-black px-8 py-3 rounded-full font-black text-xs uppercase tracking-widest hover:scale-110 transition-all shadow-xl">Sync GitHub DNA</button>
-                  </div>
-                )}
-
-                <div className="w-full flex items-center justify-center relative z-0 mt-2">
-                  <GithubCard githubUsername={githubUsername} size={48} />
-                </div>
-              </div>
-
-              <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 md:p-10 border group`}>
-                <div className="flex justify-between items-center mb-6 md:mb-8">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-accent)]"><FaCode size={18} /></div>
-                    <h4 className={`text-xl md:text-2xl font-black text-[var(--theme-text)] tracking-tight leading-none`}>Tech Stack</h4>
-                  </div>
-                  <button onClick={() => setTechModalOpen(true)} className="w-10 h-10 rounded-xl glass flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-all"><FaPlus size={14} /></button>
-                </div>
-                <div className="flex flex-wrap gap-2 md:gap-3">
-                  {techStack.map(tech => (
-                    <span key={tech.name} className={`px-4 py-2 md:px-6 md:py-3 glass rounded-xl md:rounded-2xl text-[10px] md:text-sm font-bold text-[var(--theme-text-secondary)] hover:text-[var(--theme-accent)] border-[var(--theme-border)] cursor-pointer transition-all hover:scale-110 active:scale-95 whitespace-nowrap flex items-center gap-2`}>
-                      <span className="text-lg opacity-80">{tech.icon}</span>
-                      <span>{tech.name}</span>
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <TechStackCard
+                techStack={techStack}
+                onAddClick={() => setTechModalOpen(true)}
+              />
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="md:col-span-4 space-y-8">
-              <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-10 border group bg-white/[0.01]`}>
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400"><FaInfoCircle size={18} /></div>
-                  <h4 className={`text-xl font-black text-[var(--theme-text)] tracking-tight`}>About Me</h4>
-                </div>
-                <InlineEdit
-                  value={aboutMe}
-                  onSave={(val) => { setAboutMe(val); autoSaveProfile({ about_me: val }); }}
-                  as="textarea"
-                  className={`text-sm text-[var(--theme-text-secondary)] leading-relaxed font-light min-h-[120px]`}
-                  placeholder="Tell your story..."
-                />
-              </div>
+              <AboutMeCard
+                aboutMe={aboutMe}
+                onSave={(val) => { setAboutMe(val); autoSaveProfile({ about_me: val }); }}
+              />
 
-              <div
+              <StatusCard
+                isAvailable={isAvailable}
+                statusText={statusText}
                 onClick={() => setStatusModalOpen(true)}
-                className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[1.5rem] p-8 border flex items-center justify-between group cursor-pointer hover:border-[var(--theme-accent)] transition-all`}
-              >
-                <div className="flex flex-col">
-                  <span className="text-[10px] uppercase tracking-widest text-[var(--theme-text-secondary)] mb-2">Current Status</span>
-                  <div className="flex flex-col gap-1">
-                    <span className={`text-sm font-black flex items-center gap-3 text-[var(--theme-text)]`}>
-                      <span className={`w-2.5 h-2.5 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'} ${isAvailable ? 'animate-pulse' : ''}`} />
-                      {isAvailable ? 'Available' : 'Focused'}
-                    </span>
-                    <span className="text-xs text-[var(--theme-text-secondary)] font-medium truncate max-w-[180px]">
-                      {statusText || (isAvailable ? "Set availability text..." : "Set focus text...")}
-                    </span>
-                  </div>
-                </div>
-                <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-accent)] group-hover:bg-blue-500/10 transition-all">
-                  <FaPlus size={14} />
-                </div>
-              </div>
+              />
 
+              <CVCard
+                cvUrl={cvUrl}
+                userName={name}
+                onUploadClick={() => cvInputRef.current?.click()}
+                onRemoveClick={() => setCvDeleteModalOpen(true)}
+              />
             </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-12">
-              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
-                <div className="text-center md:text-left">
-                  <h3 className={`text-4xl font-black text-[var(--theme-text)] tracking-tighter mb-2`}>Featured Projects</h3>
-                  <p className="text-[var(--theme-text-secondary)] font-light">Showcase your best builds.</p>
-                </div>
-                <button onClick={() => { setEditingProject(undefined); setProjectModalOpen(true); }} className="bg-white text-black px-8 py-4 rounded-3xl font-black flex items-center gap-3 hover:scale-105 transition-all whitespace-nowrap"><FaPlus size={14} /> <span>New Project</span></button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projects.map((p, i) => (
-                  <div key={i} className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 border group hover:border-[var(--theme-accent)] transition-all relative flex flex-col h-full`} onMouseLeave={() => setOpenMenuIndex(null)}>
-
-                    {/* Option Menu */}
-                    <div className="absolute top-4 right-4 z-20">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setOpenMenuIndex(openMenuIndex === i ? null : i); }}
-                        className="w-8 h-8 flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] glass rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <FaEllipsisV size={12} />
-                      </button>
-                      {openMenuIndex === i && (
-                        <div className="absolute top-10 right-0 glass bg-black border border-white/10 rounded-xl overflow-hidden min-w-[120px] z-30 shadow-2xl flex flex-col items-start p-1 animate-in fade-in slide-in-from-top-2 duration-200">
-                          <button onClick={() => { setEditingProject(p); setProjectModalOpen(true); setOpenMenuIndex(null); }} className="w-full text-left px-4 py-2.5 hover:bg-white/10 text-xs font-bold text-white flex items-center gap-2 rounded-lg transition-colors"><FaPen size={10} /> Edit</button>
-                          <button onClick={(e) => deleteProject(p.id!, e)} className="w-full text-left px-4 py-2.5 hover:bg-red-500/20 text-xs font-bold text-red-500 flex items-center gap-2 rounded-lg transition-colors"><FaTrash size={10} /> Delete</button>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex justify-between items-start mb-6 w-full">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5 flex items-center justify-center shrink-0">
-                        {p.image ? (
-                          <Image src={p.image} alt={p.title} fill className="object-cover" />
-                        ) : (
-                          <FaCode className="text-white/10" size={28} />
-                        )}
-                      </div>
-                      <a href={ensureAbsoluteUrl(p.url)} target="_blank" rel="noreferrer" className="p-3 glass rounded-xl text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] transition-colors mr-10"><FaExternalLinkAlt size={14} /></a>
-                    </div>
-                    <h4 className={`text-xl font-bold text-[var(--theme-text)] mb-2 tracking-tight`}>{p.title}</h4>
-                    <p className={`text-[var(--theme-text-secondary)] font-light mb-6 text-sm leading-relaxed line-clamp-2`}>{p.description}</p>
-                    <div className="flex flex-wrap gap-2 mt-auto">{p.tech.map(t => <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 bg-[var(--theme-card-bg)] text-[var(--theme-text-secondary)] rounded-lg">{t}</span>)}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Primary Action Card - Dashboard Footer */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="mt-12"
-              >
-                <div
-                  onClick={() => setCtaModalOpen(true)}
-                  className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-10 border bg-gradient-to-br from-blue-600/5 to-purple-600/5 flex flex-col md:flex-row items-center justify-between gap-8 group cursor-pointer hover:border-[var(--theme-accent)] transition-all shadow-2xl shadow-blue-500/5 overflow-hidden relative`}
-                >
-                  <div className="relative z-10 text-center md:text-left">
-                    <span className="text-[10px] uppercase tracking-widest text-[var(--theme-accent)] font-black mb-3 block">Conversion Engine</span>
-                    <h4 className={`text-2xl md:text-3xl font-black text-[var(--theme-text)] tracking-tight mb-2`}>
-                      {ctaTitle || "Primary Action Area"}
-                    </h4>
-                    <p className="text-[var(--theme-text-secondary)] font-light max-w-xl">
-                      {ctaDescription || "Set up your footer call-to-action to convert visitors into leads."}
-                    </p>
-                  </div>
-
-                  <div className="relative z-10 flex items-center gap-6">
-                    
-                    <div className="w-14 h-14 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all">
-                      <FaPlus size={20} />
-                    </div>
-                  </div>
-
-                  {/* Aesthetic backgrounds */}
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] -z-10 group-hover:bg-blue-500/20 transition-colors" />
-                </div>
-              </motion.div>
-            </motion.div>
-
           </div>
+
+          <ProjectGrid
+            projects={projects}
+            onNewProject={() => { setEditingProject(undefined); setProjectModalOpen(true); }}
+            onEditProject={(p) => { setEditingProject(p); setProjectModalOpen(true); }}
+            onDeleteProject={deleteProject}
+          />
+
+          <CTACard
+            ctaTitle={ctaTitle}
+            ctaDescription={ctaDescription}
+            onClick={() => setCtaModalOpen(true)}
+          />
         </div>
-      </div >
+      </div>
 
       <AnimatePresence>
         {projectModalOpen && (
@@ -784,6 +631,15 @@ const DashboardPage: React.FC = () => {
               });
               toast.success("Primary action updated!");
             }}
+          />
+        )}
+
+        {cvDeleteModalOpen && (
+          <CVDeleteModal
+            isOpen={cvDeleteModalOpen}
+            onClose={() => setCvDeleteModalOpen(false)}
+            onConfirm={removeCv}
+            saving={saving}
           />
         )}
       </AnimatePresence>
