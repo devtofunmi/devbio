@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser, FaArrowRight } from "react-icons/fa";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser, FaArrowRight, FaFilePdf } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import GitHubCard from "../components/GitHubCard";
@@ -12,6 +12,7 @@ import { AnimatePresence } from "framer-motion";
 import { FiShare2 } from "react-icons/fi";
 import { THEME_CONFIG, SOCIAL_BASE_URLS, ALL_TECHS } from "../lib/constants";
 import { ensureAbsoluteUrl, formatSocialHref } from "../lib/utils";
+import { toast } from "react-toastify";
 
 type SocialLink = {
   name: string;
@@ -53,6 +54,7 @@ type UserProfile = {
   theme?: string;
   beams_enabled?: boolean;
   is_donor?: boolean;
+  cv_url?: string;
 };
 
 type Props = {
@@ -351,6 +353,34 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
                     )
                   ))}
                 </div>
+
+                {/* CV Download Button */}
+                {user.cv_url && (
+                  <div className="pt-2">
+                    <a
+                      href={`${user.cv_url}?download=`}
+                      download={`${user.full_name.replace(/\s+/g, '_')}_CV.pdf`}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => {
+                        recordClick('cv', user.cv_url!);
+                        toast.info("Download started...", {
+                          icon: () => <span>🚀</span>,
+                          style: {
+                            borderRadius: '1rem',
+                            background: 'var(--theme-card-bg)',
+                            color: 'var(--theme-text)',
+                            border: '1px solid var(--theme-border)',
+                          },
+                        });
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-3 glass rounded-2xl border border-[var(--theme-border)] text-white/60 hover:text-[var(--theme-accent)] hover:border-[var(--theme-accent)] transition-all font-bold text-xs uppercase tracking-widest group/cv"
+                    >
+                      <FaFilePdf size={14} className="group-hover/cv:scale-110 transition-transform" />
+                      <span>Download CV</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
