@@ -283,8 +283,12 @@ const AnalyticsPage: React.FC = () => {
                       {link.type === 'social' ? <FiActivity size={16} /> : <FiLink size={16} />}
                     </div>
                     <div className="max-w-[200px] md:max-w-xs truncate">
-                      <div className="text-white font-bold text-sm truncate">{link.url}</div>
-                      <div className="text-[10px] text-white/20 font-black uppercase">{link.type}</div>
+                      <div className="text-white font-bold text-sm truncate">
+                        {link.type === 'cv'
+                          ? (link.url.startsWith('http') ? link.url.split('/').pop() : 'resume.pdf')
+                          : link.url}
+                      </div>
+                      <div className="text-[10px] text-white/20 font-black uppercase text-emerald-400">{link.type}</div>
                     </div>
                   </div>
                   <div className="text-2xl font-black text-white">{link.count}</div>
