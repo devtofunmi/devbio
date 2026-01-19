@@ -44,6 +44,7 @@ type Project = {
   url: string;
   tech: string[];
   image?: string;
+  sort_order?: number;
 };
 
 
@@ -203,7 +204,8 @@ const DashboardPage: React.FC = () => {
         const { data: userProjects, error: projectsError } = await supabase
           .from('projects')
           .select('*')
-          .eq('user_id', user.id);
+          .eq('user_id', user.id)
+          .order('sort_order', { ascending: true });
 
         if (projectsError) throw projectsError;
         if (userProjects) {
@@ -400,6 +402,26 @@ const DashboardPage: React.FC = () => {
     setOpenMenuIndex(null);
   };
 
+  const handleReorder = async (newOrder: Project[]) => {
+    setProjects(newOrder);
+    try {
+      const updates = newOrder.map((p, index) => ({
+        id: p.id,
+        user_id: user?.id,
+        sort_order: index,
+        title: p.title, // Add required fields for safer upsert if needed, though id should suffice for update
+      }));
+
+      const { error } = await supabase
+        .from('projects')
+        .upsert(updates);
+
+      if (error) throw error;
+    } catch (err) {
+      console.error("Failed to save reorder:", err);
+    }
+  };
+
   return (
     <DashboardLayout>
       {showConfetti && (
@@ -525,6 +547,7 @@ const DashboardPage: React.FC = () => {
             onNewProject={() => { setEditingProject(undefined); setProjectModalOpen(true); }}
             onEditProject={(p) => { setEditingProject(p); setProjectModalOpen(true); }}
             onDeleteProject={deleteProject}
+            onReorder={handleReorder}
           />
 
           <CTACard
