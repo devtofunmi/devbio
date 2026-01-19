@@ -14,6 +14,7 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-helpers-react": "^0.5.0",
     "@supabase/supabase-js": "^2.90.1",
+    "@vercel/analytics": "^1.6.1",
     "framer-motion": "^12.23.24",
     "geist": "^1.5.1",
     "keen-slider": "^6.8.6",
