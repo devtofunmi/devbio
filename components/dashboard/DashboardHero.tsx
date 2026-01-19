@@ -4,13 +4,19 @@ import Image from "next/image";
 import { FaUser, FaCamera, FaMagic, FaPlus } from "react-icons/fa";
 import InlineEdit from "./edit/InlineEdit";
 
+interface Social {
+    name: string;
+    icon: React.ReactElement;
+    href: string;
+}
+
 interface DashboardHeroProps {
     name: string;
     profession: string;
     bio: string;
     avatarUrl: string;
     isDonor: boolean;
-    socials: any[];
+    socials: Social[];
     onNameSave: (val: string) => void;
     onProfessionSave: (val: string) => void;
     onBioSave: (val: string) => void;
