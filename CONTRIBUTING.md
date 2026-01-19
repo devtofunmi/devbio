@@ -24,26 +24,89 @@ First off, thank you for considering contributing to DevBio! It's people like yo
 
 ```text
 ├── components/
-│   ├── dashboard/          # Editor & User Dashboard components
-│   │   └── edit/           # Modals and Inline editing tools
-│   ├── landingpage/        # Marketing & Front-facing site components
-│   ├── GitHubCard.tsx      # GitHub contribution graph component
-│   ├── PublicShareModal.tsx # Share modal for public profiles
-│   └── Portal.tsx          # React portal wrapper
+│   ├── dashboard/              # Editor & User Dashboard components
+│   │   ├── edit/               # Modals and Inline editing tools
+│   │   │   ├── CTAModal.tsx
+│   │   │   ├── GitHubModal.tsx
+│   │   │   ├── InlineEdit.tsx
+│   │   │   ├── ProjectModal.tsx
+│   │   │   ├── SocialModal.tsx
+│   │   │   ├── StatusModal.tsx
+│   │   │   └── TechStackModal.tsx
+│   │   ├── cv/                 # CV/Resume components
+│   │   │   ├── CVCard.tsx
+│   │   │   └── CVDeleteModal.tsx
+│   │   ├── AboutMeCard.tsx
+│   │   ├── AccountSettings.tsx
+│   │   ├── AutoResizingTextarea.tsx
+│   │   ├── CTACard.tsx
+│   │   ├── DashboardHero.tsx
+│   │   ├── DashboardLayout.tsx
+│   │   ├── DeleteAccountModal.tsx
+│   │   ├── GitHubDNACard.tsx
+│   │   ├── ProfileCard.tsx
+│   │   ├── ProjectGrid.tsx     # Drag-and-drop project reordering
+│   │   ├── ShareModal.tsx
+│   │   ├── Sidebar.tsx
+│   │   ├── SocialCard.tsx
+│   │   ├── StatusCard.tsx
+│   │   ├── SupportModal.tsx
+│   │   ├── TechStackCard.tsx
+│   │   ├── ThemeSettings.tsx
+│   │   ├── ThemeSidebar.tsx
+│   │   ├── ThemeTrigger.tsx
+│   │   └── WelcomeModal.tsx
+│   ├── landingpage/            # Marketing & Front-facing site components
+│   │   ├── About.tsx
+│   │   ├── CallToAction.tsx
+│   │   ├── Contribute.tsx
+│   │   ├── CrackedDevs.tsx     # Auto-scrolling developer showcase
+│   │   ├── DonationCTA.tsx
+│   │   ├── FAQ.tsx
+│   │   ├── Features.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Hero.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── SocialProof.tsx
+│   │   └── Testimonials.tsx
+│   ├── GitHubCard.tsx          # GitHub contribution graph component
+│   ├── LoadingSpinner.tsx      # Reusable loading indicator
+│   ├── Portal.tsx              # React portal wrapper
+│   ├── PublicShareModal.tsx    # Share modal for public profiles
+│   └── SuccessModal.tsx        # Success confirmation modal
 ├── lib/
-│   ├── AuthContext.tsx     # Supabase Authentication logic
-│   ├── constants.tsx       # Themes, Tech Icons, and Social URLs
-│   ├── supabaseClient.ts   # Database client initialization
-│   └── utils.ts            # Shared helper functions (URL formatting)
+│   ├── AuthContext.tsx         # Supabase Authentication logic
+│   ├── constants.tsx           # Themes, Tech Icons, and Social URLs
+│   ├── supabaseClient.ts       # Database client initialization
+│   └── utils.ts                # Shared helper functions (URL formatting)
 ├── pages/
-│   ├── dashboard/          # Private editor routes
-│   ├── [profile].tsx       # High-performance public bio page
-│   ├── login.tsx           # Authentication page
-│   └── signup.tsx          # User registration page
-├── public/                 # Static assets (logos, icons)
-├── styles/                 # Global CSS & Tailwind configuration
-├── middleware.ts           # Auth middleware for protected routes
-└── SETUP_DB.sql            # Database schema & RLS policies
+│   ├── api/
+│   │   └── webhooks/           # API webhook handlers
+│   ├── dashboard/              # Private editor routes
+│   │   ├── analytics.tsx       # Profile analytics dashboard
+│   │   ├── index.tsx           # Main dashboard/editor
+│   │   ├── settings.tsx        # Account settings
+│   │   └── themes.tsx          # Theme customization
+│   ├── [profile].tsx           # High-performance public bio page
+│   ├── _app.tsx                # Next.js app wrapper
+│   ├── _document.tsx           # Next.js document wrapper
+│   ├── about.tsx               # About page
+│   ├── claim.tsx               # Username claim page
+│   ├── contribute.tsx          # Contribution page
+│   ├── donate.tsx              # Donation/support page
+│   ├── index.tsx               # Landing page
+│   ├── login.tsx               # Authentication page
+│   ├── signup.tsx              # User registration page
+│   └── success.tsx             # Post-signup success page
+├── public/                     # Static assets
+│   ├── 1.jpeg - 12.jpeg        # Developer avatars for CrackedDevs section
+│   ├── favicon.ico
+│   ├── logo.svg
+│   └── *.svg                   # Various icon assets
+├── styles/
+│   └── globals.css             # Global CSS & Tailwind configuration
+├── middleware.ts               # Auth middleware for protected routes
+└── SETUP_DB.sql                # Database schema & RLS policies
 ```
 
 ## Design Principles
