@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useKeenSlider } from 'keen-slider/react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -14,7 +14,7 @@ const CRACKED_DEVS = [
         tags: ["Web Developer"]
     },
     {
-        name: "Xing",
+        name: "Titanium",
         handle: "xt42io",
         avatar: "/2.jpeg",
         tags: ["Cracked Dev"]
@@ -67,11 +67,17 @@ const CRACKED_DEVS = [
         avatar: "/10.jpeg",
         tags: ["Web Developer"]
     },
-     {
+    {
         name: "Abiola",
         handle: "darnyy_abiola",
         avatar: "/11.jpeg",
         tags: ["Electrical Engr"]
+    },
+    {
+        name: "Ben",
+        handle: "benlad_1",
+        avatar: "/12.jpeg",
+        tags: ["Software Developer"]
     }
 ]
 
@@ -80,12 +86,16 @@ interface CrackedDevCardProps {
     handle: string;
     avatar: string;
     tags: string[];
+    onHoverChange: (isHovered: boolean) => void;
 }
 
-const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar, tags }) => (
+const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar, tags, onHoverChange }) => (
     <motion.div
         whileHover={{ y: -5 }}
-        className="relative w-[300px] h-[400px] glass-card rounded-[2.5rem] overflow-hidden border-white/5 group transition-all duration-500"
+        onMouseEnter={() => onHoverChange(true)}
+        onMouseLeave={() => onHoverChange(false)}
+        onClick={() => onHoverChange(true)}
+        className="relative w-[300px] h-[400px] glass-card rounded-[2.5rem] overflow-hidden border-white/5 group transition-all duration-500 cursor-pointer"
     >
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
@@ -121,6 +131,7 @@ const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar, t
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-white/40 hover:text-blue-400 font-mono text-sm transition-colors group/link"
+                onClick={(e) => e.stopPropagation()}
             >
                 <FaTwitter size={12} className="group-hover/link:animate-pulse" />
                 @{handle}
@@ -130,7 +141,9 @@ const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar, t
 );
 
 const CrackedDevs: React.FC = () => {
-    const [sliderRef] = useKeenSlider<HTMLDivElement>({
+    const [isPaused, setIsPaused] = useState(false);
+    
+    const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
         loop: true,
         renderMode: "performance",
         drag: true,
@@ -138,16 +151,31 @@ const CrackedDevs: React.FC = () => {
             s.moveToIdx(5, true, animation)
         },
         updated(s) {
-            s.moveToIdx(s.track.details.abs + 5, true, animation)
+            if (!isPaused) {
+                s.moveToIdx(s.track.details.abs + 5, true, animation)
+            }
         },
         animationEnded(s) {
-            s.moveToIdx(s.track.details.abs + 5, true, animation)
+            if (!isPaused) {
+                s.moveToIdx(s.track.details.abs + 5, true, animation)
+            }
         },
         slides: {
             perView: "auto",
             spacing: 24,
         },
     })
+
+    const handleHoverChange = (isHovered: boolean) => {
+        setIsPaused(isHovered);
+        if (instanceRef.current) {
+            if (isHovered) {
+                instanceRef.current.animator.stop();
+            } else {
+                instanceRef.current.moveToIdx(instanceRef.current.track.details.abs + 5, true, animation);
+            }
+        }
+    }
 
     return (
         <section className="py-32 bg-black relative overflow-hidden">
@@ -183,7 +211,7 @@ const CrackedDevs: React.FC = () => {
                 <div ref={sliderRef} className="keen-slider !overflow-visible">
                     {CRACKED_DEVS.map((dev, index) => (
                         <div className="keen-slider__slide" key={index} style={{ minWidth: "300px", maxWidth: "300px" }}>
-                            <CrackedDevCard {...dev} />
+                            <CrackedDevCard {...dev} onHoverChange={handleHoverChange} />
                         </div>
                     ))}
                 </div>
