@@ -6,7 +6,7 @@ import Features from '../components/landingpage/Features';
 import Footer from '../components/landingpage/Footer';
 import Hero from '../components/landingpage/Hero';
 import SocialProof from '../components/landingpage/SocialProof';
-import Testimonials from '../components/landingpage/Testimonials';
+// import Testimonials from '../components/landingpage/Testimonials';
 import FAQ from '../components/landingpage/FAQ';
 import Navbar from '../components/landingpage/Navbar';
 import DonationCTA from '../components/landingpage/DonationCTA';
@@ -23,7 +23,7 @@ const Home: React.FC = () => {
             <SocialProof />
             <Features />
             <CrackedDevs />
-            <Testimonials />
+            {/* <Testimonials /> */}
             <FAQ />
             <CallToAction />
             <DonationCTA />

@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
                     </div>
 
                     <nav className="hidden md:flex items-center space-x-10">
-                        {['Features', 'Testimonials', 'FAQ'].map((item) => (
+                        {['Features', 'FAQ'].map((item) => (
                             <Link
                                 key={item}
                                 href={`/#${item.toLowerCase()}`}
@@ -117,7 +117,7 @@ const Navbar: React.FC = () => {
                             </button>
                         </div>
                         <nav className="flex flex-col space-y-8">
-                            {['Features', 'Testimonials', 'FAQ'].map((item) => (
+                            {['Features', 'FAQ'].map((item) => (
                                 <Link
                                     key={item}
                                     href={`/#${item.toLowerCase()}`}

@@ -8,46 +8,70 @@ const animation = { duration: 30000, easing: (t: number) => t }
 
 const CRACKED_DEVS = [
     {
-        name: "Marc Lou",
-        handle: "marclou",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop",
-        tags: ["Indie Hacker"]
+        name: "Jay",
+        handle: "codebreak_er",
+        avatar: "/1.jpeg",
+        tags: ["Web Developer"]
     },
     {
-        name: "Pieter Levels",
-        handle: "levelsio",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop",
-        tags: ["Digital Nomad"]
+        name: "Xing",
+        handle: "xt42io",
+        avatar: "/2.jpeg",
+        tags: ["Cracked Dev"]
     },
     {
-        name: "Tofunmi",
-        handle: "devtofunmi",
-        avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop",
+        name: "Hicode",
+        handle: "_hicode",
+        avatar: "/3.jpeg",
         tags: ["Elite Dev"]
     },
     {
-        name: "Sarah Edo",
-        handle: "sdras",
-        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=600&fit=crop",
-        tags: ["CSS Queen"]
+        name: "Emmanuel",
+        handle: "obiabo_immanuel",
+        avatar: "/4.jpeg",
+        tags: ["Cracked Dev"]
     },
     {
-        name: "Lee Robinson",
-        handle: "leerob",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=600&fit=crop",
-        tags: ["Next.js"]
+        name: "Emmanuel",
+        handle: " Emmysoft_Tm",
+        avatar: "/5.jpeg",
+        tags: ["Cracked Dev"]
     },
     {
-        name: "Patricia",
-        handle: "patricia",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=600&fit=crop",
-        tags: ["DX Engineer"]
+        name: "Phantom",
+        handle: "phantom",
+        avatar: "/6.jpeg",
+        tags: ["Web Developer"]
     },
     {
-        name: "Dan Abramov",
-        handle: "gaearon",
-        avatar: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=600&fit=crop",
-        tags: ["React Core"]
+        name: "Vicky Jay",
+        handle: "heyVickyJay",
+        avatar: "/7.jpeg",
+        tags: ["Software Engr"]
+    },
+    {
+        name: "Stella",
+        handle: "devstella",
+        avatar: "/8.jpeg",
+        tags: ["Software Engr"]
+    },
+    {
+        name: "JayPro",
+        handle: "JayPro_01",
+        avatar: "/9.jpeg",
+        tags: ["Web Developer"]
+    },
+    {
+        name: "Eric",
+        handle: "@enri-code",
+        avatar: "/10.jpeg",
+        tags: ["Web Developer"]
+    },
+     {
+        name: "Abiola",
+        handle: "darnyy_abiola",
+        avatar: "/11.jpeg",
+        tags: ["Electrical Engr"]
     }
 ]
 
