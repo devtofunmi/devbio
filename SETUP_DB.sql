@@ -23,6 +23,7 @@ create table profiles (
   theme text default 'dark',
   beams_enabled boolean default true,
   is_donor boolean default false,
+  cv_url text,
   
   constraint username_length check (char_length(username) >= 3)
 );
@@ -36,7 +37,8 @@ create table projects (
   description text,
   url text,
   image_url text, -- Project Logo URL
-  tech_tags jsonb default '[]'::jsonb -- Array of tech strings e.g. ["Next.js", "React"]
+  tech_tags jsonb default '[]'::jsonb, -- Array of tech strings e.g. ["Next.js", "React"]
+  sort_order integer default 0 -- For rearranging projects
 );
 
 -- Table for tracking profile views
@@ -150,3 +152,17 @@ create policy "Images are publicly accessible."
 create policy "Authenticated users can upload images."
   on storage.objects for insert
   with check ( bucket_id = 'images' and auth.role() = 'authenticated' );
+-- Create Storage bucket for CVs
+insert into storage.buckets (id, name, public) 
+values ('cvs', 'cvs', true)
+on conflict (id) do nothing;
+
+-- Policy to allow public access to CVs
+create policy "CVs are publicly accessible."
+  on storage.objects for select
+  using ( bucket_id = 'cvs' );
+
+-- Policy to allow authenticated users to upload CVs
+create policy "Authenticated users can upload CVs."
+  on storage.objects for insert
+  with check ( bucket_id = 'cvs' and auth.role() = 'authenticated' );
