@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaPlus, FaEllipsisV, FaPen, FaTrash, FaCode, FaExternalLinkAlt } from "react-icons/fa";
+import { FaPlus, FaEllipsisV, FaPen, FaTrash, FaCode, FaExternalLinkAlt, FaGripLines } from "react-icons/fa";
 import { ensureAbsoluteUrl } from "../../lib/utils";
+import { Reorder } from "framer-motion";
 
 type Project = {
     id?: string;
@@ -11,6 +12,7 @@ type Project = {
     url: string;
     tech: string[];
     image?: string;
+    sort_order?: number;
 };
 
 interface ProjectGridProps {
@@ -18,17 +20,30 @@ interface ProjectGridProps {
     onNewProject: () => void;
     onEditProject: (project: Project) => void;
     onDeleteProject: (id: string, e: React.MouseEvent) => void;
+    onReorder: (projects: Project[]) => void;
 }
 
-const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEditProject, onDeleteProject }) => {
+const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEditProject, onDeleteProject, onReorder }) => {
     const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-12">
             <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 mb-12">
                 <div className="text-center md:text-left">
                     <h3 className={`text-4xl font-black text-[var(--theme-text)] tracking-tighter mb-2`}>Featured Projects</h3>
-                    <p className="text-[var(--theme-text-secondary)] font-light">Showcase your best builds.</p>
+                    <p className="text-[var(--theme-text-secondary)] font-light">
+                        Showcase your best builds. {!isMobile && "Drag to reorder."}
+                    </p>
                 </div>
                 <button
                     onClick={onNewProject}
@@ -37,13 +52,28 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEdi
                     <FaPlus size={14} /> <span>New Project</span>
                 </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <Reorder.Group
+                axis="x"
+                values={projects}
+                onReorder={isMobile ? () => { } : onReorder}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
                 {projects.map((p, i) => (
-                    <div
-                        key={p.id || i}
-                        className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 border group hover:border-[var(--theme-accent)] transition-all relative flex flex-col h-full`}
+                    <Reorder.Item
+                        key={p.id || `project-${i}`}
+                        value={p}
+                        drag={isMobile ? false : true} // Allow both x and y dragging in grid
+                        className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 border group hover:border-[var(--theme-accent)] transition-all relative flex flex-col h-full ${isMobile ? '' : 'cursor-grab active:cursor-grabbing'} backdrop-blur-xl shadow-xl`}
                         onMouseLeave={() => setOpenMenuIndex(null)}
                     >
+                        {/* Drag Handle Icon - Hidden on mobile */}
+                        {!isMobile && (
+                            <div className="absolute top-4 left-4 text-white/10 group-hover:text-[var(--theme-accent)] transition-colors">
+                                <FaGripLines size={14} />
+                            </div>
+                        )}
+
                         {/* Option Menu */}
                         <div className="absolute top-4 right-4 z-20">
                             <button
@@ -70,7 +100,7 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEdi
                             )}
                         </div>
 
-                        <div className="flex justify-between items-start mb-6 w-full">
+                        <div className="flex justify-between items-start mb-6 w-full pt-4">
                             <div className="w-16 h-16 rounded-2xl overflow-hidden relative border border-white/10 bg-white/5 flex items-center justify-center shrink-0">
                                 {p.image ? (
                                     <Image src={p.image} alt={p.title} fill className="object-cover" />
@@ -96,9 +126,9 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEdi
                                 </span>
                             ))}
                         </div>
-                    </div>
+                    </Reorder.Item>
                 ))}
-            </div>
+            </Reorder.Group>
         </motion.div>
     );
 };
