@@ -13,6 +13,7 @@ type Project = {
   url: string;
   tech: string[];
   image?: string;
+  sort_order?: number;
 };
 
 type ProjectModalProps = {

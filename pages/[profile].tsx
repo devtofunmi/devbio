@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .from('projects')
     .select('*')
     .eq('user_id', profile.id)
-    .order('created_at', { ascending: false });
+    .order('sort_order', { ascending: true });
 
   return {
     props: {
