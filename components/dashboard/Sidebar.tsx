@@ -74,6 +74,7 @@ const Sidebar: React.FC = () => {
 
           <div className="flex items-center gap-3 pr-4">
             <button
+              type="button"
               onClick={handleLogout}
               className="w-12 h-12 glass rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-lg"
             >
@@ -152,6 +153,7 @@ const Sidebar: React.FC = () => {
                 {/* Quick Actions */}
                 <div className="flex flex-col gap-1.5 relative z-10">
                   <button
+                    type="button"
                     onClick={handleLogout}
                     className="w-full cursor-pointer py-2 glass rounded-lg text-[9px] font-black uppercase tracking-widest text-red-500/40 hover:text-white hover:bg-red-500 transition-all border-white/5 flex items-center justify-center gap-2"
                   >
