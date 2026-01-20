@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
 import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser, FaArrowRight, FaFilePdf } from "react-icons/fa";
@@ -199,6 +200,24 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
       className={`relative min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-[var(--theme-text)] selection:bg-[var(--theme-accent)] transition-colors duration-700`}
       style={themeStyles}
     >
+      <Head>
+        <title>{user.full_name} | DevBio</title>
+        <meta name="description" content={user.bio || `Check out ${user.full_name}'s developer portfolio on DevBio.`} />
+        <link rel="canonical" href={`https://devbio.co/${user.username}`} />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content={`${user.full_name} - ${user.profession || 'Developer Portfolio'}`} />
+        <meta property="og:description" content={user.bio || `Check out ${user.full_name}'s projects and skills on DevBio.`} />
+        <meta property="og:image" content={user.avatar_url || 'https://devbio.co/devbio.png'} />
+        <meta property="og:url" content={`https://devbio.co/${user.username}`} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${user.full_name} | DevBio Portfolio`} />
+        <meta name="twitter:description" content={user.bio || `Check out ${user.full_name}'s projects and skills on DevBio.`} />
+        <meta name="twitter:image" content={user.avatar_url || 'https://devbio.co/devbio.png'} />
+      </Head>
       {isImageBg && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Image
