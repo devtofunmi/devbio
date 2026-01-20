@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { motion } from "framer-motion";
@@ -110,6 +111,10 @@ const Signup: React.FC = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black text-white relative overflow-hidden">
+      <Head>
+        <title>Sign Up | DevBio</title>
+        <meta name="description" content="Create your developer portfolio with DevBio." />
+      </Head>
       <SuccessModal isOpen={showSuccessModal} onClose={handleSuccessClose} />
 
       {/* Fixed Logo Navbar */}

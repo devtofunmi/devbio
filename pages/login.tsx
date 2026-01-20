@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { motion } from "framer-motion";
 import { FiEye, FiEyeOff } from 'react-icons/fi';
@@ -112,6 +113,10 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-black text-white relative overflow-hidden">
+      <Head>
+        <title>Login | DevBio</title>
+        <meta name="description" content="Login to your DevBio account to manage your developer portfolio." />
+      </Head>
 
       {/* Fixed Logo Navbar */}
       <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/50 border-b border-white/5">

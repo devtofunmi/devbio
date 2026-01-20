@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '../components/landingpage/Navbar';
 import Footer from '../components/landingpage/Footer';
@@ -35,6 +36,10 @@ const DonatePage: React.FC = () => {
 
     return (
         <div className="bg-black flex flex-col min-h-screen">
+            <Head>
+                <title>Support DevBio - Keep the Project Alive</title>
+                <meta name="description" content="Support DevBio and get exclusive perks like a gold profile border. Your donation helps us keep the platform free and open-source." />
+            </Head>
             <Navbar />
 
             <main className="flex-1 flex items-center justify-center p-6 py-32">
