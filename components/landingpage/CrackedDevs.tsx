@@ -63,7 +63,7 @@ const CRACKED_DEVS = [
     },
     {
         name: "Eric",
-        handle: "@enri-code",
+        handle: "enri-code",
         avatar: "/10.jpeg",
         tags: ["Web Developer"]
     },
@@ -72,6 +72,13 @@ const CRACKED_DEVS = [
         handle: "darnyy_abiola",
         avatar: "/11.jpeg",
         tags: ["Electrical Engr"]
+    },
+    
+    {
+        name: "X Programmer",
+        handle: "Saka_Builds",
+        avatar: "/13.jpeg",
+        tags: ["Web Dev"]
     },
     {
         name: "Ben",
