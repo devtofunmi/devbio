@@ -71,8 +71,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [supabase, router]); // Keep router so we have fresh path info, but throttle toast
 
     const signOut = async () => {
-        await supabase.auth.signOut();
-        router.push('/login');
+        try {
+            const { error } = await supabase.auth.signOut();
+            // Ignore 403 session_not_found errors as it means  already logged out
+        } catch (error) {
+            // Catch unexpected network errors or other exceptions
+            console.error("Unexpected error signing out:", error);
+        } finally {
+            router.push('/login');
+        }
     };
 
     return (
