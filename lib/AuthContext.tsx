@@ -31,7 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const {
             data: { subscription },
-        } = supabase.auth.onAuthStateChange(async (event: string) => {
+        } = supabase.auth.onAuthStateChange(async (event, session) => {
             if (event === 'SIGNED_IN') {
                 const now = Date.now();
                 const shouldToast = now - lastToastRef.current > 2000;
@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
                 // Show success message if user coming from a public page (home, login, signup)
                 // or if user just landed on the dashboard with a hash (OAuth callback)
-                const isComingFromAuth = ['/login', '/signup'].includes(router.pathname);
+                const isComingFromAuth = ['/login', '/signup', '/'].includes(router.pathname);
                 const isOAuthCallback = router.pathname === '/dashboard' && typeof window !== 'undefined' && window.location.hash.includes('access_token');
 
                 if ((isComingFromAuth || isOAuthCallback || isEmailVerification) && shouldToast) {
@@ -57,12 +57,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
                 if (redirect) {
                     router.push(redirect);
-                } else if (isComingFromAuth) {
-                    const welcome = router.query.welcome;
-                    router.push({
-                        pathname: '/dashboard',
-                        query: welcome === 'true' ? { welcome: 'true' } : {}
-                    });
+                } else if (isComingFromAuth || isOAuthCallback) {
+                    // Check if user has a username to decide where to redirect
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('username')
+                        .eq('id', session?.user?.id)
+                        .maybeSingle();
+
+                    if (!profile?.username) {
+                        router.push('/claim');
+                    } else if (isComingFromAuth) {
+                        const welcome = router.query.welcome;
+                        router.push({
+                            pathname: '/dashboard',
+                            query: welcome === 'true' ? { welcome: 'true' } : {}
+                        });
+                    }
                 }
             }
         });

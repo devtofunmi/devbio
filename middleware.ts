@@ -10,8 +10,8 @@ export async function middleware(req: NextRequest) {
         data: { session },
     } = await supabase.auth.getSession()
 
-    // Protect dashboard and claim routes
-    if (req.nextUrl.pathname.startsWith('/dashboard') || req.nextUrl.pathname === '/claim') {
+    // Protect dashboard routes
+    if (req.nextUrl.pathname.startsWith('/dashboard')) {
         if (!session) {
             const redirectUrl = req.nextUrl.clone()
             redirectUrl.pathname = '/login'

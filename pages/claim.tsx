@@ -7,7 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import Link from 'next/link';
 
 const ClaimPage: React.FC = () => {
-    const { user, supabase } = useAuth();
+    const { user, loading, supabase } = useAuth();
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [checking, setChecking] = useState(false);
@@ -15,6 +15,8 @@ const ClaimPage: React.FC = () => {
     const [available, setAvailable] = useState<boolean | null>(null);
 
     useEffect(() => {
+        if (loading) return;
+
         if (!user) {
             router.push('/signup');
             return;
@@ -113,6 +115,14 @@ const ClaimPage: React.FC = () => {
             setClaiming(false);
         }
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <LoadingSpinner />
+            </div>
+        );
+    }
 
     if (!user) {
         return null;
