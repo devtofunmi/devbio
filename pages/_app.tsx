@@ -3,6 +3,7 @@ import "keen-slider/keen-slider.min.css";
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useState } from 'react';
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { AuthProvider } from "@/lib/AuthContext";
 import { ToastContainer } from 'react-toastify';
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
@@ -18,6 +19,12 @@ export default function App({ Component, pageProps }: AppProps) {
       initialSession={pageProps.initialSession}
     >
       <AuthProvider>
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta charSet="utf-8" />
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="theme-color" content="#000000" />
+        </Head>
         <Component {...pageProps} />
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
         <Analytics />
