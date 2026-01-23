@@ -109,9 +109,9 @@ const Features: React.FC = () => {
       <div className="flex flex-col">
         <FeatureBlock
           badge="Featured Projects"
-          title="Showcase Your"
-          accentTitle="Best Work."
-          description="Go beyond a simple list of projects. With DevBio, you can create a rich, detailed portfolio. Add descriptions, tech stacks, and live links."
+          title="Build Irrefutable"
+          accentTitle="Proof of Work."
+          description="Go beyond a simple list of projects. Build a living portfolio that proves your expertise with deep technical context, real-world impact, and direct links to your best work."
           icon={FaProjectDiagram}
           accentColor="#3b82f6"
           isReversed={false}
@@ -146,9 +146,9 @@ const Features: React.FC = () => {
 
         <FeatureBlock
           badge="Built-in Analytics"
-          title="Understand Your"
-          accentTitle="Audience."
-          description="Knowledge is power. Our built-in analytics give you valuable insights into your profile's performance. See how many people are viewing your page, where they're coming from, and what content is most popular. Use this data to tailor your profile and grow your online presence."
+          title="Quantify Your"
+          accentTitle="Market Leverage."
+          description="Knowledge is power. Identify who is looking at your work and where your influence is growing. Use real data to negotiate your next role or scale your independent brand with confidence."
           icon={FaChartBar}
           accentColor="#a855f7"
           isReversed={true}
@@ -170,9 +170,9 @@ const Features: React.FC = () => {
 
         <FeatureBlock
           badge="GitHub Contributions"
-          title="Sync Your"
-          accentTitle="GitHub Activity."
-          description="Keep your profile dynamic and up-to-date automatically. DevBio seamlessly integrates with your GitHub account to display your contribution graph. It’s the easiest way to show you're an active and engaged developer."
+          title="Automate Your"
+          accentTitle="Technical Credibility."
+          description="Keep your profile dynamic without lifting a finger. DevBio mirrors your real-world activity, turning Every commit and contribution into a signal of consistency and technical growth."
           icon={FaGithub}
           accentColor="#ffffff"
           isReversed={false}
@@ -192,9 +192,9 @@ const Features: React.FC = () => {
 
         <FeatureBlock
           badge="Tech Stack Visuals"
-          title="Display Your"
-          accentTitle="Expertise."
-          description="Don't just list your skills show them. Our visual tech stack allows you to display the languages, frameworks, and tools you're proficient in. It’s a quick and effective way for visitors to gauge your technical abilities."
+          title="Signal Your"
+          accentTitle="Technical Seniority."
+          description="Don't just list keywords. Visualize your breadth and depth across the modern stack. Make it effortless for visitors to recognize your expertise in the tools that matter most."
           icon={FaCode}
           accentColor="#10b981"
           isReversed={true}
