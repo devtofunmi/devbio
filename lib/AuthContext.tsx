@@ -75,6 +75,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         });
                     }
                 }
+            } else if (event === 'SIGNED_OUT') {
+                // If the user logs out or session expires, and they are in a protected area,
+                // force them back to the login page.
+                const isProtectedRoute = router.pathname.startsWith('/dashboard') || router.pathname === '/claim';
+                if (isProtectedRoute) {
+                    window.location.href = '/login';
+                }
             }
         });
 
@@ -83,13 +90,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const signOut = async () => {
         try {
-            await supabase.auth.signOut();
-            // Ignore 403 session_not_found errors as it means  already logged out
-        } catch (error) {
-            // Catch unexpected network errors or other exceptions
-            console.error("Unexpected error signing out:", error);
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.warn("Sign out error (often occurs if already logged out):", error.message);
+            }
+        } catch (err) {
+            console.error("Unexpected error during sign out:", err);
         } finally {
-            router.push('/login');
+            // Force a hard reload to the login page to clear all local state and cookies
+            window.location.href = '/login';
         }
     };
 
