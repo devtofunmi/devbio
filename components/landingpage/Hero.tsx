@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaGithub, FaCode, FaRocket, FaCheckCircle } from 'react-icons/fa';
+import { FaCode, FaRocket, FaCheckCircle } from 'react-icons/fa';
 
 const Hero: React.FC = () => (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 px-6 overflow-hidden">
@@ -35,7 +35,7 @@ const Hero: React.FC = () => (
                 </div>
             </div>
             <div className="space-y-2">
-                <p className="text-[11px] text-white/60 font-medium leading-tight">"We saw your DevBio profile. Your 'SafeScore' project is exactly what we need..."</p>
+                <p className="text-[11px] text-white/60 font-medium leading-tight">&quot;We saw your DevBio profile. Your &apos;SafeScore&apos; project is exactly what we need...&quot;</p>
 
             </div>
         </motion.div>

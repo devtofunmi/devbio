@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
                 // Show success message if user coming from a public page (home, login, signup)
                 // or if user just landed on the dashboard with a hash (OAuth callback)
-                const isComingFromAuth = ['/login', '/signup', '/'].includes(router.pathname);
+                const isComingFromAuth = ['/login', '/signup'].includes(router.pathname);
                 const isOAuthCallback = router.pathname === '/dashboard' && typeof window !== 'undefined' && window.location.hash.includes('access_token');
 
                 if ((isComingFromAuth || isOAuthCallback || isEmailVerification) && shouldToast) {
@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const signOut = async () => {
         try {
-            const { error } = await supabase.auth.signOut();
+            await supabase.auth.signOut();
             // Ignore 403 session_not_found errors as it means  already logged out
         } catch (error) {
             // Catch unexpected network errors or other exceptions
