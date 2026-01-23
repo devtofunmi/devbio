@@ -224,11 +224,11 @@ const CrackedDevs: React.FC = () => {
                 </div>
             </div>
 
-            <div className="mt-20 text-center">
+            {/* <div className="mt-20 text-center">
                 <p className="text-white/20 leading-[1.1] font-black uppercase tracking-[0.3em] text-xs">
                     Join 10,000+ engineers<br /> building their legacy
                 </p>
-            </div>
+            </div> */}
         </section>
     );
 }
