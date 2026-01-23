@@ -11,7 +11,8 @@ export async function middleware(req: NextRequest) {
     } = await supabase.auth.getSession()
 
     // Protect dashboard routes
-    if (req.nextUrl.pathname.startsWith('/dashboard')) {
+    // Allow if "code" search param is present, to let Supabase client handle the OAuth exchange on the dashboard page
+    if (req.nextUrl.pathname.startsWith('/dashboard') && !req.nextUrl.searchParams.has('code')) {
         if (!session) {
             const redirectUrl = req.nextUrl.clone()
             redirectUrl.pathname = '/login'

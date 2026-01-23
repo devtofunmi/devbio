@@ -69,18 +69,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         router.push('/claim');
                     } else if (isComingFromAuth) {
                         const welcome = router.query.welcome;
-                        router.push({
-                            pathname: '/dashboard',
-                            query: welcome === 'true' ? { welcome: 'true' } : {}
-                        });
+                        // Determine if we need to redirect (e.g. to clean URL or move from login page)
+                        const shouldRedirect = isComingFromAuth;
+
+                        if (shouldRedirect) {
+                            router.push({
+                                pathname: '/dashboard',
+                                query: welcome === 'true' ? { welcome: 'true' } : {}
+                            });
+                        }
                     }
                 }
             } else if (event === 'SIGNED_OUT') {
-                // If the user logs out or session expires, and they are in a protected area,
-                // force them back to the login page.
                 const isProtectedRoute = router.pathname.startsWith('/dashboard') || router.pathname === '/claim';
                 if (isProtectedRoute) {
-                    window.location.href = '/login';
+                    router.push('/login');
                 }
             }
         });
@@ -90,15 +93,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const signOut = async () => {
         try {
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                console.warn("Sign out error (often occurs if already logged out):", error.message);
-            }
+            // Call the server-side logout route to clear HttpOnly cookies
+            await fetch('/api/auth/logout', { method: 'POST' });
         } catch (err) {
-            console.error("Unexpected error during sign out:", err);
+            console.error("Error during server-side sign out:", err);
         } finally {
-            // Force a hard reload to the login page to clear all local state and cookies
-            window.location.href = '/login';
+            // Clear any local client-side state if possible (though HttpOnly cookies are key)
+            // Then redirect
+            router.push('/login');
         }
     };
 
