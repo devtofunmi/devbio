@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaGithub, FaArrowRight } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
 
 const About = () => {
@@ -41,15 +42,15 @@ const About = () => {
                                     </div>
                                     <FaArrowRight size={14} className="text-white/20 group-hover/item:text-blue-400 group-hover/item:translate-x-1 transition-all" />
                                 </a>
-                                {/* <a href="https://twitter.com/devbio" className="flex items-center justify-between p-5 glass rounded-2xl border-white/5 hover:border-blue-400/50 transition-all group/item">
+                                {/* <a href="https://x.com/devbio" className="flex items-center justify-between p-5 glass rounded-2xl border-white/5 hover:border-white/50 transition-all group/item">
                                     <div className="flex items-center gap-4">
-                                        <FaTwitter size={24} className="text-blue-400" />
+                                        <FaXTwitter size={24} className="text-white" />
                                         <div>
-                                            <p className="font-bold text-white text-lg">Twitter</p>
+                                            <p className="font-bold text-white text-lg">X</p>
                                             <p className="text-white/40 text-sm">@devbio</p>
                                         </div>
                                     </div>
-                                    <FaArrowRight size={14} className="text-white/20 group-hover/item:text-blue-400 group-hover/item:translate-x-1 transition-all" />
+                                    <FaArrowRight size={14} className="text-white/20 group-hover/item:text-white group-hover/item:translate-x-1 transition-all" />
                                 </a> */}
                             </div>
                         </div>

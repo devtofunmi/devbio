@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck, FiDownload } from 'react-icons/fi';
-import { FaTwitter } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import Portal from '../Portal';
@@ -16,7 +16,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
     const origin = typeof window !== 'undefined' ? window.location.origin : '';
     const shareUrl = `${origin}/${username}`;
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(shareUrl)}&bgcolor=ffffff&color=000000&margin=20`;
-    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out my developer portfolio on DevBio! 🚀`)}&url=${encodeURIComponent(shareUrl)}`;
+    const xShareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(`Check out my developer portfolio on DevBio! 🚀`)}&url=${encodeURIComponent(shareUrl)}`;
 
     const handleCopy = () => {
         navigator.clipboard.writeText(shareUrl);
@@ -135,12 +135,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ username, onClose }) => {
                                     <FiExternalLink size={12} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                 </a>
                                 <a
-                                    href={twitterShareUrl}
+                                    href={xShareUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center gap-2 md:gap-3 py-3 md:py-4 glass bg-[#1DA1F2]/10 border-[#1DA1F2]/20 rounded-[1.2rem] md:rounded-[1.5rem] text-[#1DA1F2] hover:bg-[#1DA1F2] hover:text-white transition-all group shadow-lg shadow-[#1DA1F2]/10"
+                                    className="flex items-center justify-center gap-2 md:gap-3 py-3 md:py-4 glass bg-white/5 border-white/10 rounded-[1.2rem] md:rounded-[1.5rem] text-white/60 hover:text-white hover:bg-white/10 transition-all group shadow-xl"
                                 >
-                                    <FaTwitter size={12} />
+                                    <FaXTwitter size={12} />
                                     <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Share on X</span>
                                 </a>
                             </div>

@@ -2,7 +2,8 @@ import React from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser, FaArrowRight, FaFilePdf } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaYoutube, FaExternalLinkAlt, FaCode, FaInfoCircle, FaUser, FaArrowRight, FaFilePdf } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import GitHubCard from "../components/GitHubCard";
@@ -64,7 +65,8 @@ type Props = {
 };
 
 const SOCIAL_ICONS: Record<string, React.ReactNode> = {
-  'Twitter': <FaTwitter />,
+  'X': <FaXTwitter />,
+  'Twitter': <FaXTwitter />, // Support legacy data
   'GitHub': <FaGithub />,
   'LinkedIn': <FaLinkedin />,
   'YouTube': <FaYoutube />,

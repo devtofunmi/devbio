@@ -379,7 +379,8 @@ export const THEME_CONFIG: Record<string, ThemeStyle> = {
 };
 
 export const SOCIAL_BASE_URLS: Record<string, string> = {
-    'Twitter': 'https://twitter.com/',
+    'X': 'https://x.com/',
+    'Twitter': 'https://x.com/',
     'GitHub': 'https://github.com/',
     'LinkedIn': 'https://linkedin.com/in/',
     'YouTube': 'https://youtube.com/@',

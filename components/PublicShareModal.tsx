@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiX, FiCopy, FiExternalLink, FiShare2, FiCheck, FiUser, FiDownload } from 'react-icons/fi';
-import { FaTwitter, FaLinkedin, FaWhatsapp, FaFacebook } from 'react-icons/fa';
+import { FaLinkedin, FaWhatsapp, FaFacebook } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import Portal from './Portal';
@@ -21,7 +22,7 @@ const PublicShareModal: React.FC<PublicShareModalProps> = ({ username, fullName,
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(shareUrl)}&bgcolor=ffffff&color=000000&margin=20`;
 
     const shareText = `Check out ${fullName}'s developer portfolio on DevBio! 🚀`;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    const xUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
@@ -145,8 +146,8 @@ const PublicShareModal: React.FC<PublicShareModalProps> = ({ username, fullName,
                         <div className="space-y-4">
                             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 px-2">Share this legacy</label>
                             <div className="grid grid-cols-4 gap-3">
-                                <a href={twitterUrl} target="_blank" rel="noreferrer" className="glass rounded-2xl p-5 flex items-center justify-center text-white/40 hover:text-[#1DA1F2] hover:bg-[#1DA1F2]/5 border-white/5 transition-all">
-                                    <FaTwitter size={22} />
+                                <a href={xUrl} target="_blank" rel="noreferrer" className="glass rounded-2xl p-5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/5 border-white/5 transition-all">
+                                    <FaXTwitter size={22} />
                                 </a>
                                 <a href={linkedinUrl} target="_blank" rel="noreferrer" className="glass rounded-2xl p-5 flex items-center justify-center text-white/40 hover:text-[#0A66C2] hover:bg-[#0A66C2]/5 border-white/5 transition-all">
                                     <FaLinkedin size={22} />

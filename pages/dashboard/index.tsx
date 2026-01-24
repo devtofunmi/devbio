@@ -25,13 +25,13 @@ import { toast } from 'react-toastify';
 import { ALL_TECHS, Tech, THEME_CONFIG } from '../../lib/constants';
 import {
   FaPlus,
-  FaTwitter,
   FaGithub,
   FaLinkedin,
   FaYoutube,
   FaShareAlt,
   FaCode, // Keep FaCode for ALL_TECHS fallback
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -84,7 +84,7 @@ const DashboardPage: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [techStack, setTechStack] = useState<Tech[]>([]);
   const [socials, setSocials] = useState([
-    { name: 'Twitter', icon: <FaTwitter />, href: '' },
+    { name: 'X', icon: <FaXTwitter />, href: '' },
     { name: 'GitHub', icon: <FaGithub />, href: '' },
     { name: 'LinkedIn', icon: <FaLinkedin />, href: '' },
     { name: 'YouTube', icon: <FaYoutube />, href: '' },
@@ -195,7 +195,8 @@ const DashboardPage: React.FC = () => {
           if (profile.social_links) {
             const dbSocials = profile.social_links as { name: string; href: string }[];
             setSocials(prev => prev.map(s => {
-              const dbMatch = dbSocials.find(dbs => dbs.name === s.name);
+              const legacyName = s.name === 'X' ? 'Twitter' : s.name;
+              const dbMatch = dbSocials.find(dbs => dbs.name === s.name || dbs.name === legacyName);
               return dbMatch ? { ...s, href: dbMatch.href } : s;
             }));
           }

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useKeenSlider } from 'keen-slider/react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { FaCheckCircle, FaTwitter } from 'react-icons/fa';
+import { FaCheckCircle } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const animation = { duration: 30000, easing: (t: number) => t }
 
@@ -73,7 +74,7 @@ const CRACKED_DEVS = [
         avatar: "/11.jpeg",
         tags: ["Electrical Engr"]
     },
-    
+
     {
         name: "X Programmer",
         handle: "Saka_Builds",
@@ -134,13 +135,13 @@ const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar, t
                 <FaCheckCircle className="text-blue-500" size={16} />
             </div>
             <a
-                href={`https://twitter.com/${handle}`}
+                href={`https://x.com/${handle}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white/40 hover:text-blue-400 font-mono text-sm transition-colors group/link"
+                className="inline-flex items-center gap-2 text-white/40 hover:text-white font-mono text-sm transition-colors group/link"
                 onClick={(e) => e.stopPropagation()}
             >
-                <FaTwitter size={12} className="group-hover/link:animate-pulse" />
+                <FaXTwitter size={12} className="group-hover/link:animate-pulse" />
                 @{handle}
             </a>
         </div>
@@ -149,7 +150,7 @@ const CrackedDevCard: React.FC<CrackedDevCardProps> = ({ name, handle, avatar, t
 
 const CrackedDevs: React.FC = () => {
     const [isPaused, setIsPaused] = useState(false);
-    
+
     const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
         loop: true,
         renderMode: "performance",
