@@ -100,6 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .from('projects')
     .select('*')
     .eq('user_id', profile.id)
+    .eq('is_hidden', false)
     .order('sort_order', { ascending: true });
 
   return {
@@ -590,7 +591,15 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           transition={{ delay: 1 }}
           className="mt-16 text-center text-[var(--theme-text-secondary)] text-sm font-medium tracking-widest uppercase"
         >
-          Built with <span className="text-[var(--theme-text)]">DevBio.co</span>
+          Built with{" "}
+          <a
+            href="https://devbio.co"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--theme-text)] hover:text-[var(--theme-accent)] transition-colors"
+          >
+            DevBio.co
+          </a>
         </motion.footer>
       </main>
 
