@@ -45,6 +45,7 @@ type Project = {
   tech: string[];
   image?: string;
   sort_order?: number;
+  is_hidden?: boolean;
 };
 
 
@@ -403,6 +404,28 @@ const DashboardPage: React.FC = () => {
     setOpenMenuIndex(null);
   };
 
+  const toggleProjectHidden = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const target = projects.find(p => p.id === id);
+    if (!target) return;
+    const nextHidden = !target.is_hidden;
+
+    // Optimistic update
+    setProjects(prev => prev.map(p => (p.id === id ? { ...p, is_hidden: nextHidden } : p)));
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .update({ is_hidden: nextHidden })
+        .eq('id', id);
+      if (error) throw error;
+      toast.success(nextHidden ? "Project hidden from portfolio" : "Project visible on portfolio");
+    } catch {
+      // Revert on failure
+      setProjects(prev => prev.map(p => (p.id === id ? { ...p, is_hidden: !nextHidden } : p)));
+      toast.error("Failed to update visibility");
+    }
+  };
+
   const handleReorder = async (newOrder: Project[]) => {
     setProjects(newOrder);
     try {
@@ -548,6 +571,7 @@ const DashboardPage: React.FC = () => {
             onNewProject={() => { setEditingProject(undefined); setProjectModalOpen(true); }}
             onEditProject={(p) => { setEditingProject(p); setProjectModalOpen(true); }}
             onDeleteProject={deleteProject}
+            onToggleHide={toggleProjectHidden}
             onReorder={handleReorder}
           />
 
