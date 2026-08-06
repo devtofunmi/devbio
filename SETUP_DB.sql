@@ -38,7 +38,8 @@ create table projects (
   url text,
   image_url text, -- Project Logo URL
   tech_tags jsonb default '[]'::jsonb, -- Array of tech strings e.g. ["Next.js", "React"]
-  sort_order integer default 0 -- For rearranging projects
+  sort_order integer default 0, -- For rearranging projects
+  is_hidden boolean default false not null -- Hidden projects are excluded from the public portfolio
 );
 
 -- Table for tracking profile views
