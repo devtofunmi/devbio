@@ -14,6 +14,7 @@ type Project = {
   tech: string[];
   image?: string;
   sort_order?: number;
+  is_hidden?: boolean;
 };
 
 type ProjectModalProps = {
