@@ -15,16 +15,7 @@ type ContributionDay = {
   level: number;
 };
 
-const mapContributionLevel = (level: string, count: number): number => {
-  if (count === 0) return 0;
-  if (level === 'FIRST_QUARTILE') return 1;
-  if (level === 'SECOND_QUARTILE') return 2;
-  if (level === 'THIRD_QUARTILE') return 3;
-  if (level === 'FOURTH_QUARTILE') return 4;
-  return count > 0 ? 1 : 0;
-};
-
-const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
+const GitHubCard: React.FC<Props> = ({ githubUsername = "", size = 52 }) => {
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -55,20 +46,28 @@ const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
       setError(false);
 
       try {
-        console.log(`[GitHubCard] Fetching contributions for: ${githubUsername}`);
-        const response = await fetch(`https://github-contributions-api.deno.dev/${githubUsername}.json`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+        const response = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${githubUsername}?y=last`,
+          { signal: controller.signal }
+        );
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
-          console.error(`[GitHubCard] API returned status: ${response.status}`);
-          throw new Error("Failed to fetch");
+          throw new Error(`API returned status ${response.status}`);
         }
 
         const data = await response.json();
-        const totalContributions = data.contributions.flat().map((day: { date: string; contributionCount: number; contributionLevel: string }) => ({
-          date: day.date,
-          count: day.contributionCount,
-          level: mapContributionLevel(day.contributionLevel, day.contributionCount)
-        }));
+        // API returns a flat array where `level` is already a 0–4 integer.
+        const totalContributions: ContributionDay[] = (data.contributions || []).map(
+          (day: { date: string; count: number; level: number }) => ({
+            date: day.date,
+            count: day.count,
+            level: day.level,
+          })
+        );
 
         const daysToDisplay = size * 7;
         const recentDays = totalContributions.slice(-daysToDisplay);
@@ -85,7 +84,9 @@ const GitHubCard: React.FC<Props> = ({ githubUsername = "jay", size = 52 }) => {
 
         setContributions(recentDays);
       } catch (err) {
-        console.error("[GitHubCard] Error fetching GitHub contributions:", err);
+        // External API is optional/best-effort — log a warning (not console.error,
+        // which Next.js dev surfaces as a runtime error overlay) and fall back.
+        console.warn("[GitHubCard] Could not load GitHub contributions:", err);
         // Fallback to empty graph on error
         const daysToDisplay = size * 7;
         const emptyDays = Array(daysToDisplay).fill(0).map((_, i) => ({
