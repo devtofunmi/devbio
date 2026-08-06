@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FaPlus, FaEllipsisV, FaPen, FaTrash, FaCode, FaExternalLinkAlt, FaGripLines } from "react-icons/fa";
+import { FaPlus, FaEllipsisV, FaPen, FaTrash, FaCode, FaExternalLinkAlt, FaGripLines, FaEye, FaEyeSlash } from "react-icons/fa";
 import { ensureAbsoluteUrl } from "../../lib/utils";
 import { Reorder } from "framer-motion";
 
@@ -13,6 +13,7 @@ type Project = {
     tech: string[];
     image?: string;
     sort_order?: number;
+    is_hidden?: boolean;
 };
 
 interface ProjectGridProps {
@@ -20,10 +21,11 @@ interface ProjectGridProps {
     onNewProject: () => void;
     onEditProject: (project: Project) => void;
     onDeleteProject: (id: string, e: React.MouseEvent) => void;
+    onToggleHide: (id: string, e: React.MouseEvent) => void;
     onReorder: (projects: Project[]) => void;
 }
 
-const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEditProject, onDeleteProject, onReorder }) => {
+const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEditProject, onDeleteProject, onToggleHide, onReorder }) => {
     const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(false);
 
@@ -64,9 +66,16 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEdi
                         key={p.id || `project-${i}`}
                         value={p}
                         drag={isMobile ? false : true} // Allow both x and y dragging in grid
-                        className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 border group hover:border-[var(--theme-accent)] transition-all relative flex flex-col h-full ${isMobile ? '' : 'cursor-grab active:cursor-grabbing'} backdrop-blur-xl shadow-xl`}
+                        className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 border group hover:border-[var(--theme-accent)] transition-all relative flex flex-col h-full ${isMobile ? '' : 'cursor-grab active:cursor-grabbing'} backdrop-blur-xl shadow-xl ${p.is_hidden ? 'opacity-50' : ''}`}
                         onMouseLeave={() => setOpenMenuIndex(null)}
                     >
+                        {/* Hidden badge */}
+                        {p.is_hidden && (
+                            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-white/70">
+                                <FaEyeSlash size={9} /> Hidden
+                            </div>
+                        )}
+
                         {/* Drag Handle Icon - Hidden on mobile */}
                         {!isMobile && (
                             <div className="absolute top-4 left-4 text-white/10 group-hover:text-[var(--theme-accent)] transition-colors">
@@ -89,6 +98,12 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEdi
                                         className="w-full text-left px-4 py-2.5 hover:bg-white/10 text-xs font-bold text-white flex items-center gap-2 rounded-lg transition-colors"
                                     >
                                         <FaPen size={10} /> Edit
+                                    </button>
+                                    <button
+                                        onClick={(e) => { onToggleHide(p.id!, e); setOpenMenuIndex(null); }}
+                                        className="w-full text-left px-4 py-2.5 hover:bg-white/10 text-xs font-bold text-white flex items-center gap-2 rounded-lg transition-colors"
+                                    >
+                                        {p.is_hidden ? <><FaEye size={10} /> Show</> : <><FaEyeSlash size={10} /> Hide</>}
                                     </button>
                                     <button
                                         onClick={(e) => onDeleteProject(p.id!, e)}
