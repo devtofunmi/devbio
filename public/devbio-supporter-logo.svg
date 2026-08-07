@@ -1,0 +1,39 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="db" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#93C5FD"/>
+      <stop offset="0.5" stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.5">
+      <stop offset="0" stop-color="#3B82F6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/>
+      <stop offset="1" stop-color="#EAB308"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="180" fill="#08080A"/>
+  <rect x="0" y="0" width="1024" height="1024" rx="180" fill="url(#glow)"/>
+  <rect x="6" y="6" width="1012" height="1012" rx="176" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="12"/>
+
+  <!-- D/B mark -->
+  <g transform="translate(512 388)">
+    <rect x="-190" y="-190" width="380" height="380" rx="104" transform="rotate(6)" fill="#3B82F6" opacity="0.9"/>
+    <rect x="-190" y="-190" width="380" height="380" rx="104" fill="#0A0A0C" stroke="#ffffff" stroke-opacity="0.12" stroke-width="8"/>
+    <text x="0" y="52" font-family="Segoe UI, Arial, sans-serif" font-weight="900" font-size="168" text-anchor="middle" fill="url(#db)">D/B</text>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="512" y="742" font-family="Segoe UI, Arial, sans-serif" font-weight="900" font-size="128" letter-spacing="-4" text-anchor="middle" fill="#ffffff">DevBio</text>
+
+  <!-- Supporter tag with gold accent -->
+  <g transform="translate(512 838)">
+    <text x="0" y="0" font-family="Segoe UI, Arial, sans-serif" font-weight="700" font-size="46" letter-spacing="14" text-anchor="middle" fill="url(#gold)">SUPPORTER</text>
+    <path d="M -232 -16 l 10 20 l 22 3 l -16 15 l 4 22 l -20 -10 l -20 10 l 4 -22 l -16 -15 l 22 -3 z" fill="url(#gold)"/>
+    <path d="M 232 -16 l 10 20 l 22 3 l -16 15 l 4 22 l -20 -10 l -20 10 l 4 -22 l -16 -15 l 22 -3 z" fill="url(#gold)"/>
+  </g>
+</svg>
