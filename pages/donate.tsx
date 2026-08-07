@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 import Navbar from '../components/landingpage/Navbar';
 import Footer from '../components/landingpage/Footer';
 import { motion } from 'framer-motion';
-import { FaHeart, FaRocket, FaBolt } from 'react-icons/fa';
+import { FaHeart, FaRocket, FaBolt, FaSpinner } from 'react-icons/fa';
 import { useUser } from '@supabase/auth-helpers-react';
 import { supabase } from '../lib/supabaseClient';
 
 const DonatePage: React.FC = () => {
     const user = useUser();
-    const [checkoutUrl, setCheckoutUrl] = useState('https://buy.polar.sh/polar_cl_OrWX2PpfSMuM3kcz9485cUFN9toa9FTzL19Zl4ZFpQv');
+    const router = useRouter();
     const [userAvatar, setUserAvatar] = useState<string | null>(null);
+    const [redirecting, setRedirecting] = useState(false);
 
     useEffect(() => {
-        // If user is logged in, append their user_id to the checkout link metadata
         if (user?.id) {
-            const baseUrl = 'https://buy.polar.sh/polar_cl_OrWX2PpfSMuM3kcz9485cUFN9toa9FTzL19Zl4ZFpQv';
-            const urlWithMetadata = `${baseUrl}?metadata[user_id]=${user.id}`;
-            setCheckoutUrl(urlWithMetadata);
-
             // Fetch user's avatar from profiles
             supabase
                 .from('profiles')
@@ -33,6 +32,43 @@ const DonatePage: React.FC = () => {
                 });
         }
     }, [user]);
+
+    // Surface the result when Bachs redirects back to the donate page.
+    useEffect(() => {
+        const status = router.query.donation;
+        if (status === 'success') {
+            toast.success('Thank you for supporting DevBio! 💛 Your gold badge will appear shortly.');
+            router.replace('/donate', undefined, { shallow: true });
+        } else if (status === 'cancelled') {
+            toast.info('Donation cancelled — no charge was made.');
+            router.replace('/donate', undefined, { shallow: true });
+        }
+    }, [router.query.donation, router]);
+
+    const handleDonate = async () => {
+        if (!user?.id || !user.email) return;
+        setRedirecting(true);
+        try {
+            const res = await fetch('/api/checkout/bachs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.id,
+                    email: user.email,
+                    name: user.user_metadata?.full_name,
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok || !data.checkout_url) {
+                throw new Error(data.error || 'Failed to start checkout');
+            }
+            window.location.href = data.checkout_url;
+        } catch (err) {
+            console.error(err);
+            toast.error(err instanceof Error ? err.message : 'Could not start checkout.');
+            setRedirecting(false);
+        }
+    };
 
     return (
         <div className="bg-black flex flex-col min-h-screen">
@@ -75,14 +111,22 @@ const DonatePage: React.FC = () => {
                                 DevBio is free and open-source. Your donations help us cover server costs and maintenance.
                                 {user && <span className="block mt-2 text-blue-400 text-xs">✨ Donors get a gold border on their profile!</span>}
                             </p>
-                            <a
-                                href={checkoutUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full py-5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs shadow-2xl flex items-center justify-center cursor-pointer"
-                            >
-                                Make a Donation
-                            </a>
+                            {user ? (
+                                <button
+                                    onClick={handleDonate}
+                                    disabled={redirecting}
+                                    className="w-full py-5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs shadow-2xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-wait"
+                                >
+                                    {redirecting ? <><FaSpinner className="animate-spin" /> Redirecting...</> : 'Make a Donation'}
+                                </button>
+                            ) : (
+                                <Link
+                                    href="/login?redirect=/donate"
+                                    className="w-full py-5 bg-white text-black font-black rounded-2xl hover:scale-[1.02] transition-all uppercase tracking-widest text-xs shadow-2xl flex items-center justify-center cursor-pointer"
+                                >
+                                    Log in to Donate
+                                </Link>
+                            )}
                         </motion.div>
                     </div>
 
