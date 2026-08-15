@@ -7,6 +7,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import GitHubCard from "../components/GitHubCard";
+import MinimalProfile from "../components/profile/MinimalProfile";
 import PublicShareModal from "../components/PublicShareModal";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
@@ -57,6 +58,7 @@ type UserProfile = {
   beams_enabled?: boolean;
   is_donor?: boolean;
   cv_url?: string;
+  layout?: string;
 };
 
 type Props = {
@@ -103,9 +105,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .eq('is_hidden', false)
     .order('sort_order', { ascending: true });
 
+  // Allow previewing a layout without saving it: /username?layout=minimal
+  const layoutQuery = context.query.layout;
+  const layoutOverride =
+    layoutQuery === 'minimal' || layoutQuery === 'classic' ? layoutQuery : null;
+
   return {
     props: {
-      user: profile,
+      user: layoutOverride ? { ...profile, layout: layoutOverride } : profile,
       projects: projects || [],
     },
   };
@@ -184,7 +191,19 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   const leftColClass = !hasAboutMe ? "md:col-span-12" : "md:col-span-8";
   const rightColClass = !hasLeftColumn ? "md:col-span-12" : "md:col-span-4";
 
-  const themeConfig = THEME_CONFIG[user.theme || 'onyx'] || THEME_CONFIG['onyx'];
+  const isMinimal = user.layout === 'minimal';
+  // Minimal defaults to the warm "sand" palette. The default-ish dark themes
+  // (onyx / dark / unset) fall through to sand so minimal reads warm out of the
+  // box; a distinctive chosen theme (forest, midnight, matrix, ...) still wins.
+  let resolvedThemeKey: string;
+  if (isMinimal) {
+    const isDefaultish =
+      !user.theme || user.theme === 'dark' || user.theme === 'onyx' || !THEME_CONFIG[user.theme];
+    resolvedThemeKey = isDefaultish ? 'sand' : user.theme!;
+  } else {
+    resolvedThemeKey = user.theme && THEME_CONFIG[user.theme] ? user.theme : 'onyx';
+  }
+  const themeConfig = THEME_CONFIG[resolvedThemeKey] || THEME_CONFIG['onyx'];
   const bgConfig = themeConfig.bg;
   const isImageBg = bgConfig.startsWith('http');
 
@@ -234,6 +253,15 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
         </div>
       )}
 
+      {isMinimal ? (
+        <MinimalProfile
+          user={user}
+          projects={projects}
+          recordClick={recordClick}
+          onShare={() => setShareModalOpen(true)}
+        />
+      ) : (
+      <>
       {/* Floating Share Button - Premium Glassmorphism Neon Version */}
       <motion.div
         animate={{
@@ -602,6 +630,8 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
           </a>
         </motion.footer>
       </main>
+      </>
+      )}
 
       <AnimatePresence>
         {shareModalOpen && (

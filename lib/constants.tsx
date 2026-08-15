@@ -53,6 +53,17 @@ export type ThemeStyle = {
 };
 
 export const THEME_CONFIG: Record<string, ThemeStyle> = {
+    // Warm paper-dark, default for the Minimal layout
+    'sand': {
+        bg: 'bg-[#0c0b09]',
+        card: 'rgba(245, 242, 235, 0.03)',
+        border: 'rgba(245, 242, 235, 0.10)',
+        accent: '#f5f2eb',
+        accentText: '#0c0b09',
+        text: '#f5f2eb',
+        textSecondary: '#9a958c',
+        heroGradient: 'linear-gradient(to top, #0c0b09 10%, rgba(12,11,9,0.8) 50%, rgba(245,242,235,0.05) 100%)'
+    },
     // Solid Colors
     'onyx': {
         bg: 'bg-[#000000]',

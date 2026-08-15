@@ -6,6 +6,7 @@ import { useAuth } from '../../lib/AuthContext';
 import { toast } from 'react-toastify';
 
 const themes = [
+    { id: 'sand', name: 'Warm Paper', type: 'solid', preview: 'bg-[#0c0b09] border border-[#f5f2eb]/10' },
     { id: 'onyx', name: 'Onyx Dark', type: 'solid', preview: 'bg-black border border-white/10' },
     { id: 'ghost', name: 'Ghost', type: 'solid', preview: 'bg-zinc-950 border border-zinc-900' },
     { id: 'midnight', name: 'Midnight Royal', type: 'solid', preview: 'bg-[#020617] border border-blue-900/30' },
