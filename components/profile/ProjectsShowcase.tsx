@@ -6,12 +6,15 @@ import { ensureAbsoluteUrl } from "../../lib/utils";
 import type { UserProfile, ProjectRecord } from "../../lib/types";
 
 type Props = {
-    user: UserProfile;
+    cta_text?: string;
+    cta_link?: string;
+    cta_title?: string;
+    cta_description?: string;
     projects: ProjectRecord[];
     recordClick: (type: string, url: string) => void;
 };
 
-const ProjectsShowcase: React.FC<Props> = ({ user, projects, recordClick }) => {
+const ProjectsShowcase: React.FC<Props> = ({ cta_text, cta_link, cta_title, cta_description, projects, recordClick }) => {
     if (!projects || projects.length === 0) return null;
 
     return (
@@ -71,7 +74,7 @@ const ProjectsShowcase: React.FC<Props> = ({ user, projects, recordClick }) => {
                 ))}
             </div>
 
-            {user.cta_text && user.cta_link && (
+            {cta_text && cta_link && (
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -82,22 +85,22 @@ const ProjectsShowcase: React.FC<Props> = ({ user, projects, recordClick }) => {
                         <div className="relative z-10 max-w-2xl mx-auto space-y-8">
                             <div className="space-y-4">
                                 <h3 className="text-3xl md:text-6xl font-black text-[var(--theme-text)] tracking-tighter">
-                                    {user.cta_title || "Ready to work together?"}
+                                    {cta_title || "Ready to work together?"}
                                 </h3>
                                 <p className="text-lg md:text-xl text-[var(--theme-text-secondary)] font-light leading-relaxed">
-                                    {user.cta_description || "Let's build something incredible. Reach out and let's start a conversation."}
+                                    {cta_description || "Let's build something incredible. Reach out and let's start a conversation."}
                                 </p>
                             </div>
 
                             <div className="pt-4">
                                 <a
-                                    href={ensureAbsoluteUrl(user.cta_link || '')}
+                                    href={ensureAbsoluteUrl(cta_link || '')}
                                     target="_blank"
                                     rel="noreferrer"
-                                    onClick={() => recordClick('cta', user.cta_text || 'Primary CTA')}
+                                    onClick={() => recordClick('cta', cta_text || 'Primary CTA')}
                                     className="inline-flex items-center gap-4 bg-[var(--theme-accent)] text-[var(--theme-accent-text)] px-10 py-5 rounded-[2rem] font-black text-xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[var(--theme-accent)]/20 group"
                                 >
-                                    {user.cta_text}
+                                    {cta_text}
                                     <FaArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
                                 </a>
                             </div>
