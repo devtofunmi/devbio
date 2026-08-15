@@ -38,16 +38,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Confetti from 'react-confetti';
 
-type Project = {
-  id?: string;
-  title: string;
-  description: string;
-  url: string;
-  tech: string[];
-  image?: string;
-  sort_order?: number;
-  is_hidden?: boolean;
-};
+import type { Project } from "../../lib/types";
 
 
 
