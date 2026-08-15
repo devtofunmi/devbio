@@ -6,16 +6,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../../lib/AuthContext';
 import Portal from "@/components/Portal";
 
-type Project = {
-  id?: string;
-  title: string;
-  description: string;
-  url: string;
-  tech: string[];
-  image?: string;
-  sort_order?: number;
-  is_hidden?: boolean;
-};
+import type { Project } from "../../../lib/types";
 
 type ProjectModalProps = {
   existingProject?: Project;
