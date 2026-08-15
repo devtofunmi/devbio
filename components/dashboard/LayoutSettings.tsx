@@ -62,10 +62,16 @@ const LayoutSettings: React.FC = () => {
         const previous = selected;
         setSelected(id);
         setSaving(true);
+
+        // Dispatch a custom event for layout change
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('layout-change', { detail: id }));
+        }
+
         try {
             const { error } = await supabase
                 .from('profiles')
-                .update({ layout: id, updated_at: new Date().toISOString() })
+                .update({ layout: id })
                 .eq('id', user.id);
             if (error) throw error;
         } catch (err) {
