@@ -233,10 +233,19 @@ const DashboardPage: React.FC = () => {
       }
     };
 
+    const handleLayoutChange = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail) {
+        setLayout(customEvent.detail);
+      }
+    };
+
     window.addEventListener('theme-change', handleThemeChange);
+    window.addEventListener('layout-change', handleLayoutChange);
 
     return () => {
       window.removeEventListener('theme-change', handleThemeChange);
+      window.removeEventListener('layout-change', handleLayoutChange);
     };
   }, [user, supabase]);
 
@@ -576,8 +585,7 @@ const DashboardPage: React.FC = () => {
           <ProjectGrid
             projects={projects}
             onNewProject={() => { setEditingProject(undefined); setProjectModalOpen(true); }}
-            onEditProject={(p) => { setEditingProject(p); setProjectModalOpen(true); }}
-            onDeleteProject={deleteProject}
+            onEditProject={(p) => { setEditingProject(p); setProjectModalOpen(true); }}n            onDeleteProject={deleteProject}
             onToggleHide={toggleProjectHidden}
             onReorder={handleReorder}
           />
