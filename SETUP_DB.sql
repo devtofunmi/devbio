@@ -21,6 +21,7 @@ create table profiles (
   cta_text text,
   cta_link text,
   theme text default 'dark',
+  layout text default 'classic', -- Public profile layout: 'classic' | 'minimal'
   beams_enabled boolean default true,
   is_donor boolean default false,
   cv_url text,
