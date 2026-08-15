@@ -16,54 +16,11 @@ import { FiShare2 } from "react-icons/fi";
 import { THEME_CONFIG, SOCIAL_BASE_URLS, ALL_TECHS } from "../lib/constants";
 import { ensureAbsoluteUrl, formatSocialHref } from "../lib/utils";
 import { toast } from "react-toastify";
-
-type SocialLink = {
-  name: string;
-  href: string;
-};
-
-type TechItem = {
-  name: string;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-  image_url: string;
-  tech_tags: string[];
-};
-
-type UserProfile = {
-  id: string;
-  username: string;
-  full_name: string;
-  profession: string;
-  bio: string;
-  about_me: string;
-  avatar_url: string;
-  github_username: string;
-  github_graph_title?: string;
-  social_links: SocialLink[];
-  tech_stack: TechItem[];
-  is_available: boolean;
-  status_message?: string;
-  status_icon?: string;
-  cta_title?: string;
-  cta_description?: string;
-  cta_text?: string;
-  cta_link?: string;
-  theme?: string;
-  beams_enabled?: boolean;
-  is_donor?: boolean;
-  cv_url?: string;
-  layout?: string;
-};
+import type { SocialLink, TechItem, UserProfile, ProjectRecord } from "../lib/types";
 
 type Props = {
   user: UserProfile | null;
-  projects: Project[];
+  projects: ProjectRecord[];
 };
 
 const SOCIAL_ICONS: Record<string, React.ReactNode> = {
