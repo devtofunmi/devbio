@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 @theme inline {
@@ -91,5 +91,14 @@ body {
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Minimal layout typography */
+  .font-serif-display {
+    font-family: 'Newsreader', Georgia, ui-serif, serif;
+  }
+
+  .font-dm {
+    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   }
 }

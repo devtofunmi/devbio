@@ -13,6 +13,7 @@ import CTAModal from "../../components/dashboard/edit/CTAModal";
 import Portal from "../../components/Portal";
 import DashboardHero from "../../components/dashboard/DashboardHero";
 import GitHubDNACard from "../../components/dashboard/GitHubDNACard";
+import LayoutHiddenWrapper from "../../components/dashboard/LayoutHiddenWrapper";
 import CVCard from "../../components/dashboard/cv/CVCard";
 import ProjectGrid from "../../components/dashboard/ProjectGrid";
 import CVDeleteModal from "../../components/dashboard/cv/CVDeleteModal";
@@ -73,6 +74,7 @@ const DashboardPage: React.FC = () => {
   const [ctaText, setCtaText] = useState("");
   const [ctaLink, setCtaLink] = useState("");
   const [theme, setTheme] = useState('onyx');
+  const [layout, setLayout] = useState('classic');
   const [isDonor, setIsDonor] = useState(false);
   const [cvUrl, setCvUrl] = useState("");
 
@@ -181,6 +183,7 @@ const DashboardPage: React.FC = () => {
           setCtaText(profile.cta_text || "");
           setCtaLink(profile.cta_link || "");
           setTheme(profile.theme || 'onyx');
+          setLayout(profile.layout || 'classic');
           setIsDonor(profile.is_donor || false);
           setCvUrl(profile.cv_url || "");
 
@@ -532,12 +535,14 @@ const DashboardPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-8 flex flex-col gap-8">
-              <GitHubDNACard
-                githubUsername={githubUsername}
-                githubGraphTitle={githubGraphTitle}
-                onTitleSave={(val) => { setGithubGraphTitle(val); autoSaveProfile({ github_graph_title: val }); }}
-                onSettingsClick={() => setGithubModalOpen(true)}
-              />
+              <LayoutHiddenWrapper hidden={layout === 'minimal'}>
+                <GitHubDNACard
+                  githubUsername={githubUsername}
+                  githubGraphTitle={githubGraphTitle}
+                  onTitleSave={(val) => { setGithubGraphTitle(val); autoSaveProfile({ github_graph_title: val }); }}
+                  onSettingsClick={() => setGithubModalOpen(true)}
+                />
+              </LayoutHiddenWrapper>
 
               <TechStackCard
                 techStack={techStack}
@@ -546,10 +551,12 @@ const DashboardPage: React.FC = () => {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="md:col-span-4 space-y-8">
-              <AboutMeCard
-                aboutMe={aboutMe}
-                onSave={(val) => { setAboutMe(val); autoSaveProfile({ about_me: val }); }}
-              />
+              <LayoutHiddenWrapper hidden={layout === 'minimal'}>
+                <AboutMeCard
+                  aboutMe={aboutMe}
+                  onSave={(val) => { setAboutMe(val); autoSaveProfile({ about_me: val }); }}
+                />
+              </LayoutHiddenWrapper>
 
               <StatusCard
                 isAvailable={isAvailable}
@@ -575,11 +582,13 @@ const DashboardPage: React.FC = () => {
             onReorder={handleReorder}
           />
 
-          <CTACard
-            ctaTitle={ctaTitle}
-            ctaDescription={ctaDescription}
-            onClick={() => setCtaModalOpen(true)}
-          />
+          <LayoutHiddenWrapper hidden={layout === 'minimal'}>
+            <CTACard
+              ctaTitle={ctaTitle}
+              ctaDescription={ctaDescription}
+              onClick={() => setCtaModalOpen(true)}
+            />
+          </LayoutHiddenWrapper>
         </div>
       </div>
 
