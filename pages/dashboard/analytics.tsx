@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import { FiBarChart2, FiLink, FiActivity, FiTrendingUp, FiGlobe, FiCalendar } from "react-icons/fi";
 import { motion } from "framer-motion";
@@ -21,6 +22,13 @@ interface AnalyticsSummary {
   timeSeries: { date: string; views: number; clicks: number }[];
   geoData: { country: string; count: number; code: string }[];
 }
+
+// Flag emoji don't render on Windows browsers, so use flagcdn images instead.
+// Returns a usable ISO 3166-1 alpha-2 code, or null for unknown/invalid ones.
+const flagCode = (code?: string): string | null => {
+  const cc = (code || "").toLowerCase();
+  return /^[a-z]{2}$/.test(cc) && cc !== "un" ? cc : null;
+};
 
 const AnalyticsPage: React.FC = () => {
   const { user, supabase } = useAuth();
@@ -315,6 +323,18 @@ const AnalyticsPage: React.FC = () => {
                 <div key={i} className="space-y-2">
                   <div className="flex justify-between items-center text-[10px] font-black uppercase">
                     <div className="flex items-center gap-3">
+                      {flagCode(geo.code) ? (
+                        <Image
+                          src={`https://flagcdn.com/32x24/${flagCode(geo.code)}.png`}
+                          alt={geo.country}
+                          width={22}
+                          height={16}
+                          className="rounded-sm shrink-0 object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <FiGlobe className="text-white/20 shrink-0" size={16} />
+                      )}
                       <span className="text-white/20">{geo.code}</span>
                       <span className="text-white">{geo.country}</span>
                     </div>
