@@ -5,33 +5,11 @@ import { FaUser } from "react-icons/fa";
 import { FiArrowUpRight } from "react-icons/fi";
 import { SOCIAL_BASE_URLS } from "../../lib/constants";
 import { ensureAbsoluteUrl, formatSocialHref } from "../../lib/utils";
-
-type SocialLink = { name: string; href: string };
-type TechItem = { name: string };
-type Project = {
-    id: string;
-    title: string;
-    description: string;
-    url: string;
-    image_url: string;
-    tech_tags: string[];
-};
-
-type MinimalUser = {
-    full_name: string;
-    profession?: string;
-    bio?: string;
-    avatar_url?: string;
-    social_links?: SocialLink[];
-    tech_stack?: TechItem[];
-    is_donor?: boolean;
-    cv_url?: string;
-    full_name_slug?: string;
-};
+import type { UserProfile, ProjectRecord } from "../../lib/types";
 
 type Props = {
-    user: MinimalUser;
-    projects: Project[];
+    user: UserProfile;
+    projects: ProjectRecord[];
     recordClick: (type: string, url: string) => void;
     onShare: () => void;
 };
