@@ -5,16 +5,7 @@ import { FaPlus, FaEllipsisV, FaPen, FaTrash, FaCode, FaExternalLinkAlt, FaGripL
 import { ensureAbsoluteUrl } from "../../lib/utils";
 import { Reorder } from "framer-motion";
 
-type Project = {
-    id?: string;
-    title: string;
-    description: string;
-    url: string;
-    tech: string[];
-    image?: string;
-    sort_order?: number;
-    is_hidden?: boolean;
-};
+import type { Project } from "../../lib/types";
 
 interface ProjectGridProps {
     projects: Project[];
