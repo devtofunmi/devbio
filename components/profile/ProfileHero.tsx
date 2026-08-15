@@ -74,7 +74,7 @@ const ProfileHero: React.FC<Props> = ({ user, recordClick }) => (
 
                     </motion.div>
                     <div className="absolute bottom-7 left-23 md:left-35 w-10 h-10 md:w-12 md:h-12 bg-[#1e1e1e] rounded-full flex items-center justify-center border-4 border-[#0a0a0a] group-hover:scale-110 transition-transform cursor-pointer relative group/status z-20" onClick={(e) => e.stopPropagation()}>
-                        <span className="text-lg md:text-xl">{user.status_icon || (user.is_available)}</span>
+                        <span className="text-lg md:text-xl">{user.status_icon || (user.is_available ? '🟢' : '🔴')}</span>
                         <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 w-max max-w-[200px] px-3 py-1.5 glass bg-[#1e1e1e] border border-[var(--theme-border)] rounded-full text-xs font-bold text-white shadow-xl opacity-0 group-hover/status:opacity-100 group-active/status:opacity-100 transition-all pointer-events-none select-none flex items-center gap-2 z-50 backdrop-blur-xl">
                             <span className={`w-2 h-2 rounded-full ${user.is_available ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
                             {user.status_message || (user.is_available ? "Available" : "Focused")}
@@ -133,8 +133,17 @@ const ProfileHero: React.FC<Props> = ({ user, recordClick }) => (
                                 download={`${user.full_name.replace(/\s+/g, '_')}_CV.pdf`}
                                 target="_blank"
                                 rel="noreferrer"
-                                onClick={() => {
-                                    recordClick('cv', user.cv_url!);
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent immediate navigation
+                                    recordClick('cv', user.cv_url!).then(() => {
+                                        // After analytics recorded, trigger download
+                                        const link = document.createElement('a');
+                                        link.href = `${user.cv_url}?download=`;
+                                        link.download = `${user.full_name.replace(/\s+/g, '_')}_CV.pdf`;
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                    });
                                     toast.info("Download started...", {
                                         icon: () => <span>🚀</span>,
                                         style: {
