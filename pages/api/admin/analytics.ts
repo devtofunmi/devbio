@@ -6,7 +6,7 @@ export type AdminAnalytics = {
     totals: { users: number; views: number; clicks: number; projects: number };
     topProfiles: { username: string | null; views: number }[];
     geo: { country: string; code: string; count: number }[];
-    recent: { username: string | null; country: string; code: string; at: string }[];
+    timeseries: { date: string; views: number; clicks: number }[];
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -57,12 +57,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .sort((a, b) => b.count - a.count)
             .slice(0, 8);
 
-        const recent = (viewRows || []).slice(0, 15).map((v) => ({
-            username: usernameById.get(v.profile_id) ?? null,
-            country: v.viewer_country || "Unknown",
-            code: v.viewer_country_code || "UN",
-            at: v.viewed_at,
-        }));
+        // Daily views/clicks over the last 14 days for the trend chart.
+        const DAYS = 14;
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        start.setDate(start.getDate() - (DAYS - 1));
+        const startIso = start.toISOString();
+
+        const [{ data: tsViews }, { data: tsClicks }] = await Promise.all([
+            supabaseAdmin.from("profile_views").select("viewed_at").gte("viewed_at", startIso),
+            supabaseAdmin.from("link_clicks").select("clicked_at").gte("clicked_at", startIso),
+        ]);
+
+        const dayKeys: string[] = [];
+        for (let i = 0; i < DAYS; i++) {
+            const d = new Date(start);
+            d.setDate(start.getDate() + i);
+            dayKeys.push(d.toISOString().slice(0, 10));
+        }
+        const vBy: Record<string, number> = {};
+        const cBy: Record<string, number> = {};
+        (tsViews || []).forEach((r) => { const k = (r.viewed_at || "").slice(0, 10); if (k) vBy[k] = (vBy[k] || 0) + 1; });
+        (tsClicks || []).forEach((r) => { const k = (r.clicked_at || "").slice(0, 10); if (k) cBy[k] = (cBy[k] || 0) + 1; });
+        const timeseries = dayKeys.map((k) => ({ date: k.slice(5), views: vBy[k] || 0, clicks: cBy[k] || 0 }));
 
         const payload: AdminAnalytics = {
             totals: {
@@ -73,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             topProfiles,
             geo,
-            recent,
+            timeseries,
         };
 
         return res.status(200).json(payload);
