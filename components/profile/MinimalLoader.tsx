@@ -19,12 +19,14 @@ type Props = {
     /** Opaque background class for the overlay, so it matches the active theme
      *  and fully hides the profile underneath. */
     bgClass: string;
-    /** ?loader=hold — play the sequence then stay up instead of dismissing, so
-     *  the finished state can be inspected. Skip still works. */
-    hold?: boolean;
+    /** How long the boot screen runs, in ms. Owner-configurable in the
+     *  dashboard; the caller is responsible for skipping render when it's 0. */
+    durationMs?: number;
 };
 
-const TOTAL_MS = 2800;
+export const LOADER_DEFAULT_MS = 2800;
+export const LOADER_MIN_MS = 1200;
+export const LOADER_MAX_MS = 8000;
 const FADE_MS = 520;
 const GLYPHS = ["<", ">", "{", "}", "[", "]", "/", "0", "1", ";", "*", "$"];
 const BAR_SLOTS = 16;
@@ -104,13 +106,38 @@ const MinimalLoader: React.FC<Props> = ({
     techCount,
     linkCount,
     bgClass,
-    hold = false,
+    durationMs,
 }) => {
     // Rendered on the server so the profile never flashes before the boot
     // screen. The effect below decides whether it actually plays.
     const [visible, setVisible] = useState(true);
     const [animate, setAnimate] = useState(false);
     const dismissed = useRef(false);
+
+    const total = Math.min(
+        LOADER_MAX_MS,
+        Math.max(LOADER_MIN_MS, durationMs ?? LOADER_DEFAULT_MS)
+    );
+
+    /**
+     * Every delay is a fraction of the total, so a shorter duration compresses
+     * the whole sequence instead of leaving the closing line to fire after the
+     * overlay has already gone. The fractions reproduce the original hand-tuned
+     * timings at the 2800ms default.
+     */
+    const at = useMemo(
+        () => ({
+            header: 0.05 * total,
+            linesStart: 0.18 * total,
+            lineStep: 0.11 * total,
+            finalLine: 0.73 * total,
+            statsStart: 0.36 * total,
+            statStep: 0.043 * total,
+            rampDelay: 0.09 * total,
+            rampDuration: 0.82 * total,
+        }),
+        [total]
+    );
 
     const firstName = (name || "").trim().split(/\s+/)[0] || "this developer";
 
@@ -149,13 +176,6 @@ const MinimalLoader: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
-        // Inspection mode: always play, never time out, and don't burn the
-        // once-per-tab flag so normal visits still get the full thing.
-        if (hold) {
-            setAnimate(true);
-            return;
-        }
-
         const reduceMotion =
             typeof window !== "undefined" &&
             window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -175,9 +195,9 @@ const MinimalLoader: React.FC<Props> = ({
         }
 
         setAnimate(true);
-        const timer = setTimeout(dismiss, TOTAL_MS);
+        const timer = setTimeout(dismiss, total);
         return () => clearTimeout(timer);
-    }, [dismiss, hold]);
+    }, [dismiss, total]);
 
     // Hold the page still underneath while the overlay is up.
     useEffect(() => {
@@ -198,7 +218,7 @@ const MinimalLoader: React.FC<Props> = ({
         return () => window.removeEventListener("keydown", onKey);
     }, [visible, dismiss]);
 
-    const ramp = useRamp(animate, TOTAL_MS - 500, 260);
+    const ramp = useRamp(animate, at.rampDuration, at.rampDelay);
     const filled = Math.round(ramp * BAR_SLOTS);
 
     const columns = useMemo(() => {
@@ -217,11 +237,11 @@ const MinimalLoader: React.FC<Props> = ({
                 <motion.div
                     id="minimal-loader"
                     key="minimal-loader"
-                    {...(hold ? { "data-hold": "true" } : {})}
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: FADE_MS / 1000, ease: "easeInOut" }}
                     className={`fixed inset-0 z-[200] flex items-center justify-center overflow-hidden ${bgClass}`}
+                    style={{ "--loader-failsafe": `${total + 2000}ms` } as React.CSSProperties}
                     role="status"
                     aria-live="polite"
                     aria-label="Loading profile"
@@ -267,27 +287,14 @@ const MinimalLoader: React.FC<Props> = ({
                         </div>
                     )}
 
-                    <div className="absolute top-6 right-6 z-10 flex items-center gap-4">
-                        {hold && (
-                            <span
-                                className="font-mono text-[10px] uppercase tracking-[0.22em] border px-2 py-1"
-                                style={{
-                                    color: "var(--theme-accent)",
-                                    borderColor: "var(--theme-border)",
-                                }}
-                            >
-                                Hold
-                            </span>
-                        )}
-                        <button
-                            type="button"
-                            onClick={dismiss}
-                            className="font-mono text-[10px] uppercase tracking-[0.22em] transition-opacity hover:opacity-100 cursor-pointer"
-                            style={{ color: "var(--theme-text-secondary)" }}
-                        >
-                            Skip &rarr;
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={dismiss}
+                        className="absolute top-6 right-6 z-10 font-mono text-[10px] uppercase tracking-[0.22em] transition-opacity hover:opacity-100 cursor-pointer"
+                        style={{ color: "var(--theme-text-secondary)" }}
+                    >
+                        Skip &rarr;
+                    </button>
 
                     <div className="relative w-full max-w-xl mx-auto px-6 md:px-8">
                         {/* Identity */}
@@ -295,7 +302,7 @@ const MinimalLoader: React.FC<Props> = ({
                             className="mb-10"
                             initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.15 }}
+                            transition={{ duration: 0.5, delay: at.header / 1000 }}
                         >
                             {profession && (
                                 <p
@@ -328,7 +335,7 @@ const MinimalLoader: React.FC<Props> = ({
                                     style={{ color: "var(--theme-text-secondary)" }}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.25, delay: 0.5 + i * 0.32 }}
+                                    transition={{ duration: 0.25, delay: (at.linesStart + i * at.lineStep) / 1000 }}
                                 >
                                     <span className="mr-2" style={{ color: "var(--theme-accent)", opacity: 0.7 }}>
                                         &gt;
@@ -341,7 +348,7 @@ const MinimalLoader: React.FC<Props> = ({
                                 style={{ color: "var(--theme-text)" }}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3, delay: 2.05 }}
+                                transition={{ duration: 0.3, delay: at.finalLine / 1000 }}
                             >
                                 <span className="mr-2" style={{ color: "var(--theme-accent)" }}>
                                     &gt;
@@ -376,7 +383,7 @@ const MinimalLoader: React.FC<Props> = ({
                                     style={{ background: "var(--theme-accent)" }}
                                     initial={{ width: "0%" }}
                                     animate={{ width: animate ? "100%" : "0%" }}
-                                    transition={{ duration: (TOTAL_MS - 500) / 1000, delay: 0.26, ease: "linear" }}
+                                    transition={{ duration: at.rampDuration / 1000, delay: at.rampDelay / 1000, ease: "linear" }}
                                 />
                             </div>
                         </div>
@@ -393,7 +400,7 @@ const MinimalLoader: React.FC<Props> = ({
                                         value={s.value}
                                         label={s.label}
                                         t={ramp}
-                                        delay={1.0 + i * 0.12}
+                                        delay={(at.statsStart + i * at.statStep) / 1000}
                                     />
                                 ))}
                             </div>
