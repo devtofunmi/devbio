@@ -129,14 +129,14 @@ const ClaimPage: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white flex items-center justify-center p-6 relative overflow-hidden">
+        <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-6 pt-28 pb-16 relative overflow-hidden">
             {/* Background Effects */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-transparent" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full opacity-50" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] max-w-full h-[600px] bg-blue-600/10 blur-[120px] rounded-full opacity-50" />
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             {/* Logo */}
-            <div className="fixed top-8 left-8 z-50">
+            <div className="absolute top-6 left-6 sm:top-8 sm:left-8 z-50">
                 <Link href="/" className="inline-block group">
                     <div className="flex items-center gap-3 transition-all group-hover:scale-105">
                         <div className="relative w-10 h-10 flex items-center justify-center">
@@ -155,21 +155,21 @@ const ClaimPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="relative z-10 w-full max-w-2xl"
             >
-                <div className="text-center mb-12">
+                <div className="text-center mb-10 sm:mb-12">
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', delay: 0.2 }}
-                        className="text-6xl mt-10 mb-6"
+                        className="text-5xl sm:text-6xl mb-6"
                     >
                         🥳
                     </motion.div>
-                    <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-4">
                         <span className="text-gradient">Claim Your</span>
                         <br />
                         <span className="text-white">Developer Identity</span>
                     </h1>
-                    <p className="text-xl text-white/60 font-light">
+                    <p className="text-base sm:text-lg md:text-xl text-white/60 font-light">
                         Choose your unique username to get started
                     </p>
                 </div>
@@ -177,8 +177,8 @@ const ClaimPage: React.FC = () => {
                 <form onSubmit={handleClaim} className="space-y-6">
                     <div className="relative">
                         <div className="glass-card rounded-3xl p-2 border-white/10 bg-white/5">
-                            <div className="flex items-center gap-4 px-6 py-4">
-                                <span className="text-white/40 font-bold text-lg whitespace-nowrap">devbio.co/</span>
+                            <div className="flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-4">
+                                <span className="text-white/40 font-bold text-sm sm:text-base md:text-lg whitespace-nowrap shrink-0">devbio.co/</span>
                                 <input
                                     type="text"
                                     value={username}
@@ -188,10 +188,10 @@ const ClaimPage: React.FC = () => {
                                     required
                                     minLength={3}
                                     maxLength={30}
-                                    className="flex-1 bg-transparent text-white text-2xl font-bold focus:outline-none placeholder:text-white/20"
+                                    className="flex-1 min-w-0 bg-transparent text-white text-lg sm:text-xl md:text-2xl font-bold focus:outline-none placeholder:text-white/20"
                                 />
                                 {checking && (
-                                    <div className="w-6 h-6">
+                                    <div className="w-6 h-6 shrink-0">
                                         <LoadingSpinner />
                                     </div>
                                 )}
@@ -199,7 +199,7 @@ const ClaimPage: React.FC = () => {
                                     <motion.div
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1 }}
-                                        className="text-green-500 text-2xl"
+                                        className="text-green-500 text-xl sm:text-2xl shrink-0"
                                     >
                                         ✓
                                     </motion.div>
@@ -208,7 +208,7 @@ const ClaimPage: React.FC = () => {
                                     <motion.div
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1 }}
-                                        className="text-red-500 text-2xl"
+                                        className="text-red-500 text-xl sm:text-2xl shrink-0"
                                     >
                                         ✗
                                     </motion.div>
@@ -217,7 +217,7 @@ const ClaimPage: React.FC = () => {
                         </div>
 
                         {/* Validation Messages */}
-                        <div className="mt-4 px-6">
+                        <div className="mt-4 px-4 sm:px-6">
                             {username.length > 0 && username.length < 3 && (
                                 <p className="text-yellow-500 text-sm font-medium">At least 3 characters required</p>
                             )}
@@ -235,7 +235,7 @@ const ClaimPage: React.FC = () => {
                         disabled={claiming || !available || username.length < 3}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="group relative w-full bg-white text-black py-6 rounded-full font-black text-xl hover:shadow-2xl hover:shadow-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 overflow-hidden"
+                        className="group relative w-full bg-white text-black py-5 sm:py-6 rounded-full font-black text-lg sm:text-xl hover:shadow-2xl hover:shadow-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 overflow-hidden"
                     >
                         <div className="absolute cursor-pointer inset-0 bg-gradient-to-r from-blue-400 to-purple-400 opacity-0 group-hover:opacity-10 transition-opacity" />
                         {claiming ? (

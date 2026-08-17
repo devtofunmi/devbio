@@ -26,7 +26,7 @@ const ProfileHero: React.FC<Props> = ({ user, recordClick }) => (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative group p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-[var(--theme-border)]"
+            className="relative group p-6 md:p-8 lg:p-12 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden min-h-[400px] md:min-h-[450px] flex flex-col justify-end border border-[var(--theme-border)]"
         >
             {/* High-End Background Effect */}
             <div className="absolute inset-0 z-0">
@@ -86,7 +86,7 @@ const ProfileHero: React.FC<Props> = ({ user, recordClick }) => (
                 {/* Info Section */}
                 <div className="flex-1 space-y-6 w-full overflow-hidden">
                     <div className="flex flex-col gap-2">
-                        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1]">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1] break-words">
                             {user.full_name}
                         </h1>
                         <div className="flex flex-col lg:flex-row lg:items-center gap-3">

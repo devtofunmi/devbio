@@ -1,11 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+/* Font families are loaded by next/font in lib/fonts.ts and exposed as
+   --font-* variables on <html>. Do not add a Google Fonts @import here:
+   Tailwind v4 strips remote @import url(...) rules from the bundle. */
 @import "tailwindcss";
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Outfit', var(--font-geist-sans);
-  --font-mono: 'JetBrains Mono', var(--font-geist-mono);
+  --font-sans: var(--font-outfit), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), var(--font-geist-mono), ui-monospace, monospace;
 }
 
 :root {
@@ -23,7 +25,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -95,10 +97,43 @@ body {
 
   /* Minimal layout typography */
   .font-serif-display {
-    font-family: 'Newsreader', Georgia, ui-serif, serif;
+    font-family: var(--font-newsreader), Georgia, ui-serif, serif;
   }
 
   .font-dm {
-    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Public profile typography — the akinkunmi.dev pairing: Newsreader for
+     display headings, DM Sans for everything else. Deliberately not the app's
+     default Outfit, and the same two faces the minimal layout already uses. */
+  .font-profile {
+    font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+    font-synthesis-weight: none;
+    -webkit-font-synthesis: none;
+    font-synthesis: none;
+  }
+
+  /* Weights are pinned here rather than edited into each component: the profile
+     headings carry `font-black` from the old geometric-sans look, and a serif
+     at 900 reads as a slab. Descendant specificity (0,1,1) beats the utility.
+
+     font-weight/letter-spacing are split across DISJOINT selector sets on
+     purpose. lightningcss ships a legacy `:-webkit-any()` copy of every `:is()`
+     rule, and Chrome gives `:-webkit-any()` pseudo-class specificity — so an
+     `:is(h1, ...)` rule resolves to (0,2,0) and would beat a later
+     `.font-profile h1` at (0,1,1). No overlap means no cascade to lose. */
+  .font-profile :is(h1, h2, h3, h4, h5) {
+    font-family: var(--font-newsreader), Georgia, ui-serif, serif;
+  }
+
+  .font-profile h1 {
+    font-weight: 400;
+    letter-spacing: -0.025em;
+  }
+
+  .font-profile :is(h2, h3, h4, h5) {
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
 }

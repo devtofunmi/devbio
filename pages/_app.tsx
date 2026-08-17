@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { Analytics } from '@vercel/analytics/react';
+import { rootFontStyles } from "@/lib/fonts";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [supabaseClient] = useState(() => createPagesBrowserClient());
@@ -22,8 +23,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta charSet="utf-8" />
-          <link rel="icon" href="/favicon.ico" />
+          {/* Icons live in _document.tsx so there is a single source of truth */}
           <meta name="theme-color" content="#000000" />
+          <style
+            id="font-variables"
+            dangerouslySetInnerHTML={{ __html: rootFontStyles }}
+          />
         </Head>
         <Component {...pageProps} />
         <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />

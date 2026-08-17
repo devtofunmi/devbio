@@ -54,7 +54,7 @@ const AdminOverview: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Top profiles */}
-                <div className="glass-card p-8 rounded-[2rem] border-white/5">
+                <div className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5">
                     <h2 className="text-lg font-black tracking-tight mb-6">Top Profiles</h2>
                     {loading ? (
                         <ListSkeleton />
@@ -62,8 +62,8 @@ const AdminOverview: React.FC = () => {
                         <div className="space-y-4">
                             {data.topProfiles.map((p, i) => (
                                 <div key={i} className="flex justify-between items-center text-sm">
-                                    <span className="text-white/70 truncate">{p.username || "—"}</span>
-                                    <span className="text-emerald-400 font-bold text-xs">{p.views}</span>
+                                    <span className="text-white/70 truncate min-w-0">{p.username || "—"}</span>
+                                    <span className="text-emerald-400 font-bold text-xs shrink-0 ml-3">{p.views}</span>
                                 </div>
                             ))}
                             {data.topProfiles.length === 0 && <p className="text-white/20 text-xs uppercase tracking-widest">No views yet</p>}
@@ -72,7 +72,7 @@ const AdminOverview: React.FC = () => {
                 </div>
 
                 {/* By country */}
-                <div className="glass-card p-8 rounded-[2rem] border-white/5">
+                <div className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5">
                     <h2 className="text-lg font-black tracking-tight mb-6">By Country</h2>
                     {loading ? (
                         <ListSkeleton />
@@ -82,11 +82,11 @@ const AdminOverview: React.FC = () => {
                                 const f = flagUrl(g.code);
                                 return (
                                     <div key={i} className="flex justify-between items-center text-sm">
-                                        <span className="flex items-center gap-2 text-white/70 truncate">
+                                        <span className="flex items-center gap-2 text-white/70 min-w-0">
                                             {f ? <Image src={f} alt={g.country} width={20} height={15} className="rounded-sm shrink-0" unoptimized /> : <span className="w-5 text-center">🏳️</span>}
-                                            {g.country}
+                                            <span className="truncate">{g.country}</span>
                                         </span>
-                                        <span className="text-white/40 font-bold text-xs">{g.count}</span>
+                                        <span className="text-white/40 font-bold text-xs shrink-0 ml-3">{g.count}</span>
                                     </div>
                                 );
                             })}

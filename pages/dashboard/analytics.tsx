@@ -156,20 +156,20 @@ const AnalyticsPage: React.FC = () => {
     <DashboardLayout>
       <div className="space-y-12 pb-32">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8">
           <div>
-            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter">
               Analytics <span className="text-gradient">Hub</span>
             </h1>
-            <p className="text-white/40 text-lg font-light mt-2 italic">Detailed traffic and conversion insights.</p>
+            <p className="text-white/40 text-base md:text-lg font-light mt-2 italic">Detailed traffic and conversion insights.</p>
           </div>
 
-          <div className="flex items-center gap-2 glass p-1.5 rounded-2xl border-white/5">
+          <div className="flex items-center gap-2 glass p-1.5 rounded-2xl border-white/5 self-start lg:self-auto">
             {[7, 30, 90].map((r) => (
               <button
                 key={r}
                 onClick={() => setTimeRange(r)}
-                className={`relative px-6 py-2.5 cursor-pointer rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${timeRange === r
+                className={`relative px-4 md:px-6 py-2.5 cursor-pointer rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${timeRange === r
                   ? 'text-black'
                   : 'text-white/20 hover:text-white/40'
                   }`}
@@ -188,36 +188,36 @@ const AnalyticsPage: React.FC = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
           {cards.map((card, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="glass-card p-8 rounded-[2.5rem] border-white/5 relative overflow-hidden group"
+              className="glass-card p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border-white/5 relative overflow-hidden group"
             >
-              <div className="flex justify-between items-start mb-10">
-                <div className={`w-12 h-12 glass rounded-2xl flex items-center justify-center ${card.color}`}>
+              <div className="flex justify-between items-start gap-2 mb-8 md:mb-10">
+                <div className={`w-12 h-12 shrink-0 glass rounded-2xl flex items-center justify-center ${card.color}`}>
                   {card.icon}
                 </div>
-                <span className="text-white/20 text-[10px] font-black uppercase tracking-widest leading-none mt-1">{card.title}</span>
+                <span className="text-white/20 text-[10px] font-black uppercase tracking-widest leading-tight mt-1 text-right">{card.title}</span>
               </div>
-              <div className="text-5xl font-black text-white tracking-tighter">{card.value}</div>
+              <div className="text-4xl md:text-5xl font-black text-white tracking-tighter">{card.value}</div>
               <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-white/5 blur-[50px] rounded-full group-hover:bg-white/10 transition-all duration-700" />
             </motion.div>
           ))}
         </div>
 
         {/* Performance Graph */}
-        <div className="glass-card p-8 md:p-12 rounded-[3.5rem] border-white/5 overflow-hidden">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <div className="glass-card p-6 md:p-8 lg:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border-white/5 overflow-hidden">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 md:mb-12">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-blue-400">
+              <div className="w-12 h-12 shrink-0 glass rounded-2xl flex items-center justify-center text-blue-400">
                 <FiCalendar size={20} />
               </div>
               <div>
-                <h3 className="text-2xl font-black text-white tracking-tight">Traffic Over Time</h3>
+                <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">Traffic Over Time</h3>
                 <p className="text-white/20 text-[10px] uppercase font-black tracking-widest">Views vs Link Clicks</p>
               </div>
             </div>
@@ -227,7 +227,7 @@ const AnalyticsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="h-[400px] w-full mt-8">
+          <div className="h-[280px] md:h-[400px] w-full mt-8">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data?.timeSeries || []}>
                 <defs>
@@ -273,24 +273,24 @@ const AnalyticsPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Top Links */}
-          <div className="glass-card p-10 rounded-[3rem] border-white/5">
-            <div className="flex items-center gap-4 mb-10">
-              <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-purple-400">
+          <div className="glass-card p-6 md:p-8 lg:p-10 rounded-[2.5rem] md:rounded-[3rem] border-white/5">
+            <div className="flex items-center gap-4 mb-8 md:mb-10">
+              <div className="w-12 h-12 shrink-0 glass rounded-2xl flex items-center justify-center text-purple-400">
                 <FiTrendingUp size={20} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-white tracking-tight">Top performing</h2>
+                <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Top performing</h2>
                 <p className="text-white/20 text-[10px] uppercase font-black tracking-widest">Most clicked assets</p>
               </div>
             </div>
             <div className="space-y-3">
               {data?.topLinks.map((link, i) => (
-                <div key={i} className="glass p-5 rounded-2xl border-white/5 flex items-center justify-between group hover:border-blue-500/30 transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/20">
+                <div key={i} className="glass p-4 md:p-5 rounded-2xl border-white/5 flex items-center justify-between gap-3 group hover:border-blue-500/30 transition-all">
+                  <div className="flex items-center gap-3 md:gap-4 min-w-0">
+                    <div className="w-10 h-10 shrink-0 glass rounded-xl flex items-center justify-center text-white/20">
                       {link.type === 'social' ? <FiActivity size={16} /> : <FiLink size={16} />}
                     </div>
-                    <div className="max-w-[200px] md:max-w-xs truncate">
+                    <div className="min-w-0 truncate">
                       <div className="text-white font-bold text-sm truncate">
                         {link.type === 'cv'
                           ? (link.url.startsWith('http') ? link.url.split('/').pop() : 'resume.pdf')
@@ -299,7 +299,7 @@ const AnalyticsPage: React.FC = () => {
                       <div className="text-[10px] text-white/20 font-black uppercase text-emerald-400">{link.type}</div>
                     </div>
                   </div>
-                  <div className="text-2xl font-black text-white">{link.count}</div>
+                  <div className="text-2xl font-black text-white shrink-0">{link.count}</div>
                 </div>
               ))}
               {data?.topLinks.length === 0 && <div className="py-20 text-center text-white/10 uppercase tracking-widest font-black">No clicks recorded</div>}
@@ -307,13 +307,13 @@ const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Geo Insights */}
-          <div className="glass-card p-10 rounded-[3rem] border-white/5">
-            <div className="flex items-center gap-4 mb-10">
-              <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-emerald-400">
+          <div className="glass-card p-6 md:p-8 lg:p-10 rounded-[2.5rem] md:rounded-[3rem] border-white/5">
+            <div className="flex items-center gap-4 mb-8 md:mb-10">
+              <div className="w-12 h-12 shrink-0 glass rounded-2xl flex items-center justify-center text-emerald-400">
                 <FiGlobe size={20} />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-white tracking-tight">Geo Insights</h2>
+                <h2 className="text-xl md:text-2xl font-black text-white tracking-tight">Geo Insights</h2>
                 <p className="text-white/20 text-[10px] uppercase font-black tracking-widest">Views by country</p>
               </div>
             </div>
@@ -321,8 +321,8 @@ const AnalyticsPage: React.FC = () => {
             <div className="space-y-6">
               {data?.geoData.map((geo, i) => (
                 <div key={i} className="space-y-2">
-                  <div className="flex justify-between items-center text-[10px] font-black uppercase">
-                    <div className="flex items-center gap-3">
+                  <div className="flex justify-between items-center gap-3 text-[10px] font-black uppercase">
+                    <div className="flex items-center gap-2 md:gap-3 min-w-0">
                       {flagCode(geo.code) ? (
                         <Image
                           src={`https://flagcdn.com/32x24/${flagCode(geo.code)}.png`}
@@ -335,10 +335,10 @@ const AnalyticsPage: React.FC = () => {
                       ) : (
                         <FiGlobe className="text-white/20 shrink-0" size={16} />
                       )}
-                      <span className="text-white/20">{geo.code}</span>
-                      <span className="text-white">{geo.country}</span>
+                      <span className="text-white/20 shrink-0">{geo.code}</span>
+                      <span className="text-white truncate">{geo.country}</span>
                     </div>
-                    <span className="text-emerald-400">{geo.count} Views</span>
+                    <span className="text-emerald-400 shrink-0 whitespace-nowrap">{geo.count} Views</span>
                   </div>
                   <div className="h-1.5 w-full glass rounded-full overflow-hidden">
                     <motion.div

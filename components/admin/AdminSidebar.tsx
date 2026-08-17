@@ -19,9 +19,9 @@ const AdminSidebar: React.FC = () => {
 
     return (
         <>
-            {/* Mobile Bottom Bar */}
-            <div className="md:hidden fixed bottom-6 left-6 right-6 z-50">
-                <nav className="glass bg-black/60 backdrop-blur-xl rounded-[2.5rem] p-2 flex justify-between items-center border-white/10 shadow-2xl">
+            {/* Mobile + Tablet Bottom Bar */}
+            <div className="xl:hidden fixed bottom-6 left-6 right-6 z-50">
+                <nav className="glass bg-black/60 backdrop-blur-xl rounded-[2.5rem] p-2 flex justify-between items-center border-white/10 shadow-2xl max-w-md mx-auto">
                     {navItems.map((item) => (
                         <Link key={item.href} href={item.href}>
                             <div className={`p-4 rounded-full transition-all duration-300 ${isActive(item.href) ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20" : "text-white/40 hover:text-white"}`}>
@@ -37,8 +37,10 @@ const AdminSidebar: React.FC = () => {
                 </nav>
             </div>
 
-            {/* Desktop Sidebar */}
-            <div className="hidden md:flex lg:fixed w-80 p-8 flex-col h-screen z-50">
+            {/* Desktop Sidebar — only from xl, matching the user dashboard: the
+                rail costs 320px and the tables beside it need room, so anything
+                narrower (incl. iPad Pro portrait at 1024) gets the bottom bar. */}
+            <div className="hidden xl:flex xl:fixed w-80 p-8 flex-col h-screen z-50">
                 <div className="glass-card h-full rounded-[3rem] p-8 border-white/5 flex flex-col">
                     {/* Brand */}
                     <div className="flex items-center gap-3 mb-10 px-2">

@@ -73,14 +73,14 @@ const AdminAnalyticsPage: React.FC = () => {
 
             {/* Trend chart — same design as the user dashboard */}
             <div className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5 mb-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-black tracking-tight">Views &amp; Clicks · last 14 days</h2>
-                    <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6">
+                    <h2 className="text-base md:text-lg font-black tracking-tight">Views &amp; Clicks · last 14 days</h2>
+                    <div className="flex gap-4 shrink-0">
                         <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-blue-500" /><span className="text-[10px] font-black uppercase text-white/40">Views</span></div>
                         <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-purple-500" /><span className="text-[10px] font-black uppercase text-white/40">Clicks</span></div>
                     </div>
                 </div>
-                <div className="h-[400px] w-full">
+                <div className="h-[280px] md:h-[400px] w-full">
                     {loading ? (
                         <Skeleton className="w-full h-full rounded-2xl" />
                     ) : (
@@ -116,7 +116,7 @@ const AdminAnalyticsPage: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Top profiles */}
-                <div className="glass-card p-8 rounded-[2rem] border-white/5">
+                <div className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5">
                     <h2 className="text-lg font-black tracking-tight mb-6">Top Profiles</h2>
                     {loading ? (
                         <ListSkeleton />
@@ -124,8 +124,8 @@ const AdminAnalyticsPage: React.FC = () => {
                         <div className="space-y-4">
                             {data.topProfiles.map((p, i) => (
                                 <div key={i} className="flex justify-between items-center text-sm">
-                                    <span className="text-white/70 truncate">{p.username || "—"}</span>
-                                    <span className="text-emerald-400 font-bold text-xs">{p.views}</span>
+                                    <span className="text-white/70 truncate min-w-0">{p.username || "—"}</span>
+                                    <span className="text-emerald-400 font-bold text-xs shrink-0 ml-3">{p.views}</span>
                                 </div>
                             ))}
                             {data.topProfiles.length === 0 && <p className="text-white/20 text-xs uppercase tracking-widest">No views yet</p>}
@@ -134,7 +134,7 @@ const AdminAnalyticsPage: React.FC = () => {
                 </div>
 
                 {/* By country */}
-                <div className="glass-card p-8 rounded-[2rem] border-white/5">
+                <div className="glass-card p-6 md:p-8 rounded-[2rem] border-white/5">
                     <h2 className="text-lg font-black tracking-tight mb-6">By Country</h2>
                     {loading ? (
                         <ListSkeleton />
@@ -144,11 +144,11 @@ const AdminAnalyticsPage: React.FC = () => {
                                 const f = flagUrl(g.code);
                                 return (
                                     <div key={i} className="flex justify-between items-center text-sm">
-                                        <span className="flex items-center gap-2 text-white/70 truncate">
+                                        <span className="flex items-center gap-2 text-white/70 min-w-0">
                                             {f ? <Image src={f} alt={g.country} width={20} height={15} className="rounded-sm shrink-0" unoptimized /> : <span className="w-5 text-center">🏳️</span>}
-                                            {g.country}
+                                            <span className="truncate">{g.country}</span>
                                         </span>
-                                        <span className="text-white/40 font-bold text-xs">{g.count}</span>
+                                        <span className="text-white/40 font-bold text-xs shrink-0 ml-3">{g.count}</span>
                                     </div>
                                 );
                             })}

@@ -524,8 +524,8 @@ const DashboardPage: React.FC = () => {
             onSocialClick={() => setSocialModalOpen(true)}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-20">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-8 flex flex-col gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 mb-20">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="md:col-span-6 xl:col-span-8 min-w-0 flex flex-col gap-6 md:gap-8">
               <LayoutHiddenWrapper hidden={layout === 'minimal'}>
                 <GitHubDNACard
                   githubUsername={githubUsername}
@@ -541,7 +541,7 @@ const DashboardPage: React.FC = () => {
               />
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="md:col-span-4 space-y-8">
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="md:col-span-6 xl:col-span-4 min-w-0 space-y-6 md:space-y-8">
               <LayoutHiddenWrapper hidden={layout === 'minimal'}>
                 <AboutMeCard
                   aboutMe={aboutMe}

@@ -14,27 +14,27 @@ const CVCard: React.FC<CVCardProps> = ({ cvUrl, onUploadClick, onRemoveClick, us
 
     return (
         <div
-            className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[1.5rem] p-8 border group transition-all`}
+            className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[1.5rem] p-6 md:p-8 border group transition-all`}
         >
-            <div className="flex items-center gap-4 mb-6">
-                <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-emerald-400">
+            <div className="flex items-center gap-3 md:gap-4 mb-6">
+                <div className="w-10 h-10 shrink-0 glass rounded-xl flex items-center justify-center text-emerald-400">
                     <FaFilePdf size={18} />
                 </div>
-                <h4 className={`text-xl font-black text-[var(--theme-text)] tracking-tight`}>Curriculum Vitae</h4>
+                <h4 className={`text-lg md:text-xl font-black text-[var(--theme-text)] tracking-tight`}>Curriculum Vitae</h4>
             </div>
 
             {cvUrl ? (
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 glass rounded-2xl border border-white/5 bg-white/5">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-500">
+                    <div className="flex items-center justify-between gap-3 p-4 glass rounded-2xl border border-white/5 bg-white/5">
+                        <div className="flex items-center gap-3 min-w-0">
+                            <div className="w-8 h-8 shrink-0 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-500">
                                 <FaFilePdf size={14} />
                             </div>
-                            <span className="text-xs font-bold text-white/60 truncate max-w-[120px] mr-4">
+                            <span className="text-xs font-bold text-white/60 truncate">
                                 {userName ? `${userName.replace(/\s+/g, '_')}_CV.pdf` : 'resume.pdf'}
                             </span>
                         </div>
-                        <div className="relative">
+                        <div className="relative shrink-0">
                             <button
                                 onClick={() => setCvMenuOpen(!cvMenuOpen)}
                                 className="w-8 h-8 flex items-center justify-center text-[var(--theme-text-secondary)] hover:text-[var(--theme-text)] glass rounded-xl transition-all"

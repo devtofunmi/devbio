@@ -9,9 +9,9 @@ interface AboutMeCardProps {
 
 const AboutMeCard: React.FC<AboutMeCardProps> = ({ aboutMe, onSave }) => {
     return (
-        <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-10 border group bg-white/[0.01]`}>
-            <div className="flex items-center gap-4 mb-8">
-                <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-purple-400">
+        <div className={`glass-card bg-[var(--theme-card-bg)] border-[var(--theme-border)] rounded-[2rem] p-6 md:p-8 lg:p-10 border group bg-white/[0.01]`}>
+            <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                <div className="w-10 h-10 shrink-0 glass rounded-xl flex items-center justify-center text-purple-400">
                     <FaInfoCircle size={18} />
                 </div>
                 <h4 className={`text-xl font-black text-[var(--theme-text)] tracking-tight`}>About Me</h4>
