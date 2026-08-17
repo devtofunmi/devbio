@@ -63,25 +63,37 @@ function useRamp(active: boolean, duration: number, delay = 0) {
     return t;
 }
 
-const StatCell: React.FC<{ value: number | null; label: string; t: number }> = ({ value, label, t }) => (
-    <div className="border px-4 py-3" style={{ borderColor: "var(--theme-border)", background: "var(--theme-card-bg)" }}>
-        <div
-            className="font-serif-display text-2xl md:text-3xl tabular-nums"
-            style={{ color: "var(--theme-text)" }}
-        >
-            {value === null ? (
-                <span style={{ color: "var(--theme-accent)" }}>∞</span>
-            ) : (
-                Math.round(value * t)
-            )}
-        </div>
-        <p
-            className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em]"
+/**
+ * An index row rather than a dashboard tile: hairline rule, mono label left,
+ * zero-padded serif numeral right — echoing how the minimal profile styles its
+ * own project list.
+ */
+const StatRow: React.FC<{ value: number; label: string; t: number; delay: number }> = ({
+    value,
+    label,
+    t,
+    delay,
+}) => (
+    <motion.div
+        className="flex items-baseline justify-between gap-6 py-3 border-b"
+        style={{ borderColor: "var(--theme-border)" }}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay }}
+    >
+        <span
+            className="font-mono text-[10px] uppercase tracking-[0.22em]"
             style={{ color: "var(--theme-text-secondary)" }}
         >
             {label}
-        </p>
-    </div>
+        </span>
+        <span
+            className="font-serif-display text-2xl md:text-3xl leading-none tabular-nums"
+            style={{ color: "var(--theme-text)" }}
+        >
+            {String(Math.round(value * t)).padStart(2, "0")}
+        </span>
+    </motion.div>
 );
 
 const MinimalLoader: React.FC<Props> = ({
@@ -117,6 +129,18 @@ const MinimalLoader: React.FC<Props> = ({
         );
         return out;
     }, [projectCount, techCount, isAvailable]);
+
+    // Empty counts are dropped rather than shown as "00" — a boot screen
+    // announcing zero projects is worse than not mentioning them.
+    const stats = useMemo(
+        () =>
+            [
+                { label: "Projects", value: projectCount },
+                { label: "Stack", value: techCount },
+                { label: "Links", value: linkCount },
+            ].filter((s) => s.value > 0),
+        [projectCount, techCount, linkCount]
+    );
 
     const dismiss = useCallback(() => {
         if (dismissed.current) return;
@@ -357,18 +381,23 @@ const MinimalLoader: React.FC<Props> = ({
                             </div>
                         </div>
 
-                        {/* Stats */}
-                        <motion.div
-                            className="mt-10 grid grid-cols-2 gap-4 md:gap-6"
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 1.0 }}
-                        >
-                            <StatCell value={projectCount} label="Projects" t={ramp} />
-                            <StatCell value={techCount} label="Stack" t={ramp} />
-                            <StatCell value={linkCount} label="Links" t={ramp} />
-                            <StatCell value={null} label="Building" t={ramp} />
-                        </motion.div>
+                        {/* Index */}
+                        {stats.length > 0 && (
+                            <div
+                                className="mt-10 border-t"
+                                style={{ borderColor: "var(--theme-border)" }}
+                            >
+                                {stats.map((s, i) => (
+                                    <StatRow
+                                        key={s.label}
+                                        value={s.value}
+                                        label={s.label}
+                                        t={ramp}
+                                        delay={1.0 + i * 0.12}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </motion.div>
             )}
