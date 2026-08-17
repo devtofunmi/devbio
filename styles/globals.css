@@ -43,7 +43,8 @@ body {
   }
 }
 
-#minimal-loader {
+/* :not([data-hold]) so ?loader=hold isn't yanked away at 6.5s by the failsafe. */
+#minimal-loader:not([data-hold]) {
   animation: loader-failsafe 6.5s step-end forwards;
 }
 

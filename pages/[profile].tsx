@@ -17,6 +17,8 @@ import type { UserProfile, ProjectRecord } from "../lib/types";
 type Props = {
   user: UserProfile | null;
   projects: ProjectRecord[];
+  /** ?loader=hold — keep the minimal boot screen up for inspection. */
+  loaderHold: boolean;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -24,8 +26,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     ? context.params?.profile[0]
     : context.params?.profile;
 
+  // Read here rather than from useRouter so SSR and hydration agree.
+  const loaderHold = context.query.loader === 'hold';
+
   if (!usernameParam) {
-    return { props: { user: null, projects: [] } };
+    return { props: { user: null, projects: [], loaderHold } };
   }
 
   //  Fetch Profile
@@ -37,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (profileError || !profile) {
     console.error('Profile not found:', usernameParam);
-    return { props: { user: null, projects: [] } };
+    return { props: { user: null, projects: [], loaderHold } };
   }
 
   //  Fetch Projects
@@ -57,11 +62,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       user: layoutOverride ? { ...profile, layout: layoutOverride } : profile,
       projects: projects || [],
+      loaderHold,
     },
   };
 };
 
-const ProfilePage: React.FC<Props> = ({ user, projects }) => {
+const ProfilePage: React.FC<Props> = ({ user, projects, loaderHold }) => {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const { recordClick } = useProfileAnalytics(user?.id);
 
@@ -148,6 +154,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
             techCount={(user.tech_stack || []).length}
             linkCount={(user.social_links || []).filter((s) => s.href).length}
             bgClass={isImageBg ? 'bg-black' : bgConfig}
+            hold={loaderHold}
           />
           <MinimalProfile
             user={user}

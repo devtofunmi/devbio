@@ -19,6 +19,9 @@ type Props = {
     /** Opaque background class for the overlay, so it matches the active theme
      *  and fully hides the profile underneath. */
     bgClass: string;
+    /** ?loader=hold — play the sequence then stay up instead of dismissing, so
+     *  the finished state can be inspected. Skip still works. */
+    hold?: boolean;
 };
 
 const TOTAL_MS = 2800;
@@ -89,6 +92,7 @@ const MinimalLoader: React.FC<Props> = ({
     techCount,
     linkCount,
     bgClass,
+    hold = false,
 }) => {
     // Rendered on the server so the profile never flashes before the boot
     // screen. The effect below decides whether it actually plays.
@@ -121,6 +125,13 @@ const MinimalLoader: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
+        // Inspection mode: always play, never time out, and don't burn the
+        // once-per-tab flag so normal visits still get the full thing.
+        if (hold) {
+            setAnimate(true);
+            return;
+        }
+
         const reduceMotion =
             typeof window !== "undefined" &&
             window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -142,7 +153,7 @@ const MinimalLoader: React.FC<Props> = ({
         setAnimate(true);
         const timer = setTimeout(dismiss, TOTAL_MS);
         return () => clearTimeout(timer);
-    }, [dismiss]);
+    }, [dismiss, hold]);
 
     // Hold the page still underneath while the overlay is up.
     useEffect(() => {
@@ -182,6 +193,7 @@ const MinimalLoader: React.FC<Props> = ({
                 <motion.div
                     id="minimal-loader"
                     key="minimal-loader"
+                    {...(hold ? { "data-hold": "true" } : {})}
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: FADE_MS / 1000, ease: "easeInOut" }}
@@ -231,14 +243,27 @@ const MinimalLoader: React.FC<Props> = ({
                         </div>
                     )}
 
-                    <button
-                        type="button"
-                        onClick={dismiss}
-                        className="absolute top-6 right-6 z-10 font-mono text-[10px] uppercase tracking-[0.22em] transition-opacity hover:opacity-100 cursor-pointer"
-                        style={{ color: "var(--theme-text-secondary)" }}
-                    >
-                        Skip &rarr;
-                    </button>
+                    <div className="absolute top-6 right-6 z-10 flex items-center gap-4">
+                        {hold && (
+                            <span
+                                className="font-mono text-[10px] uppercase tracking-[0.22em] border px-2 py-1"
+                                style={{
+                                    color: "var(--theme-accent)",
+                                    borderColor: "var(--theme-border)",
+                                }}
+                            >
+                                Hold
+                            </span>
+                        )}
+                        <button
+                            type="button"
+                            onClick={dismiss}
+                            className="font-mono text-[10px] uppercase tracking-[0.22em] transition-opacity hover:opacity-100 cursor-pointer"
+                            style={{ color: "var(--theme-text-secondary)" }}
+                        >
+                            Skip &rarr;
+                        </button>
+                    </div>
 
                     <div className="relative w-full max-w-xl mx-auto px-6 md:px-8">
                         {/* Identity */}
