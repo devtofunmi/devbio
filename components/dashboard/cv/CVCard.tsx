@@ -30,7 +30,7 @@ const CVCard: React.FC<CVCardProps> = ({ cvUrl, onUploadClick, onRemoveClick, us
                             <div className="w-8 h-8 shrink-0 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-500">
                                 <FaFilePdf size={14} />
                             </div>
-                            <span className="text-xs font-bold text-white/60 truncate">
+                            <span className="text-xs font-bold text-white/60 truncate max-w-[120px]">
                                 {userName ? `${userName.replace(/\s+/g, '_')}_CV.pdf` : 'resume.pdf'}
                             </span>
                         </div>
