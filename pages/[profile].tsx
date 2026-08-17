@@ -7,7 +7,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import MinimalProfile from "../components/profile/MinimalProfile";
-import MinimalLoader from "../components/profile/MinimalLoader";
+import MinimalLoader, { LOADER_DEFAULT_MS } from "../components/profile/MinimalLoader";
 import ClassicProfile from "../components/profile/ClassicProfile";
 import PublicShareModal from "../components/PublicShareModal";
 import { THEME_CONFIG } from "../lib/constants";
@@ -17,8 +17,6 @@ import type { UserProfile, ProjectRecord } from "../lib/types";
 type Props = {
   user: UserProfile | null;
   projects: ProjectRecord[];
-  /** ?loader=hold — keep the minimal boot screen up for inspection. */
-  loaderHold: boolean;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -26,11 +24,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     ? context.params?.profile[0]
     : context.params?.profile;
 
-  // Read here rather than from useRouter so SSR and hydration agree.
-  const loaderHold = context.query.loader === 'hold';
-
   if (!usernameParam) {
-    return { props: { user: null, projects: [], loaderHold } };
+    return { props: { user: null, projects: [] } };
   }
 
   //  Fetch Profile
@@ -42,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (profileError || !profile) {
     console.error('Profile not found:', usernameParam);
-    return { props: { user: null, projects: [], loaderHold } };
+    return { props: { user: null, projects: [] } };
   }
 
   //  Fetch Projects
@@ -62,12 +57,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       user: layoutOverride ? { ...profile, layout: layoutOverride } : profile,
       projects: projects || [],
-      loaderHold,
     },
   };
 };
 
-const ProfilePage: React.FC<Props> = ({ user, projects, loaderHold }) => {
+const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const { recordClick } = useProfileAnalytics(user?.id);
 
@@ -83,6 +77,10 @@ const ProfilePage: React.FC<Props> = ({ user, projects, loaderHold }) => {
   }
 
   const isMinimal = user.layout === 'minimal';
+  // Owner-configured boot screen duration. 0 turns it off; null (older rows
+  // that predate the column) falls back to the default.
+  const loaderDelay = user.loader_delay_ms ?? LOADER_DEFAULT_MS;
+  const loaderEnabled = loaderDelay > 0;
   // Minimal defaults to the warm "sand" palette. The default-ish dark themes
   // (onyx / dark / unset) fall through to sand so minimal reads warm out of the
   // box; a distinctive chosen theme (forest, midnight, matrix, ...) still wins.
@@ -146,16 +144,18 @@ const ProfilePage: React.FC<Props> = ({ user, projects, loaderHold }) => {
 
       {isMinimal ? (
         <>
-          <MinimalLoader
-            name={user.full_name}
-            profession={user.profession}
-            isAvailable={user.is_available}
-            projectCount={projects.length}
-            techCount={(user.tech_stack || []).length}
-            linkCount={(user.social_links || []).filter((s) => s.href).length}
-            bgClass={isImageBg ? 'bg-black' : bgConfig}
-            hold={loaderHold}
-          />
+          {loaderEnabled && (
+            <MinimalLoader
+              name={user.full_name}
+              profession={user.profession}
+              isAvailable={user.is_available}
+              projectCount={projects.length}
+              techCount={(user.tech_stack || []).length}
+              linkCount={(user.social_links || []).filter((s) => s.href).length}
+              bgClass={isImageBg ? 'bg-black' : bgConfig}
+              durationMs={loaderDelay}
+            />
+          )}
           <MinimalProfile
             user={user}
             projects={projects}
