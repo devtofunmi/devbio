@@ -53,7 +53,8 @@ const LOADER_OPTIONS = [
 const LayoutSettings: React.FC = () => {
     const { user, supabase } = useAuth();
     const [selected, setSelected] = useState('classic');
-    const [loaderDelay, setLoaderDelay] = useState(2800);
+    // Off unless the profile says otherwise — the boot screen is opt-in.
+    const [loaderDelay, setLoaderDelay] = useState(0);
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
