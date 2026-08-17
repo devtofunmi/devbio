@@ -20,7 +20,7 @@ const StatusCard: React.FC<StatusCardProps> = ({ isAvailable, statusText, onClic
                         <span className={`w-2.5 h-2.5 shrink-0 rounded-full ${isAvailable ? 'bg-green-500' : 'bg-red-500'} ${isAvailable ? 'animate-pulse' : ''}`} />
                         {isAvailable ? 'Available' : 'Focused'}
                     </span>
-                    <span className="text-xs text-[var(--theme-text-secondary)] font-medium truncate">
+                    <span className="text-xs text-[var(--theme-text-secondary)] font-medium truncate max-w-[180px]">
                         {statusText || (isAvailable ? "Set availability text..." : "Set focus text...")}
                     </span>
                 </div>
