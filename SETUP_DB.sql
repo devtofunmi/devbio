@@ -22,7 +22,7 @@ create table profiles (
   cta_link text,
   theme text default 'dark',
   layout text default 'classic', -- Public profile layout: 'classic' | 'minimal'
-  loader_delay_ms integer default 2800, -- Minimal-layout boot screen duration; 0 disables it
+  loader_delay_ms integer default 0, -- Minimal-layout boot screen duration in ms; 0 = off, opt in from the dashboard
   beams_enabled boolean default true,
   is_donor boolean default false,
   cv_url text,
@@ -178,7 +178,14 @@ create policy "Authenticated users can upload CVs."
 -- Safe to run on an existing database; both statements are idempotent.
 -- ---------------------------------------------------------------------------
 alter table profiles
-  add column if not exists loader_delay_ms integer default 2800;
+  add column if not exists loader_delay_ms integer default 0;
+
+-- Corrects the default on databases where an earlier revision of this migration
+-- created the column with 2800. Does not touch existing rows — see the note in
+-- the PR for the one-time backfill, which must not live here or it would keep
+-- resetting anyone who deliberately picks 2.8s.
+alter table profiles
+  alter column loader_delay_ms set default 0;
 
 do $$
 begin
