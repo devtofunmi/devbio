@@ -43,9 +43,11 @@ body {
   }
 }
 
-/* :not([data-hold]) so ?loader=hold isn't yanked away at 6.5s by the failsafe. */
-#minimal-loader:not([data-hold]) {
-  animation: loader-failsafe 6.5s step-end forwards;
+/* The delay comes from an inline var (the owner's configured duration plus a
+   margin) so a longer boot screen isn't cut short by its own safety net. The
+   inline style is server-rendered, so it still applies with no JS. */
+#minimal-loader {
+  animation: loader-failsafe var(--loader-failsafe, 6.5s) step-end forwards;
 }
 
 /* Minimal-layout boot screen: columns of glyphs drifting down the viewport.
