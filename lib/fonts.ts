@@ -1,4 +1,4 @@
-import { Outfit, Space_Grotesk, Newsreader, DM_Sans, JetBrains_Mono } from 'next/font/google';
+import { Outfit, Newsreader, DM_Sans, JetBrains_Mono } from 'next/font/google';
 
 // Fonts are loaded here rather than via @import in globals.css: Tailwind v4
 // strips remote `@import url(...)` rules out of the bundle, so the Google Fonts
@@ -13,14 +13,8 @@ const outfit = Outfit({
     display: 'swap',
 });
 
-// Public profile display face. Tops out at 700 — see `.font-profile` in
-// globals.css, which disables synthetic bolding for the `font-black` utilities.
-const spaceGrotesk = Space_Grotesk({
-    subsets: ['latin'],
-    variable: '--font-space-grotesk',
-    display: 'swap',
-});
-
+// Serif display face: minimal layout headings and the public profile
+// (`.font-serif-display` / `.font-profile` in globals.css).
 const newsreader = Newsreader({
     subsets: ['latin'],
     style: ['normal', 'italic'],
@@ -43,7 +37,6 @@ const jetbrainsMono = JetBrains_Mono({
 /** Font variable classes, for the element wrapping the React tree. */
 export const fontVariables = [
     outfit.variable,
-    spaceGrotesk.variable,
     newsreader.variable,
     dmSans.variable,
     jetbrainsMono.variable,
@@ -57,7 +50,6 @@ export const fontVariables = [
  */
 export const rootFontStyles = `:root{`
     + `--font-outfit:${outfit.style.fontFamily};`
-    + `--font-space-grotesk:${spaceGrotesk.style.fontFamily};`
     + `--font-newsreader:${newsreader.style.fontFamily};`
     + `--font-dm-sans:${dmSans.style.fontFamily};`
     + `--font-jetbrains-mono:${jetbrainsMono.style.fontFamily};`

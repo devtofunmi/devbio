@@ -104,18 +104,36 @@ body {
     font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   }
 
-  /* Public profile typography — deliberately not the app's default Outfit.
-     Space Grotesk tops out at 700, so kill synthetic bolding: the many
-     `font-black` utilities on profile headings would otherwise smear. */
+  /* Public profile typography — the akinkunmi.dev pairing: Newsreader for
+     display headings, DM Sans for everything else. Deliberately not the app's
+     default Outfit, and the same two faces the minimal layout already uses. */
   .font-profile {
-    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
     font-synthesis-weight: none;
     -webkit-font-synthesis: none;
     font-synthesis: none;
-    letter-spacing: -0.011em;
   }
 
+  /* Weights are pinned here rather than edited into each component: the profile
+     headings carry `font-black` from the old geometric-sans look, and a serif
+     at 900 reads as a slab. Descendant specificity (0,1,1) beats the utility.
+
+     font-weight/letter-spacing are split across DISJOINT selector sets on
+     purpose. lightningcss ships a legacy `:-webkit-any()` copy of every `:is()`
+     rule, and Chrome gives `:-webkit-any()` pseudo-class specificity — so an
+     `:is(h1, ...)` rule resolves to (0,2,0) and would beat a later
+     `.font-profile h1` at (0,1,1). No overlap means no cascade to lose. */
   .font-profile :is(h1, h2, h3, h4, h5) {
-    letter-spacing: -0.035em;
+    font-family: var(--font-newsreader), Georgia, ui-serif, serif;
+  }
+
+  .font-profile h1 {
+    font-weight: 400;
+    letter-spacing: -0.025em;
+  }
+
+  .font-profile :is(h2, h3, h4, h5) {
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
 }
