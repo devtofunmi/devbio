@@ -1,11 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+/* Font families are loaded by next/font in lib/fonts.ts and exposed as
+   --font-* variables on <html>. Do not add a Google Fonts @import here:
+   Tailwind v4 strips remote @import url(...) rules from the bundle. */
 @import "tailwindcss";
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Outfit', var(--font-geist-sans);
-  --font-mono: 'JetBrains Mono', var(--font-geist-mono);
+  --font-sans: var(--font-outfit), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), var(--font-geist-mono), ui-monospace, monospace;
 }
 
 :root {
@@ -23,7 +25,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -95,10 +97,25 @@ body {
 
   /* Minimal layout typography */
   .font-serif-display {
-    font-family: 'Newsreader', Georgia, ui-serif, serif;
+    font-family: var(--font-newsreader), Georgia, ui-serif, serif;
   }
 
   .font-dm {
-    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Public profile typography — deliberately not the app's default Outfit.
+     Space Grotesk tops out at 700, so kill synthetic bolding: the many
+     `font-black` utilities on profile headings would otherwise smear. */
+  .font-profile {
+    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+    font-synthesis-weight: none;
+    -webkit-font-synthesis: none;
+    font-synthesis: none;
+    letter-spacing: -0.011em;
+  }
+
+  .font-profile :is(h1, h2, h3, h4, h5) {
+    letter-spacing: -0.035em;
   }
 }

@@ -28,14 +28,14 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
     <DashboardContext.Provider value={{ openThemeSidebar, closeThemeSidebar }}>
       <div className="min-h-screen bg-black text-white flex overflow-hidden">
         <Sidebar />
-        <main className="flex-1 w-full relative z-10 overflow-y-auto lg:ml-80">
-          <div className="max-w-6xl mx-auto p-6 md:p-12 md:pb-32">
+        <main className="flex-1 w-full min-w-0 relative z-10 overflow-y-auto lg:ml-80">
+          <div className="max-w-6xl mx-auto p-6 md:p-8 lg:p-12 pb-32">
             {children}
           </div>
         </main>
 
-        {/* Floating Support Button */}
-        <div className="fixed bottom-24 md:bottom-8 right-6 md:right-8 z-[100]">
+        {/* Floating Support Button — sits above the bottom bar until lg */}
+        <div className="fixed bottom-24 lg:bottom-8 right-6 md:right-8 z-[100]">
           <motion.button
             animate={{
               y: [0, -12, 0],

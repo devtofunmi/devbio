@@ -66,7 +66,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
 
   if (!user) {
     return (
-      <div className="min-h-screen p-3 flex items-center justify-center bg-black text-white">
+      <div className="font-profile min-h-screen p-3 flex items-center justify-center bg-black text-white">
         <div className="glass-card p-12 rounded-3xl text-center">
           <h1 className="text-4xl font-bold text-red-500 mb-6 font-black tracking-tighter">404 - User Not Found</h1>
           <Link href="/" className="px-4 py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all">Go back home</Link>
@@ -103,7 +103,7 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
 
   return (
     <div
-      className={`relative min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-[var(--theme-text)] selection:bg-[var(--theme-accent)] transition-colors duration-700`}
+      className={`font-profile relative min-h-screen ${isImageBg ? 'bg-transparent' : bgConfig} text-[var(--theme-text)] selection:bg-[var(--theme-accent)] transition-colors duration-700`}
       style={themeStyles}
     >
       <Head>
