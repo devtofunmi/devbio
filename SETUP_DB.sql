@@ -22,11 +22,15 @@ create table profiles (
   cta_link text,
   theme text default 'dark',
   layout text default 'classic', -- Public profile layout: 'classic' | 'minimal'
+  loader_delay_ms integer default 2800, -- Minimal-layout boot screen duration; 0 disables it
   beams_enabled boolean default true,
   is_donor boolean default false,
   cv_url text,
-  
-  constraint username_length check (char_length(username) >= 3)
+
+  constraint username_length check (char_length(username) >= 3),
+  -- 0 = off, otherwise keep it inside a sane range so a profile can't be
+  -- bricked behind a 10-minute loading screen.
+  constraint loader_delay_range check (loader_delay_ms >= 0 and loader_delay_ms <= 8000)
 );
 
 -- Create a table for Projects
@@ -168,3 +172,21 @@ create policy "CVs are publicly accessible."
 create policy "Authenticated users can upload CVs."
   on storage.objects for insert
   with check ( bucket_id = 'cvs' and auth.role() = 'authenticated' );
+
+-- ---------------------------------------------------------------------------
+-- Migration: loader_delay_ms (minimal-layout boot screen duration)
+-- Safe to run on an existing database; both statements are idempotent.
+-- ---------------------------------------------------------------------------
+alter table profiles
+  add column if not exists loader_delay_ms integer default 2800;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'loader_delay_range'
+  ) then
+    alter table profiles
+      add constraint loader_delay_range
+      check (loader_delay_ms >= 0 and loader_delay_ms <= 8000);
+  end if;
+end $$;
