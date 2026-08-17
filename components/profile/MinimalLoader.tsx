@@ -24,9 +24,11 @@ type Props = {
     durationMs?: number;
 };
 
-export const LOADER_DEFAULT_MS = 2800;
-export const LOADER_MIN_MS = 1200;
-export const LOADER_MAX_MS = 8000;
+// Not the product default — the boot screen is off unless an owner opts in.
+// This is only the duration used if a caller renders without `durationMs`.
+const FALLBACK_MS = 2800;
+const MIN_MS = 1200;
+const MAX_MS = 8000;
 const FADE_MS = 520;
 const GLYPHS = ["<", ">", "{", "}", "[", "]", "/", "0", "1", ";", "*", "$"];
 const BAR_SLOTS = 16;
@@ -114,10 +116,7 @@ const MinimalLoader: React.FC<Props> = ({
     const [animate, setAnimate] = useState(false);
     const dismissed = useRef(false);
 
-    const total = Math.min(
-        LOADER_MAX_MS,
-        Math.max(LOADER_MIN_MS, durationMs ?? LOADER_DEFAULT_MS)
-    );
+    const total = Math.min(MAX_MS, Math.max(MIN_MS, durationMs ?? FALLBACK_MS));
 
     /**
      * Every delay is a fraction of the total, so a shorter duration compresses
