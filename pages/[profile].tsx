@@ -7,7 +7,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import MinimalProfile from "../components/profile/MinimalProfile";
-import MinimalLoader, { LOADER_DEFAULT_MS } from "../components/profile/MinimalLoader";
+import MinimalLoader from "../components/profile/MinimalLoader";
 import ClassicProfile from "../components/profile/ClassicProfile";
 import PublicShareModal from "../components/PublicShareModal";
 import { THEME_CONFIG } from "../lib/constants";
@@ -77,9 +77,9 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   }
 
   const isMinimal = user.layout === 'minimal';
-  // Owner-configured boot screen duration. 0 turns it off; null (older rows
-  // that predate the column) falls back to the default.
-  const loaderDelay = user.loader_delay_ms ?? LOADER_DEFAULT_MS;
+  // Boot screen is opt-in: off unless the owner picked a duration. Null (rows
+  // predating the column) is treated the same as 0.
+  const loaderDelay = user.loader_delay_ms ?? 0;
   const loaderEnabled = loaderDelay > 0;
   // Minimal defaults to the warm "sand" palette. The default-ish dark themes
   // (onyx / dark / unset) fall through to sand so minimal reads warm out of the
