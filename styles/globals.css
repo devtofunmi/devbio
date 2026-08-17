@@ -31,6 +31,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Failsafe for the minimal-layout boot screen. The overlay is server-rendered
+   so the profile never flashes first, which means only JS removes it — a
+   hydration failure would hide the portfolio for good. This clears it without
+   JS after well past the scripted exit. Only `visibility` is keyframed (with
+   step-end), so framer-motion's inline opacity exit is left alone; animating
+   opacity here would override it and break the fade. */
+@keyframes loader-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+
+#minimal-loader {
+  animation: loader-failsafe 6.5s step-end forwards;
+}
+
+/* Minimal-layout boot screen: columns of glyphs drifting down the viewport.
+   Duration and delay are set per column inline so they desynchronise. */
+@keyframes matrix-fall {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
 /* Global Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -130,6 +157,18 @@ body {
   .font-profile h1 {
     font-weight: 400;
     letter-spacing: -0.025em;
+  }
+
+  .animate-matrix-fall {
+    animation-name: matrix-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-matrix-fall {
+      animation: none;
+    }
   }
 
   .font-profile :is(h2, h3, h4, h5) {

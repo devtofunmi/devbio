@@ -7,6 +7,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import MinimalProfile from "../components/profile/MinimalProfile";
+import MinimalLoader from "../components/profile/MinimalLoader";
 import ClassicProfile from "../components/profile/ClassicProfile";
 import PublicShareModal from "../components/PublicShareModal";
 import { THEME_CONFIG } from "../lib/constants";
@@ -138,12 +139,23 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
       )}
 
       {isMinimal ? (
-        <MinimalProfile
-          user={user}
-          projects={projects}
-          recordClick={recordClick}
-          onShare={() => setShareModalOpen(true)}
-        />
+        <>
+          <MinimalLoader
+            name={user.full_name}
+            profession={user.profession}
+            isAvailable={user.is_available}
+            projectCount={projects.length}
+            techCount={(user.tech_stack || []).length}
+            linkCount={(user.social_links || []).filter((s) => s.href).length}
+            bgClass={isImageBg ? 'bg-black' : bgConfig}
+          />
+          <MinimalProfile
+            user={user}
+            projects={projects}
+            recordClick={recordClick}
+            onShare={() => setShareModalOpen(true)}
+          />
+        </>
       ) : (
         <ClassicProfile
           user={user}
