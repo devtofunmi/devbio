@@ -86,14 +86,14 @@ const AdminUsers: React.FC = () => {
 
     return (
         <AdminLayout title="Users">
-            <div className="flex items-center justify-between mb-10">
-                <div>
+            <div className="flex items-center justify-between gap-4 mb-10">
+                <div className="min-w-0">
                     <h1 className="text-4xl md:text-5xl font-black tracking-tighter">Users</h1>
                     <p className="text-white/30 text-sm font-medium mt-2">{filtered.length} total</p>
                 </div>
                 <button
                     onClick={load}
-                    className="glass rounded-2xl px-5 py-3 text-xs font-black uppercase tracking-widest text-white/60 hover:text-white border-white/10 flex items-center gap-2 transition-colors cursor-pointer"
+                    className="glass rounded-2xl px-4 sm:px-5 py-3 text-xs font-black uppercase tracking-widest text-white/60 hover:text-white border-white/10 flex items-center gap-2 transition-colors cursor-pointer shrink-0 whitespace-nowrap"
                 >
                     <FiRefreshCw /> Refresh
                 </button>
@@ -113,7 +113,9 @@ const AdminUsers: React.FC = () => {
                 </div>
 
                 <div className="max-h-[560px] overflow-auto">
-                    <table className="w-full text-sm">
+                    {/* min-width so the 7 columns scroll horizontally on narrow
+                        screens instead of being crushed into unreadable wraps */}
+                    <table className="w-full min-w-[900px] text-sm">
                         <thead className="sticky top-0 z-10">
                             <tr className="text-white/30 text-[10px] uppercase tracking-widest">
                                 <th className="text-left font-black px-6 py-4 bg-[#0d0d0d]">User</th>

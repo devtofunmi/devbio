@@ -29,7 +29,9 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
       <div className="min-h-screen bg-black text-white flex overflow-hidden">
         <Sidebar />
         <main className="flex-1 w-full min-w-0 relative z-10 overflow-y-auto xl:ml-80">
-          <div className="max-w-6xl mx-auto p-6 md:p-8 xl:p-12 pb-32">
+          {/* pb repeated per variant: Tailwind emits media-query utilities after
+              unprefixed ones, so a bare pb-32 would be reset by md:p-8 */}
+          <div className="max-w-6xl mx-auto p-6 pb-32 md:p-8 md:pb-32 xl:p-12 xl:pb-32">
             {children}
           </div>
         </main>
