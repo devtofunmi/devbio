@@ -21,10 +21,10 @@ const ProjectGrid: React.FC<ProjectGridProps> = ({ projects, onNewProject, onEdi
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        // Matches the lg breakpoint: below it the dashboard uses the touch
+        // Matches the xl breakpoint: below it the dashboard uses the touch
         // layout, where drag-to-reorder fights the page scroll.
         const checkMobile = () => {
-            setIsMobile(window.innerWidth < 1024);
+            setIsMobile(window.innerWidth < 1280);
         };
         checkMobile();
         window.addEventListener('resize', checkMobile);

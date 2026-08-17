@@ -94,7 +94,7 @@ const DashboardHero: React.FC<DashboardHeroProps> = ({
                             <InlineEdit
                                 value={name}
                                 onSave={onNameSave}
-                                className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1] break-words"
+                                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1] break-words"
                                 placeholder="Your Name"
                             />
                             <div className="flex flex-col lg:flex-row lg:items-center gap-3">

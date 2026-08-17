@@ -6,8 +6,8 @@ import LayoutSettings from '../../components/dashboard/LayoutSettings';
 const ThemesPage: React.FC = () => {
     return (
         <DashboardLayout>
-            {/* Mobile Layout - No Fixed Border */}
-            <div className="lg:hidden py-12 px-4">
+            {/* Mobile + Tablet Layout - No Fixed Border */}
+            <div className="xl:hidden py-12 px-0 sm:px-4">
                 <div className="text-center mb-16">
                     <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-3">
                         Visual <span className="text-gradient">Themes</span>
@@ -19,7 +19,7 @@ const ThemesPage: React.FC = () => {
             </div>
 
             {/* Desktop Layout - Fixed Border */}
-            <div className="hidden lg:block fixed inset-0 lg:left-80 p-8 z-10">
+            <div className="hidden xl:block fixed inset-0 xl:left-80 p-8 z-10">
                 <div className="glass-card w-full max-w-6xl h-full mx-auto rounded-[3rem] border-white/5 flex flex-col overflow-hidden">
                     {/* Fixed Header */}
                     <div className="flex-shrink-0 text-center px-10 pt-10 pb-8">

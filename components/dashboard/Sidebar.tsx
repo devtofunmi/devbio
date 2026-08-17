@@ -57,7 +57,7 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Mobile + Tablet Bottom Bar */}
-      <div className="lg:hidden fixed bottom-6 left-6 right-6 z-50">
+      <div className="xl:hidden fixed bottom-6 left-6 right-6 z-50">
         <nav className="glass bg-black/60 backdrop-blur-xl rounded-[2.5rem] p-2 flex justify-between items-center border-white/10 shadow-2xl max-w-md mx-auto">
           {menuItems.map((item) => (
             <Link key={item.href} href={item.href}>
@@ -84,9 +84,10 @@ const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* Desktop Sidebar — only from lg; below that the w-80 rail leaves
-          tablets too little room, so they use the bottom bar instead. */}
-      <div className="hidden lg:flex lg:fixed w-80 p-8 flex-col h-screen z-50">
+      {/* Desktop Sidebar — only from xl. The rail costs 320px, and the content
+          beside it needs ~960px for the 8/4 grid to breathe, so anything under
+          1280px (incl. iPad Pro portrait at 1024) uses the bottom bar instead. */}
+      <div className="hidden xl:flex xl:fixed w-80 p-8 flex-col h-screen z-50">
         <div className="glass-card h-full rounded-[3rem] p-8 border-white/5 flex flex-col">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-8 px-2">

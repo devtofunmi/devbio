@@ -86,7 +86,7 @@ const ProfileHero: React.FC<Props> = ({ user, recordClick }) => (
                 {/* Info Section */}
                 <div className="flex-1 space-y-6 w-full overflow-hidden">
                     <div className="flex flex-col gap-2">
-                        <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1] break-words">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter text-[var(--theme-text)] block leading-[1.1] break-words">
                             {user.full_name}
                         </h1>
                         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
