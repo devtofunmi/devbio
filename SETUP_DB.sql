@@ -1,4 +1,3 @@
-
 -- Create a table for public profiles
 create table profiles (
   id uuid references auth.users on delete cascade not null primary key,
@@ -22,7 +21,7 @@ create table profiles (
   cta_link text,
   theme text default 'dark',
   layout text default 'classic', -- Public profile layout: 'classic' | 'minimal'
-  loader_delay_ms integer default 0, -- Minimal-layout boot screen duration in ms; 0 = off, opt in from the dashboard
+  loader_delay_ms integer default 0 not null, -- Minimal-layout boot screen duration in ms; 0 = off, opt in from the dashboard
   beams_enabled boolean default true,
   is_donor boolean default false,
   cv_url text,
@@ -178,7 +177,7 @@ create policy "Authenticated users can upload CVs."
 -- Safe to run on an existing database; both statements are idempotent.
 -- ---------------------------------------------------------------------------
 alter table profiles
-  add column if not exists loader_delay_ms integer default 0;
+  add column if not exists loader_delay_ms integer default 0 not null;
 
 -- Corrects the default on databases where an earlier revision of this migration
 -- created the column with 2800. Does not touch existing rows — see the note in
@@ -189,6 +188,9 @@ alter table profiles
 
 do $$
 begin
+  -- The constraint name 'loader_delay_range' is static and not derived from user input,
+  -- so direct use here is safe. For dynamic SQL with user-provided identifiers,
+  -- always use parameterization or whitelisting.
   if not exists (
     select 1 from pg_constraint where conname = 'loader_delay_range'
   ) then
