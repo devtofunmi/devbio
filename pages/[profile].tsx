@@ -7,6 +7,7 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import MinimalProfile from "../components/profile/MinimalProfile";
+import MinimalLoader from "../components/profile/MinimalLoader";
 import ClassicProfile from "../components/profile/ClassicProfile";
 import PublicShareModal from "../components/PublicShareModal";
 import { THEME_CONFIG } from "../lib/constants";
@@ -76,6 +77,10 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   }
 
   const isMinimal = user.layout === 'minimal';
+  // Boot screen is opt-in: off unless the owner picked a duration. Null (rows
+  // predating the column) is treated the same as 0.
+  const loaderDelay = user.loader_delay_ms ?? 0;
+  const loaderEnabled = loaderDelay > 0;
   // Minimal defaults to the warm "sand" palette. The default-ish dark themes
   // (onyx / dark / unset) fall through to sand so minimal reads warm out of the
   // box; a distinctive chosen theme (forest, midnight, matrix, ...) still wins.
@@ -138,12 +143,26 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
       )}
 
       {isMinimal ? (
-        <MinimalProfile
-          user={user}
-          projects={projects}
-          recordClick={recordClick}
-          onShare={() => setShareModalOpen(true)}
-        />
+        <>
+          {loaderEnabled && (
+            <MinimalLoader
+              name={user.full_name}
+              profession={user.profession}
+              isAvailable={user.is_available}
+              projectCount={projects.length}
+              techCount={(user.tech_stack || []).length}
+              linkCount={(user.social_links || []).filter((s) => s.href).length}
+              bgClass={isImageBg ? 'bg-black' : bgConfig}
+              durationMs={loaderDelay}
+            />
+          )}
+          <MinimalProfile
+            user={user}
+            projects={projects}
+            recordClick={recordClick}
+            onShare={() => setShareModalOpen(true)}
+          />
+        </>
       ) : (
         <ClassicProfile
           user={user}

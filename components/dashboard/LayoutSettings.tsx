@@ -39,20 +39,39 @@ const MinimalPreview = () => (
     </div>
 );
 
+// Boot screen durations, in ms. Discrete steps rather than a free slider so a
+// profile can't end up behind an absurd wait. Must stay within the
+// loader_delay_range constraint in SETUP_DB.sql (0–8000).
+const LOADER_OPTIONS = [
+    { ms: 0, label: 'Off' },
+    { ms: 2000, label: '2s' },
+    { ms: 2800, label: '2.8s' },
+    { ms: 4000, label: '4s' },
+    { ms: 6000, label: '6s' },
+];
+
 const LayoutSettings: React.FC = () => {
     const { user, supabase } = useAuth();
     const [selected, setSelected] = useState('classic');
+    // Off unless the profile says otherwise — the boot screen is opt-in.
+    const [loaderDelay, setLoaderDelay] = useState(0);
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         const fetchLayout = async () => {
             if (!user) return;
+            // select('*') rather than naming loader_delay_ms: before the
+            // migration runs, naming a missing column errors the whole query
+            // and would take the layout picker down with it.
             const { data, error } = await supabase
                 .from('profiles')
-                .select('layout')
+                .select('*')
                 .eq('id', user.id)
                 .single();
-            if (data && !error && data.layout) setSelected(data.layout);
+            if (data && !error) {
+                if (data.layout) setSelected(data.layout);
+                if (typeof data.loader_delay_ms === 'number') setLoaderDelay(data.loader_delay_ms);
+            }
         };
         fetchLayout();
     }, [user, supabase]);
@@ -72,6 +91,26 @@ const LayoutSettings: React.FC = () => {
             console.error('Failed to save layout', err);
             toast.error('Failed to save layout');
             setSelected(previous);
+        } finally {
+            setTimeout(() => setSaving(false), 800);
+        }
+    };
+
+    const handleLoaderDelay = async (ms: number) => {
+        if (!user || ms === loaderDelay) return;
+        const previous = loaderDelay;
+        setLoaderDelay(ms);
+        setSaving(true);
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .update({ loader_delay_ms: ms, updated_at: new Date().toISOString() })
+                .eq('id', user.id);
+            if (error) throw error;
+        } catch (err) {
+            console.error('Failed to save loading screen delay', err);
+            toast.error('Failed to save loading screen delay');
+            setLoaderDelay(previous);
         } finally {
             setTimeout(() => setSaving(false), 800);
         }
@@ -128,6 +167,53 @@ const LayoutSettings: React.FC = () => {
                     </button>
                 ))}
             </div>
+
+            {/* Only the minimal layout has a boot screen, so this is scoped to it. */}
+            {selected === 'minimal' && (
+                <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="mt-8 glass-card rounded-[2rem] border-white/5 p-6 md:p-8"
+                >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="min-w-0">
+                            <p className="font-bold text-white tracking-tight">Loading screen</p>
+                            <p className="text-white/30 text-xs mt-0.5">
+                                How long visitors see the boot screen before your profile.
+                            </p>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 glass p-1.5 rounded-2xl border-white/5 self-start sm:self-auto shrink-0">
+                            {LOADER_OPTIONS.map((opt) => (
+                                <button
+                                    key={opt.ms}
+                                    onClick={() => handleLoaderDelay(opt.ms)}
+                                    className={`relative px-3 sm:px-4 py-2 cursor-pointer rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors ${loaderDelay === opt.ms
+                                        ? 'text-black'
+                                        : 'text-white/30 hover:text-white/60'
+                                        }`}
+                                >
+                                    <span className="relative z-10">{opt.label}</span>
+                                    {loaderDelay === opt.ms && (
+                                        <motion.div
+                                            layoutId="activeLoaderDelay"
+                                            className="absolute inset-0 bg-white rounded-xl shadow-xl"
+                                            transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
+                                        />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <p className="text-white/20 text-[10px] mt-4 leading-relaxed">
+                        {loaderDelay === 0
+                            ? 'Visitors go straight to your profile.'
+                            : 'Shown once per visit. Visitors can skip it, and it is skipped entirely for anyone who prefers reduced motion.'}
+                    </p>
+                </motion.div>
+            )}
         </section>
     );
 };

@@ -62,4 +62,6 @@ export type UserProfile = {
     is_donor?: boolean;
     cv_url?: string;
     layout?: string;
+    /** Minimal-layout boot screen duration in ms. 0 disables it. */
+    loader_delay_ms?: number | null;
 };
