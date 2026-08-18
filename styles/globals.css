@@ -158,7 +158,7 @@ body {
      `:is(h1, ...)` rule resolves to (0,2,0) and would beat a later
      `.font-profile h1` at (0,1,1). No overlap means no cascade to lose. */
   .font-profile :is(h1, h2, h3, h4, h5) {
-    font-family: var(--profile-display, var(--font-newsreader)), Georgia, ui-serif, serif;
+    font-family: var(--profile-display), Georgia, ui-serif, serif;
   }
 
   .font-profile h1 {
