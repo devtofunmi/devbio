@@ -18,15 +18,29 @@ const FontSettings: React.FC = () => {
     useEffect(() => {
         const fetchFont = async () => {
             if (!user) return;
-            // select('*') rather than naming the column: naming one that does not
-            // exist fails the whole query, which would break this panel on a
-            // database where the migration has not been applied yet.
+            // Explicitly select 'profile_font' to handle cases where the column might be missing.
+            // If 'profile_font' is not present, data.profile_font will be undefined.
             const { data, error } = await supabase
                 .from('profiles')
-                .select('*')
+                .select('profile_font')
                 .eq('id', user.id)
                 .single();
-            if (data && !error && data.profile_font) setSelected(data.profile_font);
+            
+            if (error) {
+                console.error('Error fetching profile font:', error.message);
+                // Optionally, log a warning if the column is expected but missing
+                // if (error.code === '42703' && error.message.includes('column "profile_font" does not exist')) {
+                //     console.warn('Profile font column missing, using default.');
+                // }
+            }
+
+            // Check if data exists and profile_font is explicitly present and not null/undefined
+            if (data && typeof data.profile_font !== 'undefined' && data.profile_font !== null) {
+                setSelected(data.profile_font);
+            } else {
+                // If profile_font is missing or null, ensure we use the default
+                setSelected(DEFAULT_PROFILE_FONT);
+            }
         };
         fetchFont();
     }, [user, supabase]);
@@ -110,7 +124,7 @@ const FontSettings: React.FC = () => {
                             >
                                 {font.name}
                             </p>
-                            <p className="text-white/30 text-xs mt-0.5">{font.description}</p>
+                            <p className="text-white/30 text-xs mt-0.5}>{font.description}</p>
                         </button>
                     );
                 })}
