@@ -23,6 +23,7 @@ create table profiles (
   theme text default 'dark',
   layout text default 'classic', -- Public profile layout: 'classic' | 'minimal'
   loader_delay_ms integer default 0, -- Minimal-layout boot screen duration in ms; 0 = off, opt in from the dashboard
+  profile_font text default 'editorial', -- Public profile typography preset; see lib/profileFonts.ts
   beams_enabled boolean default true,
   is_donor boolean default false,
   cv_url text,
@@ -197,3 +198,10 @@ begin
       check (loader_delay_ms >= 0 and loader_delay_ms <= 8000);
   end if;
 end $$;
+
+-- ---------------------------------------------------------------------------
+-- Migration: profile_font (public profile typography preset)
+-- Safe to run on an existing database.
+-- ---------------------------------------------------------------------------
+alter table profiles
+  add column if not exists profile_font text default 'editorial';

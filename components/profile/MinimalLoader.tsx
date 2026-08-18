@@ -92,7 +92,7 @@ const StatRow: React.FC<{ value: number; label: string; t: number; delay: number
             {label}
         </span>
         <span
-            className="font-serif-display text-2xl md:text-3xl leading-none tabular-nums"
+            className="font-profile-display text-2xl md:text-3xl leading-none tabular-nums"
             style={{ color: "var(--theme-text)" }}
         >
             {String(Math.round(value * t)).padStart(2, "0")}
@@ -312,7 +312,7 @@ const MinimalLoader: React.FC<Props> = ({
                                 </p>
                             )}
                             <p
-                                className="font-serif-display text-2xl mt-1"
+                                className="font-profile-display text-2xl mt-1"
                                 style={{ color: "var(--theme-text)" }}
                             >
                                 {name}

@@ -11,6 +11,7 @@ import MinimalLoader from "../components/profile/MinimalLoader";
 import ClassicProfile from "../components/profile/ClassicProfile";
 import PublicShareModal from "../components/PublicShareModal";
 import { THEME_CONFIG } from "../lib/constants";
+import { getProfileFont, PROFILE_FONTS } from "../lib/profileFonts";
 import { useProfileAnalytics } from "../hooks/useProfileAnalytics";
 import type { UserProfile, ProjectRecord } from "../lib/types";
 
@@ -53,9 +54,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const layoutOverride =
     layoutQuery === 'minimal' || layoutQuery === 'classic' ? layoutQuery : null;
 
+  // Same for typography: /username?font=mono
+  const fontQuery = context.query.font;
+  const fontOverride =
+    typeof fontQuery === 'string' && PROFILE_FONTS.some((f) => f.id === fontQuery)
+      ? fontQuery
+      : null;
+
   return {
     props: {
-      user: layoutOverride ? { ...profile, layout: layoutOverride } : profile,
+      user: {
+        ...profile,
+        ...(layoutOverride ? { layout: layoutOverride } : {}),
+        ...(fontOverride ? { profile_font: fontOverride } : {}),
+      },
       projects: projects || [],
     },
   };
@@ -96,7 +108,11 @@ const ProfilePage: React.FC<Props> = ({ user, projects }) => {
   const bgConfig = themeConfig.bg;
   const isImageBg = bgConfig.startsWith('http');
 
+  const profileFont = getProfileFont(user.profile_font);
+
   const themeStyles = {
+    '--profile-display': profileFont.display,
+    '--profile-body': profileFont.body,
     '--theme-card-bg': themeConfig.card,
     '--theme-border': themeConfig.border,
     '--theme-accent': themeConfig.accent,
