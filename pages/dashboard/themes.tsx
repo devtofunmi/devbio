@@ -2,6 +2,7 @@ import React from 'react';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
 import ThemeSettings from '../../components/dashboard/ThemeSettings';
 import LayoutSettings from '../../components/dashboard/LayoutSettings';
+import FontSettings from '../../components/dashboard/FontSettings';
 
 const ThemesPage: React.FC = () => {
     return (
@@ -15,6 +16,7 @@ const ThemesPage: React.FC = () => {
                     <p className="text-white/40 text-base font-light italic">Customize your profile&apos;s appearance and design.</p>
                 </div>
                 <LayoutSettings />
+                <FontSettings />
                 <ThemeSettings />
             </div>
 
@@ -32,6 +34,7 @@ const ThemesPage: React.FC = () => {
                     {/* Scrollable Content */}
                     <div className="flex-1 overflow-y-auto px-10 pb-10 custom-scrollbar">
                         <LayoutSettings />
+                        <FontSettings />
                         <ThemeSettings />
                     </div>
                 </div>
