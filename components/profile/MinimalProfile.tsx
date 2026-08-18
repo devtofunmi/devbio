@@ -29,7 +29,7 @@ const MinimalProfile: React.FC<Props> = ({ user, projects, recordClick, onShare 
     const hasProjects = projects && projects.length > 0;
 
     return (
-        <main className="font-dm min-h-screen px-6 py-16 md:py-24 selection:bg-[var(--theme-text)] selection:text-[var(--theme-card-bg)]">
+        <main className="font-profile-body min-h-screen px-6 py-16 md:py-24 selection:bg-[var(--theme-text)] selection:text-[var(--theme-card-bg)]">
             <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -51,7 +51,7 @@ const MinimalProfile: React.FC<Props> = ({ user, projects, recordClick, onShare 
                         )}
                     </div>
 
-                    <h1 className="font-serif-display text-[2.6rem] md:text-[3.25rem] leading-[1.05] tracking-[-0.02em] text-[var(--theme-text)] mt-6">
+                    <h1 className="font-profile-display text-[2.6rem] md:text-[3.25rem] leading-[1.05] tracking-[-0.02em] text-[var(--theme-text)] mt-6">
                         {user.full_name}
                     </h1>
 
@@ -104,7 +104,7 @@ const MinimalProfile: React.FC<Props> = ({ user, projects, recordClick, onShare 
                 {/* Tech stack */}
                 {hasTech && (
                     <section className="mb-12">
-                        <h2 className="font-serif-display text-[1.75rem] leading-none text-[var(--theme-text)] pb-4 mb-5 border-b border-[var(--theme-border)]">
+                        <h2 className="font-profile-display text-[1.75rem] leading-none text-[var(--theme-text)] pb-4 mb-5 border-b border-[var(--theme-border)]">
                             Stack
                         </h2>
                         <p className="text-[14px] leading-relaxed text-[var(--theme-text-secondary)]">
@@ -121,7 +121,7 @@ const MinimalProfile: React.FC<Props> = ({ user, projects, recordClick, onShare 
                 {/* Projects */}
                 {hasProjects && (
                     <section className="mt-6 mb-16">
-                        <h2 className="font-serif-display text-[1.75rem] leading-none text-[var(--theme-text)] pb-5 mb-2 border-b border-[var(--theme-border)]">
+                        <h2 className="font-profile-display text-[1.75rem] leading-none text-[var(--theme-text)] pb-5 mb-2 border-b border-[var(--theme-border)]">
                             Projects
                         </h2>
                         <ul>
@@ -141,7 +141,7 @@ const MinimalProfile: React.FC<Props> = ({ user, projects, recordClick, onShare 
                                                 : {})}
                                             className="group block"
                                         >
-                                            <h3 className="font-serif-display text-[17px] leading-snug text-[var(--theme-text)] transition-opacity group-hover:opacity-70">
+                                            <h3 className="font-profile-display text-[17px] leading-snug text-[var(--theme-text)] transition-opacity group-hover:opacity-70">
                                                 {project.title}
                                             </h3>
                                             {domain && (
