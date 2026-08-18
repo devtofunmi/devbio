@@ -64,4 +64,6 @@ export type UserProfile = {
     layout?: string;
     /** Minimal-layout boot screen duration in ms. 0 disables it. */
     loader_delay_ms?: number | null;
+    /** Public profile typography preset id. See lib/profileFonts.ts. */
+    profile_font?: string | null;
 };
