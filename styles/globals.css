@@ -31,6 +31,40 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Minimal-layout custom scrollbar. Structure mirrors the reference build:
+   a fixed full-viewport SVG, a chevron arrow plus one <line> per dot, and hit
+   rects whose interactivity swaps with the state. Zero-length lines with round
+   caps are what render as dots. */
+.minimal-scrollbar {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  pointer-events: none;
+  color: var(--scrollbar-dot, var(--theme-text-secondary, #a6a6a6));
+}
+
+.minimal-scrollbar line {
+  stroke: currentColor;
+  stroke-width: var(--scrollbar-stroke, 4);
+  stroke-linecap: round;
+  transition: stroke 0.25s;
+}
+
+.minimal-scrollbar .hit-area,
+.minimal-scrollbar .arrow-hit {
+  fill: none;
+  pointer-events: none;
+}
+
+/* Only the arrow is clickable at rest; only the dots are once tracking. */
+.minimal-scrollbar[data-state='idle'] .arrow-hit,
+.minimal-scrollbar[data-state='tracking'] .hit-area {
+  pointer-events: all;
+  cursor: pointer;
+}
+
 /* Failsafe for the minimal-layout boot screen. The overlay is server-rendered
    so the profile never flashes first, which means only JS removes it — a
    hydration failure would hide the portfolio for good. This clears it without
