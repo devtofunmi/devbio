@@ -5,6 +5,7 @@ import { FaUser } from "react-icons/fa";
 import { FiArrowUpRight } from "react-icons/fi";
 import { SOCIAL_BASE_URLS } from "../../lib/constants";
 import { ensureAbsoluteUrl, formatSocialHref } from "../../lib/utils";
+import MinimalScrollbar from "./MinimalScrollbar";
 import type { UserProfile, ProjectRecord } from "../../lib/types";
 
 type Props = {
@@ -30,6 +31,7 @@ const MinimalProfile: React.FC<Props> = ({ user, projects, recordClick, onShare 
 
     return (
         <main className="font-profile-body min-h-screen px-6 py-16 md:py-24 selection:bg-[var(--theme-text)] selection:text-[var(--theme-card-bg)]">
+            <MinimalScrollbar />
             <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
