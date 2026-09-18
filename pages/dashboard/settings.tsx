@@ -1,6 +1,7 @@
 import React from 'react';
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
 import AccountSettings from '../../components/dashboard/AccountSettings';
+import DomainSettings from '../../components/dashboard/DomainSettings';
 import { motion } from 'framer-motion';
 
 const SettingsPage: React.FC = () => {
@@ -20,6 +21,7 @@ const SettingsPage: React.FC = () => {
           transition={{ duration: 0.4, ease: "easeOut" }}
         >
           <AccountSettings />
+          <DomainSettings />
         </motion.div>
       </div>
 
@@ -42,6 +44,7 @@ const SettingsPage: React.FC = () => {
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
               <AccountSettings />
+              <DomainSettings />
             </motion.div>
           </div>
         </div>
