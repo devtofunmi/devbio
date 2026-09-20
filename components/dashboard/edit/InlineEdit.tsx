@@ -63,16 +63,7 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onSave, as = 'input', cl
       value: currentValue,
       onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setCurrentValue(e.target.value),
       onBlur: (e: React.FocusEvent) => {
-        // handleSave(); // Removing auto-save on blur to rely on buttons? 
-        // User said "user wont know they have to on focus field".
-        // If I remove blur save, they MUST click save.
-        // But usually click outside expects save.
-        // I'll keep save on blur, but buttons make it explicit.
-        // BUT check buttons are inside.
-        // If I click Save button, blur fires for input?
-        // By using onMouseDown on button with preventDefault, blur doesn't fire immediately?
-        // Actually, if I keep save on blur, clicking outside saves. That is good behavior.
-        // The buttons are just visual affordance.
+        // Clicking outside saves; the buttons are an explicit affordance for it.
         handleSave();
       },
       onKeyDown: (e: React.KeyboardEvent) => {
