@@ -12,10 +12,6 @@ import { getProfileFont } from "../../lib/profileFonts";
 import { useProfileAnalytics } from "../../hooks/useProfileAnalytics";
 import type { ProfilePageProps } from "../../lib/profileData";
 
-/**
- * The public profile itself, shared by both routes that can render one:
- * devbio.co/<username> and a verified custom domain.
- */
 const ProfileView: React.FC<ProfilePageProps> = ({ user, projects, host }) => {
     const [shareModalOpen, setShareModalOpen] = useState(false);
     const { recordClick } = useProfileAnalytics(user?.id);
@@ -60,16 +56,12 @@ const ProfileView: React.FC<ProfilePageProps> = ({ user, projects, host }) => {
 
     const profileFont = getProfileFont(user.profile_font);
 
-    /**
-     * Canonical points at the owner's verified domain when they have one, even
-     * while the page is being served from devbio.co, so the two URLs are not
-     * competing for the same content and the credit lands on their domain.
-     */
+    // Canonical points at the verified domain even when served from devbio.co,
+    // so the two URLs are not competing and the credit lands on their domain.
     const canonicalUrl = user.custom_domain && user.custom_domain_verified
         ? `https://${user.custom_domain}`
         : `https://devbio.co/${user.username}`;
-    // og:url describes the page actually being viewed, so shares carry the
-    // host the visitor arrived on.
+    // og:url describes the page actually being viewed.
     const servedUrl = host ? `https://${host}${host.includes('devbio.co') ? `/${user.username}` : ''}` : canonicalUrl;
 
     const themeStyles = {
