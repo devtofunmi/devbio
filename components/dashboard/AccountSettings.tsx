@@ -96,11 +96,11 @@ const AccountSettings = () => {
 
             if (profileError) throw profileError;
             await signOut();
-            toast.success("Identity scrubbed from the matrix.");
+            toast.success("Your account has been deleted.");
             router.push('/');
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : "Unknown error";
-            toast.error("Scrub operation failed: " + message);
+            toast.error("Couldn't delete your account: " + message);
             setIsDeleting(false);
         }
     };
@@ -201,7 +201,7 @@ const AccountSettings = () => {
                 </div>
             </div>
 
-            {/* Danger Zone */}
+            {/* Delete account */}
             <div className="glass-card rounded-[3rem] p-10 border-red-500/10 relative overflow-hidden group">
                 <div className="flex flex-col md:flex-row items-center gap-10">
                     <div className="w-24 h-24 bg-red-500/10 rounded-[2rem] flex items-center justify-center text-red-500 animate-pulse">
@@ -209,9 +209,9 @@ const AccountSettings = () => {
                     </div>
 
                     <div className="flex-1 text-center md:text-left">
-                        <h3 className="text-2xl font-black text-red-500 tracking-tighter mb-2">Danger Zone</h3>
+                        <h3 className="text-2xl font-black text-red-500 tracking-tighter mb-2">Delete Account</h3>
                         <p className="text-red-500/40 text-sm font-medium leading-relaxed max-w-sm">
-                            Deleting your account is permanent. All your engineering profiles, stats, and links will be scrubbed from the matrix.
+                            This cannot be undone. Your profile, projects, links and stats will be permanently deleted.
                         </p>
                     </div>
 
@@ -219,7 +219,7 @@ const AccountSettings = () => {
                         onClick={() => setShowDeleteModal(true)}
                         className="px-10 py-5 bg-red-500 text-white font-black rounded-2xl hover:bg-red-600 transition-all cursor-pointer shadow-xl shadow-red-500/10"
                     >
-                        Delete Identity
+                        Delete Account
                     </button>
                 </div>
             </div>
@@ -229,6 +229,7 @@ const AccountSettings = () => {
                 onClose={() => setShowDeleteModal(false)}
                 onConfirm={handleDeleteConfirm}
                 isDeleting={isDeleting}
+                username={username}
             />
         </section>
     )
