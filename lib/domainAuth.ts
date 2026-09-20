@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 import type { User } from "@supabase/supabase-js";
 
-/** The signed-in user for a domains API call, or null. */
 export async function getSessionUser(
     ctx: { req: NextApiRequest; res: NextApiResponse }
 ): Promise<User | null> {
@@ -16,10 +15,7 @@ export async function getSessionUser(
 // Matches example.com, blog.example.com, my-site.co.uk. No protocol, no path.
 const DOMAIN_RE = /^(?!-)[a-z0-9-]{1,63}(?<!-)(\.(?!-)[a-z0-9-]{1,63}(?<!-))+$/;
 
-/**
- * Hosts that would hijack the app itself if someone registered them, plus the
- * obvious junk. Rejected before we ever call Vercel.
- */
+// Hosts that would hijack the app itself. Rejected before calling Vercel.
 const BLOCKED = new Set([
     "devbio.co",
     "www.devbio.co",
@@ -38,7 +34,6 @@ export function normaliseDomain(raw: unknown): string {
         .replace(/\.$/, "");
 }
 
-/** Returns an error message, or null when the domain is acceptable. */
 export function validateDomain(domain: string): string | null {
     if (!domain) return "Domain is required";
     if (domain.length > 253) return "That domain is too long";
