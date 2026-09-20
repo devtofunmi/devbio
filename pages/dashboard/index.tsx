@@ -47,7 +47,6 @@ const DashboardPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
 
-  // Data States
 
   const [name, setName] = useState("");
   const [profession, setProfession] = useState("");
@@ -70,11 +69,9 @@ const DashboardPage: React.FC = () => {
   const [cvUrl, setCvUrl] = useState("");
 
 
-  // Loading State
   const [fetching, setFetching] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Content States
   const [projects, setProjects] = useState<Project[]>([]);
   const [techStack, setTechStack] = useState<Tech[]>([]);
   const [socials, setSocials] = useState([
@@ -84,7 +81,6 @@ const DashboardPage: React.FC = () => {
     { name: 'YouTube', icon: <FaYoutube />, href: '' },
   ]);
 
-  // Modal States
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | undefined>(undefined);
   const [openMenuIndex, setOpenMenuIndex] = useState<number | null>(null);
@@ -103,7 +99,6 @@ const DashboardPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Handle window resize for confetti
     const handleResize = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
@@ -120,18 +115,15 @@ const DashboardPage: React.FC = () => {
       setShowWelcomeModal(true);
       localStorage.setItem('hasCelebrated', 'true');
 
-      // Clean up the URL
       const newPath = router.pathname;
       router.replace(newPath, undefined, { shallow: true });
 
-      // Stop confetti after 5 seconds
       const timer = setTimeout(() => setShowConfetti(false), 5000);
       return () => {
         window.removeEventListener('resize', handleResize);
         clearTimeout(timer);
       };
     } else if (router.query.welcome === 'true' && hasCelebrated) {
-      // Just clean the URL if they already celebrated
       const newPath = router.pathname;
       router.replace(newPath, undefined, { shallow: true });
     }
@@ -231,7 +223,6 @@ const DashboardPage: React.FC = () => {
     };
   }, [user, supabase]);
 
-  // Add another useEffect to apply theme when `theme` state changes (from fetch or event)
   useEffect(() => {
     if (theme) {
       const config = THEME_CONFIG[theme] || THEME_CONFIG['onyx'];
@@ -315,13 +306,11 @@ const DashboardPage: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
-    // Check file type (PDF only for CVs)
     if (file.type !== 'application/pdf') {
       toast.error('Please upload a PDF file for your CV.');
       return;
     }
 
-    // Check file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('File size must be less than 5MB.');
       return;
@@ -364,7 +353,6 @@ const DashboardPage: React.FC = () => {
     }
   };
 
-  // Show skeleton instead of full-page spinner
   const isLight = false;
 
   const themeConfig = THEME_CONFIG[theme] || THEME_CONFIG['onyx'];
