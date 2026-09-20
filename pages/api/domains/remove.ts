@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { supabaseAdmin } from "../../../lib/supabaseAdmin";
 import { getSessionUser } from "../../../lib/domainAuth";
-import { removeDomain, VercelError, vercelConfigured } from "../../../lib/vercelDomains";
+import { removeDomain, vercelConfigured } from "../../../lib/vercelDomains";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "DELETE") {
@@ -19,14 +19,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .single();
 
     if (!profile?.custom_domain) return res.status(200).json({ removed: null });
+    const domain = profile.custom_domain as string;
 
+    // The database is cleared FIRST, on purpose. These two writes cannot be made
+    // atomic, so the order decides which half-finished state a crash leaves behind:
+    //
+    //   db first     -> worst case is a domain still attached to Vercel that no
+    //                   profile claims. Harmless, and removable from the dashboard.
+    //   vercel first -> worst case is a profile claiming a domain Vercel no longer
+    //                   serves: the dashboard says Live while the site is dead.
+    //
+    // The second is what actually happened once, when a crash landed between the
+    // two calls.
     try {
-        if (vercelConfigured) {
-            await removeDomain(profile.custom_domain);
-        }
-
-        // Cleared even if Vercel was unreachable: an orphaned Vercel domain is
-        // recoverable, a profile stuck owning a domain it cannot detach is not.
         const { error } = await supabaseAdmin
             .from("profiles")
             .update({
@@ -37,13 +42,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             })
             .eq("id", user.id);
         if (error) throw error;
-
-        return res.status(200).json({ removed: profile.custom_domain });
     } catch (err) {
-        if (err instanceof VercelError) {
-            return res.status(err.status >= 500 ? 502 : 400).json({ error: err.message });
-        }
-        console.error("[domains/remove] error:", err);
+        console.error("[domains/remove] failed to clear profile:", err);
         return res.status(500).json({ error: "Failed to remove domain" });
     }
+
+    // Detaching from Vercel is best effort. The user is already unblocked and can
+    // claim a different domain; a failure here only leaves something for the owner
+    // to tidy, so it is logged rather than surfaced as an error.
+    if (vercelConfigured) {
+        try {
+            await removeDomain(domain);
+        } catch (err) {
+            console.error(
+                `[domains/remove] orphaned on Vercel, detach manually: ${domain}`,
+                err
+            );
+        }
+    }
+
+    return res.status(200).json({ removed: domain });
 }
