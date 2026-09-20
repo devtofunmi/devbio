@@ -7,12 +7,8 @@
  * Required env:
  *   VERCEL_TOKEN       personal or team access token
  *   VERCEL_PROJECT_ID  the project domains are attached to
- *   VERCEL_TEAM_ID     optional, only when the project lives under a team.
- *                      Verified unnecessary here: the project resolves without
- *                      it on the devtofunmis-projects scope.
- *   VERCEL_DOMAIN_LIMIT  optional, domains Vercel allows on the project.
- *                      Defaults to the Hobby ceiling of 50; raise it after
- *                      upgrading to Pro, where the limit is effectively gone.
+ *   VERCEL_TEAM_ID       optional, only when the project lives under a team
+ *   VERCEL_DOMAIN_LIMIT  optional, defaults to the Hobby ceiling of 50
  */
 
 const API = "https://api.vercel.com";
@@ -36,7 +32,6 @@ export type DomainStatus = {
     verified: boolean;
     /** DNS actually resolves to Vercel, so the domain serves traffic. */
     configured: boolean;
-    /** Records the owner still needs to add, ready to display. */
     records: DnsRecord[];
     /** Vercel's own explanation when something is wrong, for the UI to surface. */
     reason: string | null;
@@ -112,11 +107,7 @@ export const isApex = (domain: string) => {
     return parts.length <= apexLabelCount(parts);
 };
 
-/**
- * Builds the records to show the owner from Vercel's own response, so the
- * project-specific CNAME target and current apex IPs are always correct rather
- * than hardcoded.
- */
+// Built from Vercel's response so the values are never stale.
 function recordsFor(
     domain: string,
     config: DomainConfigResponse,
@@ -153,12 +144,6 @@ function recordsFor(
     return { records, routable };
 }
 
-/**
- * Hobby allows 50 domains per project and Vercel rejects the 51st with a raw
- * API error. Reading the current list lets us fail with something a user can
- * understand, and tells us whether a domain is already attached so re-adding
- * one does not count against the ceiling.
- */
 // parseInt rather than Number: a trailing inline comment in .env would make
 // Number() return NaN, and `count >= NaN` is always false, silently disabling
 // the guard. Anything unparseable or non-positive falls back to the Hobby cap.
@@ -184,7 +169,6 @@ export async function listProjectDomains(): Promise<ProjectDomains> {
     };
 }
 
-/** Attach a domain to the project. Safe to call for one already attached. */
 export async function addDomain(domain: string): Promise<AddDomainResponse> {
     return call<AddDomainResponse>(`/v10/projects/${PROJECT_ID}/domains`, {
         method: "POST",
@@ -204,7 +188,6 @@ export async function removeDomain(domain: string): Promise<void> {
     }
 }
 
-/** Current state plus the records still needed, in one call pair. */
 export async function getDomainStatus(domain: string): Promise<DomainStatus> {
     const [projectDomain, config] = await Promise.all([
         call<ProjectDomainResponse>(
