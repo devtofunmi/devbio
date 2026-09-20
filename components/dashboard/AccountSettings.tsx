@@ -99,7 +99,7 @@ const AccountSettings = () => {
             toast.success("Your account has been deleted.");
             router.push('/');
         } catch (error: unknown) {
-            const message = error instanceof Error ? error.message : "Unknown error";
+            const message = error instanceof Error ? error.message : String(error);
             toast.error("Couldn't delete your account: " + message);
             setIsDeleting(false);
         }
