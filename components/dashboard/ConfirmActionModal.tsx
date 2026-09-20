@@ -45,7 +45,6 @@ const ConfirmActionModal: React.FC<Props> = ({
 
     // Hold the page still behind the overlay.
     useEffect(() => {
-        if (!isOpen) return;
         const previous = document.body.style.overflow;
         document.body.style.overflow = "hidden";
         return () => {
@@ -64,7 +63,7 @@ const ConfirmActionModal: React.FC<Props> = ({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={busy ? undefined : onClose}
-                        className="fixed inset-0 bg-black/90 backdrop-blur-2xl flex justify-center items-center p-4 z-[110]"
+                        className="fixed inset-0 bg-black/90 backdrop-blur-2xl flex justify-center items-center p-4 z-modal-backdrop"
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
