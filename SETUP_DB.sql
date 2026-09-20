@@ -24,6 +24,9 @@ create table profiles (
   layout text default 'classic', -- Public profile layout: 'classic' | 'minimal'
   loader_delay_ms integer default 0, -- Minimal-layout boot screen duration in ms; 0 = off, opt in from the dashboard
   profile_font text default 'editorial', -- Public profile typography preset; see lib/profileFonts.ts
+  custom_domain text unique, -- Owner's own domain, e.g. jay.dev. Null until claimed.
+  custom_domain_verified boolean default false, -- True once Vercel confirms DNS
+  custom_domain_added_at timestamptz, -- Used to expire unclaimed, unverified domains
   beams_enabled boolean default true,
   is_donor boolean default false,
   cv_url text,
@@ -205,3 +208,53 @@ end $$;
 -- ---------------------------------------------------------------------------
 alter table profiles
   add column if not exists profile_font text default 'editorial';
+
+-- ---------------------------------------------------------------------------
+-- Migration: custom domains
+-- Safe to run on an existing database; every statement is idempotent.
+-- ---------------------------------------------------------------------------
+alter table profiles
+  add column if not exists custom_domain text,
+  add column if not exists custom_domain_verified boolean default false,
+  add column if not exists custom_domain_added_at timestamptz;
+
+-- One profile per domain. Partial so the many null rows do not collide.
+create unique index if not exists profiles_custom_domain_idx
+  on profiles (custom_domain)
+  where custom_domain is not null;
+
+-- Resolving a request by Host hits this on every custom-domain page view.
+create index if not exists profiles_custom_domain_verified_idx
+  on profiles (custom_domain)
+  where custom_domain is not null and custom_domain_verified;
+
+-- ---------------------------------------------------------------------------
+-- The "users can update own profile" policy is row-level, so without this a
+-- client could PATCH custom_domain straight through PostgREST: claiming a
+-- domain they do not own, blocking the real owner, and skipping registration
+-- with Vercel entirely. These columns are writable only by the service role,
+-- which is what the /api/domains/* routes use.
+-- ---------------------------------------------------------------------------
+create or replace function public.guard_custom_domain_columns()
+returns trigger as $$
+begin
+  -- auth.role() is 'service_role' for the server key, 'authenticated' for users.
+  if coalesce(auth.role(), '') = 'service_role' then
+    return new;
+  end if;
+
+  if new.custom_domain is distinct from old.custom_domain
+     or new.custom_domain_verified is distinct from old.custom_domain_verified
+     or new.custom_domain_added_at is distinct from old.custom_domain_added_at then
+    raise exception 'custom domain columns are managed by the server'
+      using errcode = 'insufficient_privilege';
+  end if;
+
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists guard_custom_domain_columns on profiles;
+create trigger guard_custom_domain_columns
+  before update on profiles
+  for each row execute function public.guard_custom_domain_columns();
