@@ -318,7 +318,7 @@ const DomainSettings: React.FC = () => {
                                         <a
                                             href={`https://${domain}`}
                                             target="_blank"
-                                            rel="noreferrer"
+                                            rel="noopener noreferrer"
                                             className="shrink-0 inline-flex items-center gap-2 px-5 py-3 glass rounded-xl border-white/10 text-white/70 hover:text-white hover:border-white/30 text-xs font-black uppercase tracking-widest transition-all"
                                         >
                                             Visit <FiExternalLink size={13} />
