@@ -19,7 +19,11 @@ type Props = {
     onClose: () => void;
 };
 
-const CopyField: React.FC<{ label: string; value: string }> = ({ label, value }) => {
+const CopyField: React.FC<{ label: string; value: string; truncate?: boolean }> = ({
+    label,
+    value,
+    truncate = true,
+}) => {
     const [copied, setCopied] = useState(false);
     const copy = async () => {
         try {
@@ -41,7 +45,11 @@ const CopyField: React.FC<{ label: string; value: string }> = ({ label, value })
                 title={`Copy ${label.toLowerCase()}`}
                 className="group w-full flex items-center gap-2 glass rounded-xl border-white/5 px-3 py-3 text-left hover:border-white/20 transition-colors cursor-pointer"
             >
-                <span className="font-mono text-xs text-white truncate flex-1">{value}</span>
+                <span
+                    className={`font-mono text-xs text-white flex-1 ${truncate ? "truncate" : ""}`}
+                >
+                    {value}
+                </span>
                 {copied ? (
                     <FiCheck size={13} className="text-emerald-400 shrink-0" />
                 ) : (
@@ -115,9 +123,9 @@ const DomainDnsModal: React.FC<Props> = ({
                         {records.map((r, i) => (
                             <div
                                 key={i}
-                                className="grid grid-cols-2 sm:grid-cols-[76px_1fr] gap-3 sm:gap-4"
+                                className="grid grid-cols-2 sm:grid-cols-[116px_1fr] gap-3 sm:gap-4"
                             >
-                                <CopyField label="Type" value={r.type} />
+                                <CopyField label="Type" value={r.type} truncate={false} />
                                 <CopyField label="Name" value={r.name} />
                                 <div className="col-span-2">
                                     <CopyField label="Value" value={r.value} />
