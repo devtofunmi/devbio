@@ -66,4 +66,9 @@ export type UserProfile = {
     loader_delay_ms?: number | null;
     /** Public profile typography preset id. See lib/profileFonts.ts. */
     profile_font?: string | null;
+    /** Owner's own domain, e.g. jay.dev. Null until claimed. */
+    custom_domain?: string | null;
+    /** True once Vercel confirms the DNS records resolve. */
+    custom_domain_verified?: boolean | null;
+    custom_domain_added_at?: string | null;
 };
