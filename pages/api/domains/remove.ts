@@ -3,7 +3,6 @@ import { supabaseAdmin } from "../../../lib/supabaseAdmin";
 import { getSessionUser } from "../../../lib/domainAuth";
 import { removeDomain, VercelError, vercelConfigured } from "../../../lib/vercelDomains";
 
-/** Release the caller's domain, from Vercel and from their profile. */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "DELETE") {
         res.setHeader("Allow", "DELETE");
@@ -26,9 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             await removeDomain(profile.custom_domain);
         }
 
-        // Clear the row even if Vercel was unreachable, so the user is never
-        // stuck owning a domain they cannot detach. An orphaned Vercel domain
-        // is recoverable; a permanently stuck profile row is not.
+        // Cleared even if Vercel was unreachable: an orphaned Vercel domain is
+        // recoverable, a profile stuck owning a domain it cannot detach is not.
         const { error } = await supabaseAdmin
             .from("profiles")
             .update({
