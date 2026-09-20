@@ -57,6 +57,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         await addDomain(domain);
+
+        // Warn before the wall, not at it. Hobby allows 50 per project, and the
+        // owner otherwise finds out only when a user cannot add one.
+        const used = names.length + 1;
+        if (used >= DOMAIN_LIMIT * 0.8) {
+            console.warn(
+                `[domains/add] capacity ${used}/${DOMAIN_LIMIT} - raise VERCEL_DOMAIN_LIMIT after upgrading, or gate the feature`
+            );
+        }
+
         const status = await getDomainStatus(domain);
 
         const { error } = await supabaseAdmin
