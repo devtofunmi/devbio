@@ -10,20 +10,14 @@ import {
     vercelConfigured,
 } from "../../../lib/vercelDomains";
 
-/**
- * Claim a custom domain for the signed-in user's profile.
- *
- * The row is written with the service role because custom_domain columns are
- * blocked for normal clients by a trigger — otherwise anyone could PATCH a
- * domain they do not own straight through PostgREST.
- */
+// Written with the service role: the custom_domain columns are blocked for
+// normal clients by a trigger, so nobody can claim a domain they do not own.
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
         res.setHeader("Allow", "POST");
         return res.status(405).json({ error: "Method not allowed" });
     }
-    // Auth before anything else, so an anonymous caller learns nothing about
-    // how the integration is configured.
+    // Auth first, so an anonymous caller learns nothing about the setup.
     const user = await getSessionUser({ req, res });
     if (!user) return res.status(401).json({ error: "Not signed in" });
 
@@ -36,8 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (invalid) return res.status(400).json({ error: invalid });
 
     try {
-        // Taken by someone else? The unique index would catch it, but checking
-        // first avoids registering a domain with Vercel we cannot store.
+        // The unique index would catch this, but checking first avoids
+        // registering a domain with Vercel that we cannot then store.
         const { data: existing } = await supabaseAdmin
             .from("profiles")
             .select("id")
@@ -48,9 +42,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(409).json({ error: "That domain is already in use" });
         }
 
-        // Vercel caps domains per project (50 on Hobby) and rejects the next
-        // one with a raw API error. Check first so the user gets a sentence
-        // they can act on, and so the owner sees it in the logs.
+        // Vercel rejects the 51st domain with a raw API error, so fail with
+        // something the user can act on instead.
         const { names, truncated } = await listProjectDomains();
         const alreadyAttached = names.includes(domain);
         if (!alreadyAttached && (truncated || names.length >= DOMAIN_LIMIT)) {
@@ -80,8 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(200).json(status);
     } catch (err) {
         if (err instanceof VercelError) {
-            // A domain already attached to another Vercel account comes back as
-            // a conflict; surface Vercel's wording, it is more specific than ours.
+            // Vercel's wording for a conflict is more specific than ours.
             const status = err.status === 409 ? 409 : err.status >= 500 ? 502 : 400;
             return res.status(status).json({ error: err.message, code: err.code });
         }
