@@ -90,7 +90,7 @@ const ProfileView: React.FC<ProfilePageProps> = ({ user, projects, host }) => {
             style={themeStyles}
         >
             <Head>
-                <title>{user.full_name} | DevBio</title>
+                <title>{`${user.full_name} | DevBio`}</title>
                 <meta name="description" content={user.bio || `Check out ${user.full_name}'s developer portfolio on DevBio.`} />
                 <link rel="canonical" href={canonicalUrl} />
 
