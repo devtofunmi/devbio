@@ -3,11 +3,7 @@ import { supabase } from "./supabaseClient";
 import { PROFILE_FONTS } from "./profileFonts";
 import type { UserProfile, ProjectRecord } from "./types";
 
-/**
- * Shared loader for the two routes that render a public profile:
- * pages/[profile].tsx by username, and pages/site/[host].tsx by custom domain.
- * Keeping it here stops the two drifting apart.
- */
+// Shared by both routes that render a public profile, so they cannot drift.
 
 export type ProfilePageProps = {
     user: UserProfile | null;
@@ -23,7 +19,6 @@ const SITE_HOST = (process.env.NEXT_PUBLIC_SITE_URL || "https://devbio.co")
     .replace(/^https?:\/\//, "")
     .replace(/\/.*$/, "");
 
-/** Strips the port and lowercases, so "Jay.dev:3000" becomes "jay.dev". */
 export const normaliseHost = (raw?: string | null) =>
     (raw || "").split(":")[0].trim().toLowerCase();
 
@@ -37,11 +32,7 @@ async function loadProjects(userId: string) {
     return (data || []) as ProjectRecord[];
 }
 
-/**
- * ?layout= and ?font= let the dashboard preview a look without saving it.
- * Both are validated against the known sets so a query value can never reach
- * the rendered CSS unchecked.
- */
+// Validated against the known sets so a query value never reaches the CSS.
 function applyPreviewOverrides(profile: UserProfile, context: GetServerSidePropsContext) {
     const layoutQuery = context.query.layout;
     const layout =
@@ -62,7 +53,6 @@ function applyPreviewOverrides(profile: UserProfile, context: GetServerSideProps
 
 const empty = (host: string): ProfilePageProps => ({ user: null, projects: [], host });
 
-/** Resolve by devbio.co/<username>. */
 export async function getProfileByUsername(
     context: GetServerSidePropsContext
 ): Promise<ProfilePageProps> {
@@ -88,11 +78,8 @@ export async function getProfileByUsername(
     };
 }
 
-/**
- * Resolve by the Host header, for a profile served from the owner's own domain.
- * Only verified domains resolve: an unverified row is a claim, not a live site,
- * so serving it would let anyone squat a domain and have it work.
- */
+// Only verified domains resolve: an unverified row is a claim, not a live
+// site, so serving it would let anyone squat a domain and have it work.
 export async function getProfileByDomain(
     context: GetServerSidePropsContext
 ): Promise<ProfilePageProps> {
