@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     FiGlobe,
@@ -7,23 +7,32 @@ import {
     FiTrash2,
     FiExternalLink,
     FiSettings,
+    FiAlertCircle,
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import DomainDnsModal, { DnsRecord } from "./DomainDnsModal";
 
 /**
- * Custom domain panel — UI ONLY, backed by local mock state.
+ * Custom domain panel, wired to /api/domains/*.
  *
- * Nothing here touches Supabase or the Vercel API yet. The DNS records shown
- * are plausible placeholders; the real values are project-specific and must be
- * read from Vercel per domain. Verification is faked: the first check reports
- * "not propagated" so the pending state can actually be seen, the second
- * succeeds.
+ * The DNS records rendered here come from Vercel via the API rather than being
+ * computed client-side: the CNAME target is project-specific and the apex IP
+ * can change, so anything hardcoded would eventually be wrong.
  */
 
-type Status = "empty" | "pending" | "verified";
+type Status = "loading" | "unavailable" | "empty" | "pending" | "verified";
 
-// Matches example.com, blog.example.com, my-site.co.uk. No protocol, no path.
+type DomainPayload = {
+    domain: string | null;
+    verified?: boolean;
+    configured?: boolean;
+    records?: DnsRecord[];
+    reason?: string | null;
+    available?: boolean;
+    error?: string;
+};
+
+// Cheap client-side check for instant feedback. The server validates again.
 const DOMAIN_RE = /^(?!-)[a-z0-9-]{1,63}(?<!-)(\.(?!-)[a-z0-9-]{1,63}(?<!-))+$/;
 
 const normalise = (raw: string) =>
@@ -34,50 +43,52 @@ const normalise = (raw: string) =>
         .replace(/\/.*$/, "")
         .replace(/\.$/, "");
 
-/**
- * How many trailing labels make up the registrable domain: two normally, three
- * for two-part TLDs like co.uk. Good enough for display; the real split would
- * want the public suffix list.
- */
-const apexLabelCount = (parts: string[]) =>
-    parts.length >= 3 && /^(co|com|org|net|ac|gov)$/.test(parts[parts.length - 2]) ? 3 : 2;
-
-const isApex = (domain: string) => {
-    const parts = domain.split(".");
-    return parts.length <= apexLabelCount(parts);
-};
-
-/**
- * Placeholder records. The real apex IP and the project-specific CNAME target
- * both come from Vercel's API at registration time.
- */
-const mockRecords = (domain: string): DnsRecord[] => {
-    if (isApex(domain)) {
-        return [{ type: "A", name: "@", value: "76.76.21.21" }];
-    }
-    const parts = domain.split(".");
-    // Everything to the left of the registrable domain, so a.b.example.com
-    // yields "a.b" rather than just "a".
-    const name = parts.slice(0, parts.length - apexLabelCount(parts)).join(".");
-    return [
-        {
-            type: "CNAME",
-            name: name || "@",
-            value: "d1d4fc829fe7bc7c.vercel-dns-017.com",
-        },
-    ];
-};
-
 const DomainSettings: React.FC = () => {
-    const [status, setStatus] = useState<Status>("empty");
+    const [status, setStatus] = useState<Status>("loading");
     const [input, setInput] = useState("");
     const [domain, setDomain] = useState("");
+    const [records, setRecords] = useState<DnsRecord[]>([]);
+    const [reason, setReason] = useState<string | null>(null);
     const [busy, setBusy] = useState(false);
-    const [checks, setChecks] = useState(0);
     const [dnsOpen, setDnsOpen] = useState(false);
     const [confirmRemove, setConfirmRemove] = useState(false);
 
-    const records = useMemo(() => (domain ? mockRecords(domain) : []), [domain]);
+    /** Fold an API payload into local state. */
+    const apply = useCallback((data: DomainPayload) => {
+        if (!data.domain) {
+            setDomain("");
+            setRecords([]);
+            setReason(null);
+            setStatus(data.available === false ? "unavailable" : "empty");
+            return;
+        }
+        setDomain(data.domain);
+        setRecords(data.records || []);
+        setReason(data.reason ?? null);
+        // Live means Vercel both owns the domain and sees DNS pointing at it.
+        setStatus(data.verified && data.configured ? "verified" : "pending");
+    }, []);
+
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const res = await fetch("/api/domains/status");
+                const data: DomainPayload = await res.json();
+                if (cancelled) return;
+                if (!res.ok) {
+                    setStatus(res.status === 503 ? "unavailable" : "empty");
+                    return;
+                }
+                apply(data);
+            } catch {
+                if (!cancelled) setStatus("empty");
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [apply]);
 
     const handleAdd = async () => {
         const candidate = normalise(input);
@@ -85,48 +96,69 @@ const DomainSettings: React.FC = () => {
             toast.error("That doesn't look like a valid domain");
             return;
         }
-        if (candidate.startsWith("www.")) {
-            toast.info("Add the root domain; www is configured for you");
-            return;
-        }
         setBusy(true);
-        // Stand-in for POST /api/domains/add
-        await new Promise((r) => setTimeout(r, 700));
-        setDomain(candidate);
-        setStatus("pending");
-        setChecks(0);
-        setBusy(false);
-        // Straight into the DNS instructions, which is the next thing to do.
-        setDnsOpen(true);
+        try {
+            const res = await fetch("/api/domains/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ domain: candidate }),
+            });
+            const data: DomainPayload = await res.json();
+            if (!res.ok) {
+                toast.error(data.error || "Couldn't add that domain");
+                return;
+            }
+            apply(data);
+            // Straight into the DNS instructions, which is the next thing to do.
+            setDnsOpen(true);
+        } catch {
+            toast.error("Network error. Try again.");
+        } finally {
+            setBusy(false);
+        }
     };
 
     const handleCheck = async () => {
         setBusy(true);
-        // Stand-in for GET /api/domains/status
-        await new Promise((r) => setTimeout(r, 1100));
-        const next = checks + 1;
-        setChecks(next);
-        setBusy(false);
-        // First check fails on purpose so the pending state is reachable.
-        if (next >= 2) {
-            setStatus("verified");
-            setDnsOpen(false);
-            toast.success("Domain verified");
+        try {
+            const res = await fetch("/api/domains/status");
+            const data: DomainPayload = await res.json();
+            if (!res.ok) {
+                toast.error(data.error || "Couldn't check that domain");
+                return;
+            }
+            const live = Boolean(data.verified && data.configured);
+            apply(data);
+            if (live) {
+                setDnsOpen(false);
+                toast.success("Domain verified");
+            }
+        } catch {
+            toast.error("Network error. Try again.");
+        } finally {
+            setBusy(false);
         }
     };
 
     const handleRemove = async () => {
         setBusy(true);
-        // Stand-in for DELETE /api/domains/remove
-        await new Promise((r) => setTimeout(r, 600));
-        setStatus("empty");
-        setDomain("");
-        setInput("");
-        setChecks(0);
-        setDnsOpen(false);
-        setConfirmRemove(false);
-        setBusy(false);
-        toast.success("Domain removed");
+        try {
+            const res = await fetch("/api/domains/remove", { method: "DELETE" });
+            const data: DomainPayload = await res.json();
+            if (!res.ok) {
+                toast.error(data.error || "Couldn't remove that domain");
+                return;
+            }
+            setInput("");
+            setDnsOpen(false);
+            setConfirmRemove(false);
+            apply({ domain: null, available: true });
+            toast.success("Domain removed");
+        } catch {
+            toast.error("Network error. Try again.");
+        } finally {
+            setBusy(false);
+        }
     };
 
     return (
@@ -147,6 +179,37 @@ const DomainSettings: React.FC = () => {
                     </div>
 
                     <AnimatePresence mode="wait">
+                        {/* -------------------------------------------- loading */}
+                        {status === "loading" && (
+                            <motion.div
+                                key="loading"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="flex items-center gap-3 text-white/30 py-4"
+                            >
+                                <FiLoader className="animate-spin" size={16} />
+                                <span className="text-sm font-medium">Loading...</span>
+                            </motion.div>
+                        )}
+
+                        {/* ---------------------------------------- unavailable */}
+                        {status === "unavailable" && (
+                            <motion.div
+                                key="unavailable"
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -8 }}
+                                transition={{ duration: 0.25 }}
+                                className="flex items-start gap-3 glass rounded-2xl border-white/5 p-5"
+                            >
+                                <FiAlertCircle className="text-yellow-500 shrink-0 mt-0.5" size={16} />
+                                <p className="text-white/50 text-sm leading-relaxed">
+                                    Custom domains aren&apos;t switched on yet. Check back soon.
+                                </p>
+                            </motion.div>
+                        )}
+
                         {/* ---------------------------------------------- empty */}
                         {status === "empty" && (
                             <motion.div
@@ -165,7 +228,7 @@ const DomainSettings: React.FC = () => {
                                             type="text"
                                             value={input}
                                             onChange={(e) => setInput(e.target.value)}
-                                            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+                                            onKeyDown={(e) => e.key === "Enter" && !busy && handleAdd()}
                                             placeholder="yourdomain.com"
                                             spellCheck={false}
                                             autoCapitalize="none"
@@ -208,8 +271,8 @@ const DomainSettings: React.FC = () => {
                                 </div>
 
                                 <p className="text-white/40 text-sm leading-relaxed">
-                                    Waiting on your DNS records. Open the setup steps to copy them
-                                    and check again.
+                                    {reason || "Waiting on your DNS records."} Open the setup steps
+                                    to copy them and check again.
                                 </p>
 
                                 <div className="flex flex-col sm:flex-row gap-3">
@@ -322,7 +385,7 @@ const DomainSettings: React.FC = () => {
                         records={records}
                         checking={busy}
                         verified={status === "verified"}
-                        lastCheckFailed={checks > 0 && status === "pending"}
+                        reason={status === "pending" ? reason : null}
                         onCheck={handleCheck}
                         onClose={() => setDnsOpen(false)}
                     />
