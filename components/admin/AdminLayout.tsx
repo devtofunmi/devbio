@@ -5,7 +5,7 @@ import AdminSidebar from "./AdminSidebar";
 const AdminLayout: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
     <div className="min-h-screen bg-black text-white flex overflow-hidden">
         <Head>
-            <title>{title} · DevBio Admin</title>
+            <title>{`${title} · DevBio Admin`}</title>
             <meta name="robots" content="noindex" />
         </Head>
         <AdminSidebar />
