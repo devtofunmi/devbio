@@ -3,13 +3,8 @@ import { supabaseAdmin } from "../../../lib/supabaseAdmin";
 import { getSessionUser } from "../../../lib/domainAuth";
 import { getDomainStatus, VercelError, vercelConfigured } from "../../../lib/vercelDomains";
 
-/**
- * Re-check the caller's domain against Vercel and persist the verified flag.
- *
- * Deliberately on-demand rather than polled: Vercel allows 100 verifications a
- * minute across the whole project, which many clients polling every few seconds
- * would exhaust. The UI drives this from an explicit button.
- */
+// On demand rather than polled: Vercel allows 100 verifications a minute
+// across the whole project, which polling clients would exhaust.
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "GET") {
         res.setHeader("Allow", "GET");
@@ -25,8 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .eq("id", user.id)
         .single();
 
-    // `available` lets the dashboard show a proper notice instead of only
-    // finding out the integration is missing when someone tries to add one.
+    // Lets the dashboard show a notice rather than failing on first use.
     if (!profile?.custom_domain) {
         return res.status(200).json({ domain: null, available: vercelConfigured });
     }
