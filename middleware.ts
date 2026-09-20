@@ -20,7 +20,6 @@ function isPrimaryHost(host: string) {
         host === `www.${SITE_HOST}` ||
         host === 'localhost' ||
         host === '127.0.0.1' ||
-        // Preview deployments and the project's own vercel.app URL.
         host.endsWith('.vercel.app')
     )
 }
@@ -28,11 +27,8 @@ function isPrimaryHost(host: string) {
 export async function middleware(req: NextRequest) {
     const host = (req.headers.get('host') || '').split(':')[0].toLowerCase()
 
-    // ---------------------------------------------------------------------
-    // Custom domain. Handled before anything else and with no Supabase call:
-    // this branch runs on every public profile view, and the matcher below is
-    // wide enough that an auth round-trip here would be paid on all of them.
-    // ---------------------------------------------------------------------
+    // Before anything else, and with no Supabase call: this runs on every
+    // public profile view, so an auth round-trip here would be paid on all of them.
     if (host && !isPrimaryHost(host)) {
         const { pathname, search } = req.nextUrl
 
@@ -49,9 +45,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.rewrite(url)
     }
 
-    // ---------------------------------------------------------------------
-    // Primary host. Only the auth paths pay for a session lookup.
-    // ---------------------------------------------------------------------
+    // Only the auth paths pay for a session lookup.
     if (!AUTH_PATHS.some((p) => req.nextUrl.pathname.startsWith(p))) {
         return NextResponse.next()
     }
@@ -63,7 +57,6 @@ export async function middleware(req: NextRequest) {
         data: { session },
     } = await supabase.auth.getSession()
 
-    // Protect dashboard routes
     // Allow if "code" search param is present, to let Supabase client handle the OAuth exchange on the dashboard page
     if (req.nextUrl.pathname.startsWith('/dashboard') && !req.nextUrl.searchParams.has('code')) {
         if (!session) {
@@ -75,10 +68,8 @@ export async function middleware(req: NextRequest) {
         }
     }
 
-    // Redirect signed-in users away from login/signup pages
     if (['/login', '/signup'].includes(req.nextUrl.pathname)) {
         if (session) {
-            // Check if user has a username
             const { data: profile } = await supabase
                 .from('profiles')
                 .select('username')
@@ -87,7 +78,6 @@ export async function middleware(req: NextRequest) {
 
             const redirectUrl = req.nextUrl.clone()
 
-            // If no username, send to claim page
             if (!profile?.username) {
                 redirectUrl.pathname = '/claim'
             } else {
@@ -106,11 +96,7 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    /**
-     * Widened from the four auth paths so custom-domain requests to "/" are
-     * seen. Static assets, images, API routes and anything with a file
-     * extension are excluded, and the handler returns immediately for
-     * non-auth paths on the primary host.
-     */
+    // Widened from the four auth paths so custom-domain requests to "/" are
+    // seen at all. Assets and API routes are excluded.
     matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'],
 }
