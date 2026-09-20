@@ -49,9 +49,7 @@ const jetbrainsMono = JetBrains_Mono({
     display: 'swap',
 });
 
-// ---------------------------------------------------------------------------
 // Owner-selectable profile faces. See lib/profileFonts.ts for the presets.
-// ---------------------------------------------------------------------------
 
 const spaceGrotesk = Space_Grotesk({
     subsets: ['latin'],
