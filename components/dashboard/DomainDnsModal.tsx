@@ -13,8 +13,8 @@ type Props = {
     checking: boolean;
     /** True once the domain is live, which turns the CTA into a plain dismiss. */
     verified?: boolean;
-    /** Null before the first attempt, then false while DNS has not propagated. */
-    lastCheckFailed: boolean | null;
+    /** Vercel's own explanation of what is still wrong, shown verbatim. */
+    reason?: string | null;
     onCheck: () => void;
     onClose: () => void;
 };
@@ -60,7 +60,7 @@ const DomainDnsModal: React.FC<Props> = ({
     records,
     checking,
     verified = false,
-    lastCheckFailed,
+    reason,
     onCheck,
     onClose,
 }) => {
@@ -126,14 +126,14 @@ const DomainDnsModal: React.FC<Props> = ({
                         ))}
                     </div>
 
-                    {lastCheckFailed && (
+                    {reason && (
                         <motion.div
                             initial={{ opacity: 0, y: -6 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="flex items-center gap-2 text-yellow-500 text-xs font-bold mt-5 ml-1"
                         >
-                            <FiAlertCircle size={13} />
-                            <span>Not propagated yet. Give it a few minutes.</span>
+                            <FiAlertCircle size={13} className="shrink-0" />
+                            <span>{reason}</span>
                         </motion.div>
                     )}
 
