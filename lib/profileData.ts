@@ -63,10 +63,12 @@ export async function getProfileByUsername(
         : context.params?.profile;
     if (!raw) return empty(host);
 
+    const username = String(raw).toLowerCase();
+
     const { data: profile, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("username", raw.toLowerCase())
+        .eq("username", username)
         .single();
 
     if (error || !profile) return empty(host);
