@@ -11,14 +11,10 @@ import {
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import DomainDnsModal, { DnsRecord } from "./DomainDnsModal";
+import ConfirmActionModal from "./ConfirmActionModal";
 
-/**
- * Custom domain panel, wired to /api/domains/*.
- *
- * The DNS records rendered here come from Vercel via the API rather than being
- * computed client-side: the CNAME target is project-specific and the apex IP
- * can change, so anything hardcoded would eventually be wrong.
- */
+// DNS records come from Vercel via the API, not computed here: the CNAME
+// target is project-specific and the apex IP has changed before.
 
 type Status = "loading" | "unavailable" | "empty" | "pending" | "verified";
 
@@ -53,7 +49,6 @@ const DomainSettings: React.FC = () => {
     const [dnsOpen, setDnsOpen] = useState(false);
     const [confirmRemove, setConfirmRemove] = useState(false);
 
-    /** Fold an API payload into local state. */
     const apply = useCallback((data: DomainPayload) => {
         if (!data.domain) {
             setDomain("");
@@ -284,7 +279,7 @@ const DomainSettings: React.FC = () => {
                                         DNS Setup
                                     </button>
                                     <button
-                                        onClick={handleRemove}
+                                        onClick={() => setConfirmRemove(true)}
                                         disabled={busy}
                                         className="px-6 py-4 glass rounded-2xl border-white/5 text-white/40 hover:text-white hover:border-white/20 font-black text-xs uppercase tracking-widest transition-all cursor-pointer disabled:opacity-40"
                                     >
@@ -331,52 +326,46 @@ const DomainSettings: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {!confirmRemove ? (
-                                    <div className="flex flex-wrap gap-3">
-                                        <button
-                                            onClick={() => setDnsOpen(true)}
-                                            className="inline-flex items-center gap-2 px-5 py-3 glass rounded-xl border-white/5 text-white/40 hover:text-white hover:border-white/20 text-xs font-black uppercase tracking-widest transition-all cursor-pointer"
-                                        >
-                                            <FiSettings size={13} />
-                                            DNS records
-                                        </button>
-                                        <button
-                                            onClick={() => setConfirmRemove(true)}
-                                            className="inline-flex items-center gap-2 px-5 py-3 glass rounded-xl border-white/5 text-red-500/60 hover:text-white hover:bg-red-500 hover:border-red-500 text-xs font-black uppercase tracking-widest transition-all cursor-pointer"
-                                        >
-                                            <FiTrash2 size={13} />
-                                            Remove domain
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="glass rounded-2xl border-red-500/20 p-5 space-y-4">
-                                        <p className="text-white/70 text-sm">
-                                            Remove <span className="font-mono font-bold">{domain}</span>?
-                                            Your profile stays live at devbio.co.
-                                        </p>
-                                        <div className="flex gap-3">
-                                            <button
-                                                onClick={handleRemove}
-                                                disabled={busy}
-                                                className="px-5 py-3 bg-red-500 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-red-600 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-40"
-                                            >
-                                                {busy && <FiLoader className="animate-spin" size={12} />}
-                                                Remove
-                                            </button>
-                                            <button
-                                                onClick={() => setConfirmRemove(false)}
-                                                className="px-5 py-3 glass rounded-xl border-white/5 text-white/40 hover:text-white text-xs font-black uppercase tracking-widest transition-all cursor-pointer"
-                                            >
-                                                Keep it
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
+                                <div className="flex flex-wrap gap-3">
+                                    <button
+                                        onClick={() => setDnsOpen(true)}
+                                        className="inline-flex items-center gap-2 px-5 py-3 glass rounded-xl border-white/5 text-white/40 hover:text-white hover:border-white/20 text-xs font-black uppercase tracking-widest transition-all cursor-pointer"
+                                    >
+                                        <FiSettings size={13} />
+                                        DNS records
+                                    </button>
+                                    <button
+                                        onClick={() => setConfirmRemove(true)}
+                                        className="inline-flex items-center gap-2 px-5 py-3 glass rounded-xl border-white/5 text-red-500/60 hover:text-white hover:bg-red-500 hover:border-red-500 text-xs font-black uppercase tracking-widest transition-all cursor-pointer"
+                                    >
+                                        <FiTrash2 size={13} />
+                                        Remove domain
+                                    </button>
+                                </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
             </div>
+
+            <ConfirmActionModal
+                isOpen={confirmRemove}
+                onClose={() => setConfirmRemove(false)}
+                onConfirm={handleRemove}
+                busy={busy}
+                title="Remove this domain?"
+                description={
+                    <>
+                        Your profile stays live at devbio.co, but{" "}
+                        <span className="text-white/70">{domain}</span> will stop working
+                        until you set it up again.
+                    </>
+                }
+                confirmPhrase={domain}
+                inputLabel="Type the domain to confirm"
+                confirmLabel="Remove Domain"
+                busyLabel="Removing..."
+            />
 
             <AnimatePresence>
                 {dnsOpen && domain && (
